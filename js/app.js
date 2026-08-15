@@ -1,0 +1,1302 @@
+/* ============================================================
+   TRAEYA · El Raal, en tu móvil
+   SPA: router, i18n (ES/AR RTL), render, carrito, WhatsApp
+   ============================================================ */
+"use strict";
+
+/* global TRAEYA_DATA */
+const D = window.TRAEYA_DATA;
+const CFG = D.config;
+
+/* ---------- Redes sociales (configuración central) ----------
+   TODO: cuando tengas la URL real de Facebook, rellénala abajo.
+   Instagram y TikTok están activos y abren sus perfiles directos.
+   Facebook se muestra deshabilitado hasta que se proporcione su
+   enlace real (no se inventa ninguna URL). */
+const SOCIAL_LINKS = {
+  instagram: "https://www.instagram.com/traeya.es/",
+  tiktok: "https://www.tiktok.com/@traeya.es1",
+  facebook: "", // TODO: rellenar con la URL real de Facebook
+};
+
+/* ---------- Entrega (configuración central) ----------
+   Precios de entrega definidos por el proyecto (data.js → config.delivery).
+   El Raal 2 € · Mercado Domingo 5 € · Fuera de El Raal 3 € · Comida Casera GRATIS */
+const DELIVERY = Object.assign(
+  { el_raul: 2.0, mercado: 5.0, fuera_el_raul: 3.0, comida_casera: 0.0 },
+  (CFG && CFG.delivery) || {}
+);
+
+function deliveryFor(shop) {
+  if (!shop) return { amount: 0, free: true };
+  if (shop.slug === "comida-casera") return { amount: DELIVERY.comida_casera, free: true };
+  if (shop.slug === "mercado-domingo") return { amount: DELIVERY.mercado, free: false };
+  if (shop.locality === "el-raul") return { amount: DELIVERY.el_raul, free: false };
+  return { amount: DELIVERY.fuera_el_raul, free: false };
+}
+
+const I18N = {
+  es: {
+    brandSub: "El Raal · Murcia",
+    heroEyebrow: "TRAEYA · El Raal, Murcia",
+    heroTitle: "Tu pueblo, en tu móvil.",
+    heroSub: "Los comercios de El Raal, reales y cercanos. Mira, escribe y recoge. Todo por WhatsApp.",
+    heroCta: "Entrar en El Raal",
+    heroCtaWa: "Hablar por WhatsApp",
+    navShops: "Comercios",
+    navMarket: "Mercado",
+    navComida: "Comida Casera",
+    navNeed: "¿Qué necesitas?",
+    introKicker: "Bienvenido a El Raal",
+    introLead: "El Raal está abierto. <em>TRAEYA</em> acerca sus comercios a tu móvil.",
+    introSub: "Sin catálogos infinitos ni páginas genéricas. Los lugares reales de tu pueblo, cada uno con su historia.",
+    feature1: ["Comercios reales", "Las fachadas y los productos que ves son los de El Raal."],
+    feature2: ["Cercano", "Pide desde tu sofá y recoge en pocos minutos."],
+    feature3: ["Por WhatsApp", "Un solo mensaje. Sin apps, sin cuentas, sin esperas."],
+    discoverKicker: "Descubre El Raal",
+    discoverTitle: "Un paseo por el pueblo",
+    discoverSub: "Fachadas y rincones reales de El Raal, tal y como los encontrarás al llegar.",
+    marketKicker: "Cada domingo",
+    marketTitle: "El Mercado de <em>El Raal</em>",
+    marketBody: "Cada domingo, El Raal cobra vida. Descubre los puestos, productos y sabores de nuestro mercado en un solo lugar.",
+    marketCta: "Ver Mercado",
+    comidaKicker: "Hecho en casa",
+    comidaTitle: "Comida <em>Casera</em>",
+    comidaBody: "Cuscús, tajín, harira, msemen… los platos de siempre, preparados del día.",
+    comidaCta: "Ver los platos",
+    carnTitle: "Carnicerías",
+    carnSub: "Carnes halal, ternera, pollo y alimentación de confianza.",
+    catTitle: "Categorías",
+    catSub: "Elige qué necesitas y te llevamos hasta el comercio de El Raal que lo tiene.",
+    superTitle: "Supermercados",
+    superSub: "Lo de cada día, cerca de casa.",
+    restTitle: "Restaurantes y Kebab",
+    restSub: "Los restaurantes de El Raal y alrededores.",
+    otherTitle: "Otros comercios",
+    otherSub: "Farmacia, bazares y servicios del pueblo.",
+    otherTitleLocs: "En otros pueblos",
+    otherSubLocs: "TRAEYA va creciendo. Estos comercios también están en la red.",
+    needKicker: "Message first",
+    needTitle: "¿Qué necesitas?",
+    needSub: "Escribe qué quieres y te lo dejamos listo. Te avisamos cuando puedas pasar a recoger.",
+    needPlaceholder: "Ej.: 2 kg de tomates del Mercado",
+    needBtn: "Pedir por WhatsApp",
+    needChips: ["Mercado Domingo", "Comida Casera", "Carnicería", "Kebab", "Farmacia"],
+    footerCtaTitle: "Tu pueblo, <em>a un mensaje</em>.",
+    footerCtaSub: "Escribe al WhatsApp de TRAEYA y lo resolvemos.",
+    footerCtaBtn: "Escribir a TRAEYA",
+    footerAbout: "TRAEYA es la red de los comercios de El Raal. Fotos y fachadas reales del pueblo.",
+    footerColShops: "Comercios",
+    footerColMore: "Más",
+    footerMade: "Hecho para El Raal · Murcia",
+    backHome: "Volver a El Raal",
+    tagMarket: "Mercado",
+    tagEverySunday: "Cada domingo",
+    productsLabel: "Productos",
+    priceAsk: "Precio a consultar",
+    priceFrom: "Desde ",
+    emptyTitle: "Este comercio está en El Raal",
+    emptyBody: "Todavía no hemos publicado su lista. Escríbenos por WhatsApp y te ayudamos a pedir.",
+    alsoHere: "También disponible aquí",
+    alsoHereSub: "Fotografías reales de este comercio.",
+    showMore: "Ver más",
+    galleryLabel: "Galería",
+    askFor: "Añadir al pedido",
+    askShopTitle: "¿Qué estás buscando?",
+    askShopSub: "Escríbenos lo que necesitas y te ayudamos.",
+    askShopPlaceholder: "Ej.: medio kilo de carne picada, dos brochetas, 1 kg de cebollas…",
+    askShopBtn: "Enviar por WhatsApp",
+    productsCount: (n) => n + (n === 1 ? " producto" : " productos"),
+    waGeneric: "Hola TRAEYA, necesito ",
+    waShop: "Hola TRAEYA, quiero pedir en",
+    gateTitle: "¿En qué idioma quieres continuar?",
+    gateSub: "El Raal · Murcia",
+    gateHint: "Puedes cambiarlo más tarde.",
+    socialFollow: "Síguenos",
+    socialSoon: "Próximamente",
+    cartAdd: "Añadir",
+    cartAdded: "✓ Añadido",
+    cartEmpty: "Tu pedido está vacío",
+    cartShop: "Tienda",
+    cartItems: "artículos",
+    cartUnit: "u.",
+    cartTotal: "Total",
+    cartNote: "Nota (opcional)",
+    cartNotePh: "Ej.: a partir de las 19:00",
+    cartSend: "Enviar por WhatsApp",
+    cartKeep: "Seguir viendo",
+    cartView: "Ver pedido",
+    cartRemove: "Quitar",
+    cartNoPrices: "Algunos precios se confirman en el comercio.",
+    cartSubtotal: "Productos",
+    cartDelivery: "Entrega",
+    cartDeliveryFree: "GRATIS",
+    deliveryKicker: "Entrega",
+    deliveryTitle: "¿Cómo funciona la <em>entrega</em>?",
+    deliverySub: "Pide por WhatsApp y recoge donde te venga mejor. El coste de la entrega es claro y sencillo.",
+    deliveryFree: "GRATIS",
+    deliveryElRaal: "En El Raal",
+    deliveryElRaalSub: "Entrega a domicilio en El Raal",
+    deliveryMercado: "Mercado Domingo",
+    deliveryMercadoSub: "Tu pedido del mercado, en tu puerta",
+    deliveryFuera: "Fuera de El Raal",
+    deliveryFueraSub: "Santomera, Beniel y alrededores",
+    deliveryComida: "Comida Casera",
+    deliveryComidaSub: "Entrega siempre gratis",
+    deliveryNote: "Recogida en el comercio sin coste. La entrega se confirma por WhatsApp.",
+    deliveryShop: "Entrega",
+    deliveryShopFree: "Entrega gratis",
+    menuKicker: "Menú",
+    menuHint: "La carta real del restaurante.",
+    marketKickerShop: "El Mercado Domingo",
+    marketTitleShop: "Un paseo por el <em>souk</em>",
+    marketBodyShop: "Cada domingo El Raal cobra vida. Así se vive el mercado, en su ambiente.",
+    marketVid1: "El souk, en movimiento",
+    marketVid2: "Entre puestos y productos",
+    productsOf: "de",
+    locality: { "el-raul": "El Raal", santomera: "Santomera", beniel: "Beniel" },
+    type: {
+      carniceria: "Carnicería", bazar: "Bazar", farmacia: "Farmacia", mercado: "Mercado",
+      supermercado: "Supermercado", restaurante: "Restaurante", tienda24: "Tienda 24h",
+      "comida-casera": "Comida Casera",
+    },
+    shopNameAr: {
+      "carniceria-el-pelin": "جزارة البيلين",
+      "carniceria-boujaad": "جزارة ومونة بوجاد الحاج",
+      "carniceria-halal-said": "جزارة ومونة حلال سعيد",
+      "chino-1": "البازار الصيني 1",
+      "chino-2": "البازار الصيني 2",
+      "comida-casera": "الطعام المنزلي",
+      "farmacia-haro": "صيدلية هارو",
+      "mercado-domingo": "سوق الأحد",
+      "mercadona-santomera": "ميركادونا سانتوميرا",
+      "kebab-casa-mayor": "مطعم كباب كازا مايور",
+      "kebab-khan-ali-beniel": "مطعم كباب خان علي بينيل",
+      "restaurante-patricia": "مطعم باتريسيا",
+      "the-hot-buffalo": "ذا هوت بافالو",
+      "kebab-khan-ali-el-raal": "مطعم كباب خان علي ال رعال",
+      "consum-el-raal": "سوبرماركت كونسوم ال رعال",
+      "supermercado-plaza-de-juan": "سوبرماركت بلازا دي خوان",
+      "spar-express": "سوبرماركت سبار إكسبريس",
+      "venticoitros-24": "فينتيكويتروس 24",
+    },
+  },
+
+  ar: {
+    brandSub: "ال رعال · مرسية",
+    heroEyebrow: "ترايا · ال رعال، مرسية",
+    heroTitle: "مدينتك، في جوالك.",
+    heroSub: "محلات ال رعال، حقيقية وقريبة. شاهد، اكتب، واستلم. كل شيء عبر واتساب.",
+    heroCta: "ادخل إلى ال رعال",
+    heroCtaWa: "تحدث معنا واتساب",
+    navShops: "المحلات",
+    navMarket: "السوق",
+    navComida: "الطعام المنزلي",
+    navNeed: "بماذا تحتاج؟",
+    introKicker: "مرحباً بك في ال رعال",
+    introLead: "ال رعال مفتوح. <em>ترايا</em> تقرّب محلاته إلى جوالك.",
+    introSub: "بدون كتالوجات لا نهائية أو صفحات عامة. الأماكن الحقيقية لمدينتك، لكل واحد قصته.",
+    feature1: ["محلات حقيقية", "الواجهات والمنتجات التي تراها هي محلات ال رعال نفسها."],
+    feature2: ["قريب", "اطلب من مكانك واستلم خلال دقائق."],
+    feature3: ["عبر واتساب", "رسالة واحدة فقط. بدون تطبيقات أو حسابات أو انتظار."],
+    discoverKicker: "اكتشف ال رعال",
+    discoverTitle: "جولة في المدينة",
+    discoverSub: "واجهات وأماكن حقيقية من ال رعال، كما ستجدها عند وصولك.",
+    marketKicker: "كل أحد",
+    marketTitle: "سوق <em>ال رعال</em>",
+    marketBody: "كل أحد، ال رعال ينبض بالحياة. اكتشف البسطات والمنتجات والنكهات من سوقنا في مكان واحد.",
+    marketCta: "عرض السوق",
+    comidaKicker: "مصنوع في البيت",
+    comidaTitle: "الطعام <em>المنزلي</em>",
+    comidaBody: "كسكس، طاجين، حريرة، مسمن… أطباق الدار، محضرة كل يوم.",
+    comidaCta: "عرض الأطباق",
+    carnTitle: "الجزارات",
+    carnSub: "لحوم حلال، لحم بقر، دجاج وأغذية موثوقة.",
+    catTitle: "الفئات",
+    catSub: "اختر ما تحتاجه وسنوصلك إلى محل ال رعال الذي يملكه.",
+    superTitle: "السوبرماركت",
+    superSub: "حاجياتك اليومية، قريبة من البيت.",
+    restTitle: "مطاعم وكباب",
+    restSub: "مطاعم ال رعال والمناطق المجاورة.",
+    otherTitle: "محلات أخرى",
+    otherSub: "صيدلية، بازارات وخدمات المدينة.",
+    otherTitleLocs: "في مدن أخرى",
+    otherSubLocs: "ترايا تكبر. هذه المحلات أيضاً ضمن الشبكة.",
+    needKicker: "رسالة أولاً",
+    needTitle: "بماذا تحتاج؟",
+    needSub: "اكتب ما تريد وسنتركه جاهزاً لك. نرسل لك رسالة عندما يكون بإمكانك الاستلام.",
+    needPlaceholder: "مثال: 2 كيلو طماطم من السوق",
+    needBtn: "اطلب عبر واتساب",
+    needChips: ["سوق الأحد", "الطعام المنزلي", "الجزارة", "كباب", "الصيدلية"],
+    footerCtaTitle: "مدينتك، <em>برسالة واحدة</em>.",
+    footerCtaSub: "اكتب إلى واتساب ترايا وسنحل الأمر.",
+    footerCtaBtn: "اكتب إلى ترايا",
+    footerAbout: "ترايا هي شبكة محلات ال رعال. صور وواجهات حقيقية من المدينة.",
+    footerColShops: "المحلات",
+    footerColMore: "المزيد",
+    footerMade: "صنع لـ ال رعال · مرسية",
+    backHome: "العودة إلى ال رعال",
+    tagMarket: "سوق",
+    tagEverySunday: "كل أحد",
+    productsLabel: "المنتجات",
+    priceAsk: "استشر السعر",
+    priceFrom: "من ",
+    emptyTitle: "هذا المحل موجود في ال رعال",
+    emptyBody: "لم ننشر قائمته بعد. اكتب لنا عبر واتساب وسنساعدك في الطلب.",
+    alsoHere: "متوفر أيضاً هنا",
+    alsoHereSub: "صور حقيقية من هذا المحل.",
+    showMore: "عرض المزيد",
+    galleryLabel: "المعرض",
+    askFor: "أضف إلى الطلب",
+    askShopTitle: "عم تبحث؟",
+    askShopSub: "اكتب ما تحتاجه وسنساعدك.",
+    askShopPlaceholder: "مثال: نصف كيلو لحم مفروم، حبتا بروشيت، 1 كيلو بصل…",
+    askShopBtn: "أرسل عبر واتساب",
+    productsCount: (n) => n + (n === 1 ? " منتج" : " منتجات"),
+    waGeneric: "مرحباً ترايا، أحتاج ",
+    waShop: "مرحباً ترايا، أريد أن أطلب من",
+    gateTitle: "بأي لغة تريد المتابعة؟",
+    gateSub: "ال رعال · مرسية",
+    gateHint: "يمكنك تغييرها لاحقاً.",
+    socialFollow: "تابعنا",
+    socialSoon: "قريباً",
+    cartAdd: "أضف",
+    cartAdded: "✓ أضيف",
+    cartEmpty: "طلبك فارغ",
+    cartShop: "المتجر",
+    cartItems: "منتجات",
+    cartUnit: "قطعة",
+    cartTotal: "المجموع",
+    cartNote: "ملاحظة (اختياري)",
+    cartNotePh: "مثال: بعد الساعة 19:00",
+    cartSend: "أرسل عبر واتساب",
+    cartKeep: "متابعة التسوق",
+    cartView: "عرض الطلب",
+    cartRemove: "إزالة",
+    cartNoPrices: "بعض الأسعار تُؤكد في المحل.",
+    cartSubtotal: "المنتجات",
+    cartDelivery: "التوصيل",
+    cartDeliveryFree: "مجاناً",
+    deliveryKicker: "التوصيل",
+    deliveryTitle: "كيف يعمل <em>التوصيل</em>؟",
+    deliverySub: "اطلب عبر واتساب واستلم من المكان الذي يناسبك. تكلفة التوصيل واضحة وبسيطة.",
+    deliveryFree: "مجاناً",
+    deliveryElRaal: "داخل ال رعال",
+    deliveryElRaalSub: "التوصيل إلى المنزل داخل ال رعال",
+    deliveryMercado: "سوق الأحد",
+    deliveryMercadoSub: "طلبك من السوق حتى باب بيتك",
+    deliveryFuera: "خارج ال رعال",
+    deliveryFueraSub: "سانتوميرا، بينيل والمناطق المجاورة",
+    deliveryComida: "الطعام المنزلي",
+    deliveryComidaSub: "التوصيل دائماً مجاناً",
+    deliveryNote: "الاستلام من المحل بدون تكلفة. التوصيل يُؤكد عبر واتساب.",
+    deliveryShop: "التوصيل",
+    deliveryShopFree: "توصيل مجاني",
+    menuKicker: "المنيو",
+    menuHint: "قائمة المطعم الحقيقية.",
+    marketKickerShop: "سوق الأحد",
+    marketTitleShop: "جولة في <em>السوق</em>",
+    marketBodyShop: "كل أحد، ال رعال ينبض بالحياة. هكذا يُعاش السوق في أجوائه الحقيقية.",
+    marketVid1: "السوق في حركة",
+    marketVid2: "بين البسطات والمنتجات",
+    productsOf: "من",
+    locality: { "el-raul": "ال رعال", santomera: "سانتوميرا", beniel: "بينيل" },
+    type: {
+      carniceria: "جزارة", bazar: "بازار", farmacia: "صيدلية", mercado: "سوق",
+      supermercado: "سوبرماركت", restaurante: "مطعم", tienda24: "متجر 24 ساعة",
+      "comida-casera": "طعام منزلي",
+    },
+    shopNameAr: {
+      "carniceria-el-pelin": "جزارة البيلين",
+      "carniceria-boujaad": "جزارة ومونة بوجاد الحاج",
+      "carniceria-halal-said": "جزارة ومونة حلال سعيد",
+      "chino-1": "البازار الصيني 1",
+      "chino-2": "البازار الصيني 2",
+      "comida-casera": "الطعام المنزلي",
+      "farmacia-haro": "صيدلية هارو",
+      "mercado-domingo": "سوق الأحد",
+      "mercadona-santomera": "ميركادونا سانتوميرا",
+      "kebab-casa-mayor": "مطعم كباب كازا مايور",
+      "kebab-khan-ali-beniel": "مطعم كباب خان علي بينيل",
+      "restaurante-patricia": "مطعم باتريسيا",
+      "the-hot-buffalo": "ذا هوت بافالو",
+      "kebab-khan-ali-el-raal": "مطعم كباب خان علي ال رعال",
+      "consum-el-raal": "سوبرماركت كونسوم ال رعال",
+      "supermercado-plaza-de-juan": "سوبرماركت بلازا دي خوان",
+      "spar-express": "سوبرماركت سبار إكسبريس",
+      "venticoitros-24": "فينتيكويتروس 24",
+    },
+  },
+};
+
+/* ---------- State ---------- */
+const STATE = {
+  lang: localStorage.getItem("traeya.lang") ||
+    (navigator.language && navigator.language.toLowerCase().startsWith("ar") ? "ar" : "es"),
+  shop: null,
+  galleryCounts: {},
+};
+
+const t = (key, fnArgs) => {
+  const v = I18N[STATE.lang][key];
+  return typeof v === "function" ? v(fnArgs) : v;
+};
+
+const WA = (text) => "https://wa.me/" + CFG.whatsapp + "?text=" + encodeURIComponent(text.trim());
+
+/* ---------- DOM helpers ---------- */
+const $ = (sel, root) => (root || document).querySelector(sel);
+const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+
+function el(tag, attrs, ...contents) {
+  const n = document.createElement(tag);
+  if (attrs) {
+    for (const k in attrs) {
+      const v = attrs[k];
+      if (v == null) continue;
+      if (k === "class") n.className = v;
+      else if (k === "html") n.innerHTML = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+      else if (k === "style") n.setAttribute("style", v);
+      else n.setAttribute(k, v);
+    }
+  }
+  const flat = contents.flat(Infinity).filter((c) => c != null);
+  if (flat.length === 1 && typeof flat[0] === "string") {
+    n.innerHTML = flat[0];
+  } else {
+    n.append(...flat);
+  }
+  return n;
+}
+
+const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
+const fmtPrice = (n) => new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + " €";
+const displayName = (p) => p.name_es || p.name_ar || p.id;
+const shopBg = (s) => s.facade || (D.galleries[s.slug] && D.galleries[s.slug][0]) || null;
+
+function openWA(text) { window.open(WA(text), "_blank", "noopener"); }
+
+/* ---------- Redes sociales ---------- */
+function socialIcon(name) {
+  const svg = {
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"></path></svg>',
+    facebook: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>',
+  };
+  return svg[name] || "";
+}
+
+function socialList() {
+  const list = el("div", { class: "social" });
+  [
+    { key: "instagram", label: "Instagram", href: SOCIAL_LINKS.instagram },
+    { key: "tiktok", label: "TikTok", href: SOCIAL_LINKS.tiktok },
+    { key: "facebook", label: "Facebook", href: SOCIAL_LINKS.facebook },
+  ].forEach((s, i) => {
+    const attrs = {
+      class: "social__link" + (s.href ? "" : " is-off"),
+      style: "--i:" + i,
+      "aria-label": s.label,
+      title: s.href ? s.label : s.label + " · " + t("socialSoon"),
+      html: socialIcon(s.key)
+    };
+    if (s.href) { attrs.href = s.href; attrs.target = "_blank"; attrs.rel = "noopener"; }
+    else attrs["aria-disabled"] = "true";
+    list.append(el(s.href ? "a" : "span", attrs));
+  });
+  return list;
+}
+
+/* ---------- Cart ---------- */
+const Cart = {
+  items: new Map(),
+  shop: null,
+  _persist() {
+    try { localStorage.setItem("traeya.cart", JSON.stringify([...this.items.entries()])); } catch (e) { /* noop */ }
+    CartBar.render();
+  },
+  _load() {
+    try {
+      const raw = localStorage.getItem("traeya.cart");
+      if (raw) this.items = new Map(JSON.parse(raw));
+      if (this.items.size) {
+        const first = [...this.items.values()][0];
+        this.shop = D.shops.find((s) => s.slug === first.shop) || null;
+      }
+    } catch (e) { /* noop */ }
+  },
+  add(shop, product) {
+    if (this.shop && this.shop.slug !== shop.slug) this.items.clear();
+    this.shop = shop;
+    const key = shop.slug + "::" + product.id;
+    const cur = this.items.get(key);
+    this.items.set(key, { shop: shop.slug, id: product.id, qty: (cur ? cur.qty : 0) + 1 });
+    this._persist();
+    return this.items.get(key).qty;
+  },
+  setQty(shopSlug, productId, qty) {
+    const key = shopSlug + "::" + productId;
+    if (qty <= 0) this.items.delete(key);
+    else this.items.set(key, { shop: shopSlug, id: productId, qty });
+    if (!this.items.size) this.shop = null;
+    this._persist();
+  },
+  clear() {
+    this.items.clear();
+    this.shop = null;
+    this._persist();
+  },
+  total() {
+    let n = 0;
+    this.items.forEach((it) => { n += it.qty; });
+    return n;
+  },
+  entries() { return [...this.items.values()]; },
+  productsFor(shop) {
+    return this.entries()
+      .filter((it) => it.shop === shop.slug)
+      .map((it) => {
+        const p = shop.products.find((x) => x.id === it.id) || { id: it.id };
+        return { ...it, product: p };
+      });
+  },
+};
+
+/* ---------- Topbar / Footer / Float / Gate / Cart UI ---------- */
+function renderTopbar() {
+  const bar = $("#topbar");
+  bar.hidden = false;
+  bar.innerHTML = "";
+  const social = el("div", { class: "topbar__social" },
+    el("div", { class: "topbar__social-inner" },
+      el("span", { class: "topbar__social-tag", html: t("socialFollow") }),
+      socialList(),
+      el("span", { class: "topbar__social-loc", html: esc(t("brandSub")) })
+    )
+  );
+  const inner = el("div", { class: "topbar__inner" });
+  inner.append(
+    el("a", { class: "brand", href: "#/", onclick: () => route(),
+      html: '<span class="brand__mark">TRAEYA<span>.</span></span><span class="brand__sub">' + esc(t("brandSub")) + "</span>" }),
+    el("nav", { class: "topnav" }, [
+      el("a", { class: "topnav__link", href: "#/", html: t("navShops"), onclick: (e) => { e.preventDefault(); location.hash = "#/"; setTimeout(() => goSection("comercios"), 60); } }),
+      el("a", { class: "topnav__link", href: "#/", html: t("navMarket"), onclick: (e) => { e.preventDefault(); location.hash = "#/"; setTimeout(() => goSection("market"), 60); } }),
+      el("a", { class: "topnav__link", href: "#/", html: t("navComida"), onclick: (e) => { e.preventDefault(); location.hash = "#/"; setTimeout(() => goSection("comida"), 60); } }),
+    ]),
+    el("button", { class: "btn btn--wa btn--small topnav__need", html: t("navNeed"), onclick: () => { location.hash = "#/"; setTimeout(() => goSection("need"), 60); } })
+  );
+  const lang = el("div", { class: "lang" });
+  lang.append(
+    el("button", { class: "lang__btn" + (STATE.lang === "es" ? " on" : ""), "data-lang": "es", html: "ES" }),
+    el("button", { class: "lang__btn" + (STATE.lang === "ar" ? " on" : ""), "data-lang": "ar", html: "عربي" })
+  );
+  $$(".lang__btn", lang).forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+  inner.append(lang);
+  bar.append(social, inner);
+  updateTopbar();
+}
+
+function updateTopbar() {
+  $("#topbar").classList.toggle("topbar--solid", window.scrollY > 30);
+}
+
+function renderFloat() {
+  const float = $("#wa-float");
+  float.hidden = false;
+  float.innerHTML = "";
+  float.append(el("a", { class: "wa-float", href: WA(t("waGeneric") + CFG.brand), target: "_blank", rel: "noopener", "aria-label": "WhatsApp", html: "✆" }));
+}
+
+function renderFooter() {
+  const foot = $("#footer");
+  foot.hidden = false;
+  foot.innerHTML = "";
+  const raul = D.shops.filter((s) => s.locality === "el-raul");
+
+  const ctaBtn = el("a", { class: "btn btn--wa", href: WA(t("waGeneric") + CFG.brand), target: "_blank", rel: "noopener", html: t("footerCtaBtn") });
+  const cta = el("section", { class: "footer__cta" },
+    el("div", { class: "eyebrow eyebrow--sand", html: "TRAEYA" }),
+    el("h2", { html: t("footerCtaTitle") }),
+    el("p", { html: t("footerCtaSub") }),
+    ctaBtn
+  );
+
+  const ulShops = el("ul", null);
+  raul.forEach((s) => {
+    const li = el("li");
+    li.append(el("a", { href: "#/tienda/" + s.slug, html: esc(s.name) }));
+    ulShops.append(li);
+  });
+  const colShops = el("div", { class: "footer__col" }, [el("h5", null, t("footerColShops")), ulShops]);
+
+  const ulMore = el("ul", null);
+  [["Mercado Domingo", "#/tienda/mercado-domingo"], ["Comida Casera", "#/tienda/comida-casera"], [t("locality")["el-raul"], "#/"]]
+    .forEach(([label, href]) => {
+      const li = el("li");
+      li.append(el("a", { href, html: label }));
+      ulMore.append(li);
+    });
+  const colMore = el("div", { class: "footer__col" }, [el("h5", null, t("footerColMore")), ulMore]);
+
+  const brandCol = el("div", { class: "footer__brand" },
+    el("span", { class: "brand__mark", html: "TRAEYA<span>.</span>" }),
+    el("p", { html: t("footerAbout") })
+  );
+
+  const langLink = el("a", { href: "#/", html: STATE.lang === "es" ? "العربية" : "Español" });
+  langLink.addEventListener("click", (e) => { e.preventDefault(); setLang(STATE.lang === "es" ? "ar" : "es"); });
+  const bottom = el("div", { class: "footer__bottom" },
+    el("span", null, "© " + CFG.year + " TRAEYA · " + t("footerMade")),
+    el("div", { class: "footer__social" }, socialList()),
+    el("div", { class: "footer__lang" }, langLink)
+  );
+
+  foot.append(
+    cta,
+    el("div", { class: "footer__body" }, [brandCol, colShops, colMore]),
+    bottom
+  );
+}
+
+function setLang(lang) {
+  if (lang === STATE.lang) return;
+  STATE.lang = lang;
+  localStorage.setItem("traeya.lang", lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  renderTopbar();
+  renderFooter();
+  renderFloat();
+  route();
+  window.scrollTo({ top: 0, behavior: "auto" });
+}
+
+function renderLangGate() {
+  if (localStorage.getItem("traeya.lang")) return;
+  const overlay = el("div", { class: "lang-gate", "data-lang-gate": "" });
+  const choose = (lang) => {
+    localStorage.setItem("traeya.lang", lang);
+    STATE.lang = lang;
+    applyLangAttrs();
+    overlay.classList.add("is-leaving");
+    setTimeout(() => {
+      overlay.remove();
+      document.body.classList.remove("gate-pending");
+      renderAll();
+    }, 450);
+  };
+  overlay.append(
+    el("div", { class: "lang-gate__card" },
+      el("div", { class: "lang-gate__logo", html: 'TRAEYA<span>.</span>' }),
+      el("div", { class: "eyebrow lang-gate__eyebrow", html: esc(t("gateSub")) }),
+      el("div", { class: "lang-gate__title", html: t("gateTitle") }),
+      el("div", { class: "lang-gate__options" },
+        el("button", { class: "lang-gate__opt", onclick: () => choose("es") },
+          el("span", { class: "lang-gate__flag", html: "🇪🇸" }),
+          el("span", { class: "lang-gate__name", html: "Español" })
+        ),
+        el("button", { class: "lang-gate__opt", onclick: () => choose("ar") },
+          el("span", { class: "lang-gate__flag", html: "🇲🇦" }),
+          el("span", { class: "lang-gate__name", html: "العربية" })
+        )
+      ),
+      el("div", { class: "lang-gate__hint", html: t("gateHint") })
+    )
+  );
+  document.body.append(overlay);
+}
+
+/* ---------- Reveal + motion ---------- */
+let revealObs;
+let revealTimer = null;
+function observeReveals(root) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    $$(".reveal", root).forEach((n) => n.classList.add("is-in"));
+    return;
+  }
+  if (!revealObs) {
+    revealObs = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("is-in"); revealObs.unobserve(e.target); } });
+    }, { threshold: 0.02, rootMargin: "0px 0px -6% 0px" });
+  }
+  $$(".reveal", root).forEach((n) => {
+    const r = n.getBoundingClientRect();
+    if (r.top < window.innerHeight) n.classList.add("is-in");
+    else revealObs.observe(n);
+  });
+  clearTimeout(revealTimer);
+  revealTimer = setTimeout(() => {
+    $$(".reveal").forEach((n) => n.classList.add("is-in"));
+  }, 1800);
+}
+
+function parallax() {
+  const bg = $(".hero__bg");
+  if (!bg) return;
+  bg.style.transform = "scale(1.02) translateY(" + Math.min(window.scrollY, window.innerHeight) * 0.22 + "px)";
+}
+
+/* ---------- Shared blocks ---------- */
+function cardFor(s, mediaClass) {
+  const bg = shopBg(s);
+  const arName = I18N[STATE.lang].shopNameAr[s.slug] || "";
+  const media = bg
+    ? el("div", { class: "card__media " + (mediaClass || "") }, el("img", { loading: "lazy", src: bg, alt: esc(s.name) }))
+    : el("div", { class: "card__media " + (mediaClass || "") },
+        el("div", { class: "product-card__fallback", html: esc((s.name || "T").charAt(0)) }));
+  return el("a", { class: "card", href: "#/tienda/" + s.slug, "data-shop": s.slug },
+    media,
+    el("div", { class: "card__body" },
+      el("h3", { class: "card__title", html: esc(s.name) }),
+      arName ? el("span", { class: "card__ar ar", html: arName }) : null,
+      el("div", { class: "card__meta" },
+        el("span", { class: "card__type", html: t("type")[s.type] }),
+        el("span", { class: "card__locality", html: "· " + t("locality")[s.locality] })
+      ),
+      el("span", { class: "card__go", html: "↗" })
+    )
+  );
+}
+
+function sectionHead(kicker, title, sub, opts) {
+  const o = opts || {};
+  const head = el("div", { class: "section-head reveal" });
+  if (kicker) head.append(el("div", { class: "eyebrow" + (o.light ? " eyebrow--light" : ""), html: kicker }));
+  head.append(el("h2", { class: "section-title", html: title }));
+  if (sub) head.append(el("p", { class: "lede", html: sub }));
+  return head;
+}
+
+function gridSection(id, cssClass, head, cards) {
+  return el("section", { class: "section " + cssClass, id: id },
+    el("div", { class: "container" },
+      head,
+      el("div", { class: "commerce-grid" }, cards)
+    )
+  );
+}
+
+function railSection(id, cssClass, head, cards) {
+  return el("section", { class: "section " + cssClass, id: id },
+    el("div", { class: "container" },
+      head,
+      el("div", { class: "rail__fade" }, el("div", { class: "rail" }, cards))
+    )
+  );
+}
+
+/* ---------- Home ---------- */
+function renderHome() {
+  const view = $("#view");
+  view.innerHTML = "";
+  document.title = "TRAEYA · El Raal · Comercios locales";
+
+  const byType = (types, loc) => D.shops.filter((s) => types.includes(s.type) && (!loc || s.locality === loc));
+  const market = D.shops.find((s) => s.slug === "mercado-domingo");
+  const comida = D.shops.find((s) => s.slug === "comida-casera");
+  const carn = byType(["carniceria"], "el-raul");
+  const supers = byType(["supermercado"], "el-raul");
+  const supersOther = byType(["supermercado"]).filter((s) => s.locality !== "el-raul");
+  const rests = byType(["restaurante"]);
+  const others = byType(["farmacia", "bazar", "tienda24"]);
+
+  /* 1. Hero cinematográfico */
+  const hero = el("section", { class: "hero" },
+    el("div", { class: "hero__bg", style: "background-image:url('assets/img/hero-el-raal.webp')" }),
+    el("div", { class: "hero__content" },
+      el("div", { class: "hero__brand", html: "TRAEYA<span>.</span>" }),
+      el("div", { class: "hero__eyebrow", html: t("heroEyebrow") }),
+      el("h1", { class: "hero__title", html: t("heroTitle").replace(/, ([^<]+)/, ", <em>$1</em>") }),
+      el("p", { class: "hero__sub", html: t("heroSub") }),
+      el("div", { class: "hero__actions" },
+        el("a", { class: "btn btn--primary", href: "#need", onclick: (e) => { e.preventDefault(); goSection("need"); }, html: t("heroCta") }),
+        el("a", { class: "btn btn--ghost", href: WA(t("waGeneric")), target: "_blank", rel: "noopener", html: t("heroCtaWa") })
+      )
+    ),
+    el("div", { class: "hero__scroll", "aria-hidden": "true" })
+  );
+
+  /* 2. Message First — ¿Qué necesitas? */
+  const needInput = el("input", { class: "need__input", type: "text", placeholder: t("needPlaceholder"), "aria-label": t("needTitle") });
+  const needForm = el("form", { class: "need__form" }, [
+    needInput,
+    el("button", { class: "btn btn--wa", type: "submit", html: t("needBtn") })
+  ]);
+  needForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    openWA(t("waGeneric") + (needInput.value.trim() || t("needPlaceholder")));
+  });
+
+  const needChips = el("div", { class: "need__chips" });
+  t("needChips").forEach((c) => needChips.append(el("button", { class: "chip", type: "button", html: c })));
+  $$(".chip", needChips).forEach((ch) => ch.addEventListener("click", () => {
+    const v = ch.textContent;
+    if (v.indexOf("سوق") >= 0 || v === "Mercado Domingo") goSection("market");
+    else if (v.indexOf("طعام") >= 0 || v === "Comida Casera") goSection("comida");
+    else goSection("comercios");
+  }));
+
+  const need = el("section", { class: "section need", id: "need" },
+    el("div", { class: "need__card reveal" },
+      el("div", { class: "eyebrow eyebrow--light", html: t("needKicker") }),
+      el("h2", { class: "need__title", html: t("needTitle").replace(/(\?)$/, "<em>$1</em>") }),
+      el("p", { class: "need__sub", html: t("needSub") }),
+      needForm,
+      needChips
+    )
+  );
+
+  /* 3-4. Descubre El Raal + muro SOLO de fachadas reales */
+  const intro = el("section", { class: "section section--cream reveal", id: "entrada" },
+    el("div", { class: "container" },
+      el("div", { class: "intro" },
+        el("div", { class: "eyebrow", html: t("introKicker") }),
+        el("p", { class: "intro__lead", html: t("introLead") }),
+        el("p", { class: "intro__sub", html: t("introSub") })
+      )
+    )
+  );
+
+  const facades = D.shops.filter((s) => s.facade);
+  const discover = el("section", { class: "section section--sand", id: "discover" },
+    el("div", { class: "container" },
+      sectionHead(t("discoverKicker"), t("discoverTitle"), t("discoverSub")),
+      el("div", { class: "discover-wall" }, facades.map((s, i) =>
+        el("a", { class: "discover-cell reveal", "data-delay": String((i % 3) + 1), href: "#/tienda/" + s.slug, "aria-label": esc(s.name) },
+          el("img", { loading: "lazy", src: s.facade, alt: esc(s.name) }),
+          el("span", { class: "discover-cell__tag", html: esc(s.name) })
+        )
+      ))
+    )
+  );
+
+  /* 5. Categorías */
+  const catChips = el("div", { class: "cat-strip reveal" }, [
+    [t("carnTitle"), "comercios"],
+    [t("superTitle"), "supermercados"],
+    [t("restTitle"), "restaurantes"],
+    [t("otherTitle"), "otros"],
+  ].map(([label, id]) =>
+    el("a", { class: "chip", href: "#" + id, onclick: (e) => { e.preventDefault(); goSection(id); }, html: label })
+  ));
+  const categorias = el("section", { class: "section section--cream", id: "categorias" },
+    el("div", { class: "container" },
+      sectionHead(t("carnTitle"), t("catTitle"), t("catSub")),
+      catChips
+    )
+  );
+
+  /* 6. Comercios individuales (con fachada, categoría e info) */
+  const comercios = gridSection("comercios", "section--sand", sectionHead(t("carnTitle"), t("carnTitle"), t("carnSub")), carn.map((s) => cardFor(s)));
+  const superSec = gridSection("supermercados", "section--cream", sectionHead(t("superTitle"), t("superTitle"), t("superSub")), supers.concat(supersOther).map((s) => cardFor(s)));
+
+  /* Mercado Domingo — DESTACADO (tras el hero). Solo fotos reales,
+     nunca imágenes generadas. */
+  const marketReal = (D.galleries["mercado-domingo"] || []).filter((g) => g.indexOf("gemini-generated-image") === -1);
+  const marketShots = marketReal.slice(0, 5);
+  const marketSec = el("section", { class: "section section--ink market-feature", id: "market" },
+    el("div", { class: "container" },
+      el("div", { class: "split" },
+        el("div", { class: "split__body reveal" },
+          el("div", { class: "eyebrow eyebrow--light", html: t("marketKicker") }),
+          el("h3", { html: t("marketTitle") }),
+          el("p", { class: "lede", html: t("marketBody") }),
+          el("a", { class: "btn btn--wa btn--lg", href: "#/tienda/mercado-domingo", html: t("marketCta") })
+        ),
+        el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/mercado-domingo" },
+          el("img", { loading: "lazy", src: shopBg(market) || "", alt: esc(market.name) })
+        )
+      ),
+      marketShots.length ? el("div", { class: "scene-strip reveal", "data-delay": "2" },
+        marketShots.map((g) =>
+          el("a", { class: "scene-strip__cell", href: "#/tienda/mercado-domingo" },
+            el("img", { loading: "lazy", src: g, alt: esc(market.name) })
+          )
+        )
+      ) : null
+    )
+  );
+
+  /* 7. Entrega — cómo funciona */
+  const deliveryCards = el("div", { class: "delivery-cards" }, [
+    { k: "elraul", title: t("deliveryElRaal"), sub: t("deliveryElRaalSub"), amount: DELIVERY.el_raul, free: false },
+    { k: "mercado", title: t("deliveryMercado"), sub: t("deliveryMercadoSub"), amount: DELIVERY.mercado, free: false },
+    { k: "fuera", title: t("deliveryFuera"), sub: t("deliveryFueraSub"), amount: DELIVERY.fuera_el_raul, free: false },
+    { k: "comida", title: t("deliveryComida"), sub: t("deliveryComidaSub"), amount: DELIVERY.comida_casera, free: true },
+  ].map((c, i) =>
+    el("div", { class: "delivery-card reveal", "data-delay": String((i % 2) + 1), "data-zone": c.k },
+      el("div", { class: "delivery-card__top" },
+        el("span", { class: "delivery-card__title", html: esc(c.title) }),
+        el("strong", { class: "delivery-card__price" + (c.free ? " is-free" : ""), html: c.free ? t("deliveryFree") : fmtPrice(c.amount) })
+      ),
+      el("span", { class: "delivery-card__sub", html: esc(c.sub) })
+    )
+  ));
+  const deliverySec = el("section", { class: "section section--cream", id: "entrega" },
+    el("div", { class: "container" },
+      sectionHead(t("deliveryKicker"), t("deliveryTitle"), t("deliverySub")),
+      deliveryCards,
+      el("p", { class: "delivery-note", html: esc(t("deliveryNote")) })
+    )
+  );
+
+  /* 8. Comida Casera — sección propia */
+  const comidaShots = comida && comida.products ? comida.products.map((p) => p.img).filter(Boolean).slice(0, 4) : [];
+  const comidaSec = el("section", { class: "section section--cream", id: "comida" },
+    el("div", { class: "container" },
+      el("div", { class: "split split--rev" },
+        el("div", { class: "split__body reveal" },
+          el("div", { class: "eyebrow", html: t("comidaKicker") }),
+          el("h3", { html: t("comidaTitle") }),
+          el("p", { class: "lede", html: t("comidaBody") }),
+          el("a", { class: "btn btn--dark", href: "#/tienda/comida-casera", html: t("comidaCta") })
+        ),
+        el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/comida-casera" },
+          el("img", { loading: "lazy", src: shopBg(comida) || "", alt: esc(comida.name) })
+        )
+      ),
+      comidaShots.length ? el("div", { class: "scene-strip reveal", "data-delay": "2" },
+        comidaShots.map((g) =>
+          el("a", { class: "scene-strip__cell", href: "#/tienda/comida-casera" },
+            el("img", { loading: "lazy", src: g, alt: esc(comida.name) })
+          )
+        )
+      ) : null
+    )
+  );
+
+  /* 9. Restaurantes y otros */
+  const restSec = railSection("restaurantes", "section--sand", sectionHead(t("restTitle"), t("restTitle"), t("restSub")), rests.map((s) => cardFor(s)));
+  const otherSec = gridSection("otros", "section--cream", sectionHead(t("otherTitle"), t("otherTitle"), t("otherSub")), others.map((s) => cardFor(s)));
+
+  view.append(hero, marketSec, need, intro, deliverySec, discover, categorias, comercios, superSec, comidaSec, restSec, otherSec);
+  observeReveals(view);
+  parallax();
+}
+
+function slugBySrc(src) {
+  const m = src.match(/facades\/([^/]+)\.webp/);
+  if (m) return m[1];
+  const gm = src.match(/gallery\/([^/]+?)--/);
+  if (gm) return gm[1];
+  return "";
+}
+
+function goSection(id) {
+  const n = document.getElementById(id);
+  if (n) {
+    n.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    if (location.hash !== "#/") location.hash = "#/";
+    setTimeout(() => { const m = document.getElementById(id); if (m) m.scrollIntoView({ behavior: "smooth", block: "start" }); }, 120);
+  }
+}
+
+/* ---------- Shop page ---------- */
+function renderShop(shop) {
+  const view = $("#view");
+  view.innerHTML = "";
+  document.title = shop.name + " · TRAEYA · El Raal";
+  STATE.shop = shop;
+  const products = shop.products;
+  const gallery = D.galleries[shop.slug] || [];
+  const bg = shopBg(shop);
+  const arName = I18N[STATE.lang].shopNameAr[shop.slug] || "";
+  const isMarket = shop.type === "mercado";
+
+  const dlv = deliveryFor(shop);
+  const dlvTag = el("span", { class: "tag tag--delivery" + (dlv.free ? " is-free" : ""), html: dlv.free ? t("deliveryShopFree") : t("deliveryShop") + " · " + fmtPrice(dlv.amount) });
+  const heroTags = el("div", { class: "shop-hero__tags" }, [
+    el("span", { class: "tag", style: "background:rgba(253,252,248,.14);color:var(--cream)", html: isMarket ? t("tagEverySunday") : t("type")[shop.type] }),
+    el("span", { class: "tag", style: "background:rgba(253,252,248,.14);color:var(--cream)", html: t("locality")[shop.locality] }),
+    dlvTag
+  ]);
+
+  const hero = el("section", { class: "shop-hero" },
+    bg ? el("div", { class: "shop-hero__bg", style: "background-image:url('" + bg + "')" }) : null,
+    el("div", { class: "shop-hero__content" },
+      el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
+      heroTags,
+      el("h1", { class: "shop-hero__name", html: esc(shop.name) }),
+      arName ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
+      products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
+    )
+  );
+
+  /* Caja "¿Qué estás buscando?" — bloque importante */
+  const askText = el("textarea", { class: "ask-box__textarea", rows: 3, placeholder: t("askShopPlaceholder") });
+  const askBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("askShopBtn") });
+  const askBox = el("div", { class: "ask-box" },
+    el("div", { class: "ask-box__icon", html: "✆" }),
+    el("h3", { html: t("askShopTitle") }),
+    el("p", { class: "ask-box__sub", html: t("askShopSub") }),
+    askText,
+    askBtn
+  );
+  const askGo = () => openWA(t("waShop") + " " + shop.name + ": " + (askText.value.trim() || t("askShopPlaceholder")));
+  askBtn.addEventListener("click", askGo);
+  askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
+
+  const menuSec = shop.menu
+    ? el("section", { class: "menu-section reveal" },
+        el("div", { class: "menu-section__head" },
+          el("div", { class: "eyebrow", html: t("menuKicker") }),
+          el("h3", { html: esc(shop.name) }),
+          el("span", { class: "menu-section__hint", html: t("menuHint") })
+        ),
+        el("div", { class: "menu-section__frame" },
+          el("img", { loading: "lazy", src: shop.menu, alt: "Menú · " + shop.name })
+        )
+      )
+    : null;
+
+  /* Mercado Domingo — experiencia visual: vídeos souk reales + fotos reales */
+  const marketVideos = (CFG.market && CFG.market.videos) || [];
+  const marketReal = gallery.filter((g) => g.indexOf("gemini-generated-image") === -1);
+  const marketExp =
+    isMarket && marketVideos.length
+      ? el("section", { class: "market-experience" },
+          el("div", { class: "market-exp__head" },
+            el("div", { class: "eyebrow eyebrow--light", html: t("marketKickerShop") }),
+            el("h3", { html: t("marketTitleShop") }),
+            el("p", { class: "market-exp__lede", html: t("marketBodyShop") })
+          ),
+          marketVideos.map((v, i) =>
+            el("div", { class: "market-exp__video reveal", "data-delay": String(i + 1) },
+              el("div", { class: "market-exp__frame" },
+                el("video", { autoplay: "", muted: "", loop: "", playsinline: "", poster: marketReal[i] || "", preload: "metadata", tabindex: "0" },
+                  el("source", { src: v, type: "video/mp4" })
+                )
+              ),
+              el("span", { class: "market-exp__cap", html: i === 0 ? t("marketVid1") : t("marketVid2") })
+            )
+          )
+        )
+      : null;
+
+  const body = el("section", { class: "section section--cream" },
+    el("div", { class: "container" },
+      askBox,
+      marketExp,
+      menuSec,
+      products.length ? renderProducts(shop) : renderEmpty(shop),
+      gallery.length ? renderGallery(shop, gallery) : null
+    )
+  );
+
+  view.append(hero, body);
+  observeReveals(view);
+  window.scrollTo(0, 0);
+}
+
+function renderEmpty(shop) {
+  return el("div", { class: "empty-state reveal" },
+    el("div", { class: "big", html: "☗" }),
+    el("h3", null, t("emptyTitle")),
+    el("p", null, t("emptyBody")),
+    el("div", { class: "empty-state__wa" },
+      el("a", { class: "btn btn--wa", href: WA(t("waShop") + " " + shop.name), target: "_blank", rel: "noopener", html: t("askShopBtn") })
+    )
+  );
+}
+
+function renderProducts(shop) {
+  const wrap = el("div", { class: "products" });
+  const groups = new Map();
+  shop.products.forEach((p) => {
+    const c = p.category || t("productsLabel");
+    if (!groups.has(c)) groups.set(c, []);
+    groups.get(c).push(p);
+  });
+  groups.forEach((list, cat) => {
+    const ordered = list.slice().sort((a, b) => (b.img ? 1 : 0) - (a.img ? 1 : 0));
+    const grid = el("div", { class: "product-grid" });
+    ordered.forEach((p) => grid.append(productCard(shop, p)));
+    wrap.append(
+      el("div", { class: "category-block" },
+        el("div", { class: "category-head" },
+          el("h4", { html: esc(cat) }),
+          el("span", { class: "rule" }),
+          el("span", { class: "count", html: String(list.length) })
+        ),
+        grid
+      )
+    );
+  });
+  return wrap;
+}
+
+function productCard(shop, p) {
+  const name = esc(displayName(p));
+  const ar = p.name_ar ? el("span", { class: "product-card__name-ar ar", html: esc(p.name_ar) }) : null;
+  const unit = p.unit && p.unit.toLowerCase() !== "uniti" ? el("span", { class: "product-card__unit", html: esc(p.unit) }) : null;
+  const price =
+    p.price != null
+      ? el("span", { class: "product-card__price", html: fmtPrice(p.price) + (p.price2 != null && p.price2 !== p.price ? " <small>·</small> " + fmtPrice(p.price2) : "") })
+      : el("span", { class: "product-card__ask", html: t("priceAsk") });
+
+  const media = p.img
+    ? el("div", { class: "product-card__media" }, el("img", { loading: "lazy", src: p.img, alt: name }))
+    : el("div", { class: "product-card__media" }, el("div", { class: "product-card__fallback", html: esc((p.name_es || p.name_ar || shop.name).charAt(0)) }));
+
+  const addBtn = el("button", { class: "btn btn--add", type: "button", html: '<span class="btn__label">' + esc(t("cartAdd")) + '</span><span class="btn__qty"></span>' });
+  const updateBtn = () => {
+    const key = shop.slug + "::" + p.id;
+    const it = Cart.items.get(key);
+    const qty = it ? it.qty : 0;
+    addBtn.classList.toggle("has-qty", qty > 0);
+    addBtn.querySelector(".btn__label").textContent = qty ? esc(t("cartAdded")) : t("cartAdd");
+    addBtn.querySelector(".btn__qty").textContent = qty ? "· " + qty : "";
+  };
+  addBtn.addEventListener("click", () => { Cart.add(shop, p); updateBtn(); });
+  updateBtn();
+
+  const card = el("div", { class: "product-card" }, [
+    media,
+    el("div", { class: "product-card__info" },
+      [el("div", { class: "product-card__name", html: name }), ar, unit, price]
+    ),
+    addBtn
+  ]);
+  return card;
+}
+
+function renderGallery(shop, gallery) {
+  const visible = STATE.galleryCounts[shop.slug] || 18;
+  const grid = el("div", { class: "gallery-grid" });
+  gallery.slice(0, visible).forEach((g) => grid.append(el("div", { class: "g-item" }, el("img", { loading: "lazy", src: g, alt: shop.name }))));
+
+  const sec = el("section", { class: "gallery", style: "margin-top:56px" },
+    el("div", { class: "category-head" },
+      el("h4", null, t("alsoHere")),
+      el("span", { class: "rule" }),
+      el("span", { class: "count", html: String(gallery.length) })
+    ),
+    el("p", { class: "gallery__sub", html: t("alsoHereSub") }),
+    grid
+  );
+  if (gallery.length > visible) {
+    const btn = el("button", { class: "btn btn--dark btn--small gallery__more", type: "button", html: t("showMore") + " (" + (gallery.length - visible) + ")" });
+    btn.addEventListener("click", () => {
+      STATE.galleryCounts[shop.slug] = (STATE.galleryCounts[shop.slug] || 18) + 24;
+      const ng = renderGallery(shop, gallery);
+      sec.replaceWith(ng);
+      observeReveals(ng);
+      ng.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    sec.append(el("div", { class: "gallery__more-wrap" }, btn));
+  }
+  return sec;
+}
+
+/* ---------- Cart UI ---------- */
+const CartBar = {
+  render() {
+    const bar = $("#cart-bar");
+    if (!bar) return;
+    const n = Cart.total();
+    bar.hidden = n === 0;
+    document.body.classList.toggle("has-cart", n > 0);
+    if (n === 0) return;
+    bar.innerHTML = "";
+    const inner = el("div", { class: "cart-bar__inner" });
+    inner.append(
+      el("div", { class: "cart-bar__info" },
+        el("strong", { html: t("cartView") }),
+        el("span", { html: String(n) + " " + t("cartItems") })
+      ),
+      el("button", { class: "btn btn--wa", type: "button", html: t("cartView"), onclick: () => CartDrawer.open() })
+    );
+    bar.append(inner);
+  }
+};
+
+const CartDrawer = {
+  open() {
+    const overlay = el("div", { class: "cart-drawer" }, el("div", { class: "cart-drawer__backdrop", onclick: () => overlay.remove() }));
+    const panel = el("div", { class: "cart-drawer__panel" });
+    const shop = Cart.shop && D.shops.find((s) => s.slug === Cart.shop.slug);
+    const items = shop ? Cart.productsFor(shop) : [];
+    const closeBtn = el("button", { class: "cart-drawer__close", html: "×", "aria-label": "Close" });
+    closeBtn.addEventListener("click", () => overlay.remove());
+
+    panel.append(
+      el("div", { class: "cart-drawer__head" },
+        el("div", { class: "eyebrow", html: "TRAEYA" }),
+        el("h3", { html: t("cartView") })
+      ),
+      closeBtn
+    );
+
+    if (!shop || !items.length) {
+      panel.append(
+        el("div", { class: "cart-drawer__empty" },
+          el("div", { class: "big", html: "🛒" }),
+          el("p", null, t("cartEmpty"))
+        )
+      );
+    } else {
+      panel.append(el("div", { class: "cart-drawer__shop", html: "<span>" + esc(t("cartShop")) + "</span><strong>" + esc(shop.name) + "</strong>" }));
+
+      const list = el("div", { class: "cart-drawer__list" });
+      items.forEach((it) => {
+        const p = it.product;
+        const price = p.price != null ? fmtPrice(p.price) + (p.price2 != null && p.price2 !== p.price ? " / " + fmtPrice(p.price2) : "") : t("priceAsk");
+        const row = el("div", { class: "cart-row" },
+          el("div", { class: "cart-row__name" },
+            el("strong", null, esc(displayName(p))),
+            el("span", null, price)
+          ),
+          el("div", { class: "cart-stepper" },
+            el("button", { class: "cart-stepper__btn", type: "button", html: "−", onclick: () => { Cart.setQty(shop.slug, p.id, it.qty - 1); CartDrawer.refresh(overlay, panel); } }),
+            el("span", { class: "cart-stepper__val", html: String(it.qty) }),
+            el("button", { class: "cart-stepper__btn", type: "button", html: "+", onclick: () => { Cart.setQty(shop.slug, p.id, it.qty + 1); CartDrawer.refresh(overlay, panel); } })
+          )
+        );
+        list.append(row);
+      });
+      panel.append(list);
+
+      const note = el("textarea", { class: "cart-drawer__note", rows: 2, placeholder: t("cartNotePh") });
+      panel.append(el("div", { class: "cart-drawer__note-wrap" },
+        el("label", { html: t("cartNote") }),
+        note
+      ));
+
+      const total = el("div", { class: "cart-drawer__total" });
+      CartDrawer._totals(total, shop, items);
+      const send = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("cartSend") });
+      send.addEventListener("click", () => {
+        const msg = buildOrderMessage(shop, items, note.value);
+        openWA(msg);
+      });
+      panel.append(total, el("div", { class: "cart-drawer__foot" }, send));
+    }
+
+    overlay.append(panel);
+    document.body.append(overlay);
+  },
+  refresh(overlay, panel) {
+    const shop = Cart.shop && D.shops.find((s) => s.slug === Cart.shop.slug);
+    const items = shop ? Cart.productsFor(shop) : [];
+    if (!items.length) { overlay.remove(); return; }
+    const list = panel.querySelector(".cart-drawer__list");
+    const total = panel.querySelector(".cart-drawer__total");
+    if (list) {
+      list.innerHTML = "";
+      items.forEach((it) => {
+        const p = it.product;
+        const price = p.price != null ? fmtPrice(p.price) + (p.price2 != null && p.price2 !== p.price ? " / " + fmtPrice(p.price2) : "") : t("priceAsk");
+        list.append(
+          el("div", { class: "cart-row" },
+            el("div", { class: "cart-row__name" },
+              el("strong", null, esc(displayName(p))),
+              el("span", null, price)
+            ),
+            el("div", { class: "cart-stepper" },
+              el("button", { class: "cart-stepper__btn", type: "button", html: "−", onclick: () => { Cart.setQty(shop.slug, p.id, it.qty - 1); CartDrawer.refresh(overlay, panel); } }),
+              el("span", { class: "cart-stepper__val", html: String(it.qty) }),
+              el("button", { class: "cart-stepper__btn", type: "button", html: "+", onclick: () => { Cart.setQty(shop.slug, p.id, it.qty + 1); CartDrawer.refresh(overlay, panel); } })
+            )
+          )
+        );
+      });
+    }
+    if (total) {
+      CartDrawer._totals(total, shop, items);
+    }
+  },
+  _totals(total, shop, items) {
+    const priced = items.filter((it) => it.product.price != null);
+    const dlv = deliveryFor(shop);
+    const allPriced = priced.length === items.length && items.length > 0;
+    const sum = allPriced ? priced.reduce((s, it) => s + it.product.price * it.qty, 0) : 0;
+    const subtotalHtml = allPriced
+      ? esc(fmtPrice(sum))
+      : "<small>" + esc(t("cartNoPrices")) + "</small>";
+    const deliveryHtml = dlv.free
+      ? '<span class="cart-total__free">' + esc(t("cartDeliveryFree")) + "</span>"
+      : esc(fmtPrice(dlv.amount));
+    const totalHtml = allPriced
+      ? "<strong>" + esc(fmtPrice(sum + dlv.amount)) + "</strong>"
+      : "<small>" + esc(t("cartNoPrices")) + "</small>";
+    total.innerHTML =
+      '<div class="cart-total__row"><span>' + esc(t("cartSubtotal")) + '</span><span>' + subtotalHtml + "</span></div>" +
+      '<div class="cart-total__row"><span>' + esc(t("cartDelivery")) + '</span><span>' + deliveryHtml + "</span></div>" +
+      '<div class="cart-total__row cart-total__row--last"><span>' + esc(t("cartTotal")) + "</span><span>" + totalHtml + "</span></div>";
+  }
+};
+
+function buildOrderMessage(shop, items, note) {
+  const lines = [];
+  lines.push("TRAEYA · EL RAAL");
+  lines.push(t("cartShop") + ": " + shop.name);
+  lines.push("");
+  lines.push(t("cartView") + ":");
+  items.forEach((it) => {
+    const p = it.product;
+    const price = p.price != null ? " — " + fmtPrice(p.price) : "";
+    lines.push("• " + displayName(p) + (it.qty > 1 ? " × " + it.qty : "") + price);
+  });
+  const priced = items.filter((it) => it.product.price != null);
+  const dlv = deliveryFor(shop);
+  const allPriced = priced.length === items.length && priced.length > 0;
+  if (allPriced) {
+    const sum = priced.reduce((s, it) => s + it.product.price * it.qty, 0);
+    lines.push("");
+    lines.push(t("cartSubtotal") + ": " + fmtPrice(sum));
+    lines.push(t("cartDelivery") + ": " + (dlv.free ? t("cartDeliveryFree") : fmtPrice(dlv.amount)));
+    lines.push(t("cartTotal") + ": " + fmtPrice(sum + dlv.amount));
+  } else {
+    lines.push("");
+    lines.push(t("cartNoPrices"));
+  }
+  if (note && note.trim()) {
+    lines.push("");
+    lines.push(t("cartNote") + ": " + note.trim());
+  }
+  return lines.join("\n");
+}
+
+/* ---------- Router ---------- */
+function route() {
+  const h = location.hash || "#/";
+  if (h.startsWith("#/tienda/")) {
+    const slug = decodeURIComponent(h.slice("#/tienda/".length));
+    const shop = D.shops.find((s) => s.slug === slug);
+    if (shop) return renderShop(shop);
+  }
+  renderHome();
+}
+
+/* ---------- Init ---------- */
+function renderAll() {
+  renderTopbar();
+  renderFooter();
+  renderFloat();
+  CartBar.render();
+  route();
+}
+
+function applyLangAttrs() {
+  document.documentElement.lang = STATE.lang;
+  document.documentElement.dir = STATE.lang === "ar" ? "rtl" : "ltr";
+}
+
+function init() {
+  Cart._load();
+  applyLangAttrs();
+  if (localStorage.getItem("traeya.lang")) {
+    renderAll();
+  } else {
+    /* Primera visita: SOLO el language gate, sin home detrás. */
+    document.body.classList.add("gate-pending");
+    renderLangGate();
+  }
+  window.addEventListener("hashchange", () => { route(); window.scrollTo(0, 0); });
+  window.addEventListener("scroll", () => { updateTopbar(); requestAnimationFrame(parallax); }, { passive: true });
+}
+
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+else init();

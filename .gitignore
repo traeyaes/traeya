@@ -1,0 +1,17 @@
+# Thumbnails / system files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor / OS temp
+*.tmp
+*.swp
+*~
+.vscode/
+.idea/
+
+# Temp logs and credentials (never upload)
+*.log
+*.key
+*.pem
+.env
