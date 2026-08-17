@@ -832,6 +832,7 @@ input, textarea { font: inherit; }
 .shop-hero {
   position: relative;
   padding: calc(var(--head-h) + 44px) 0 52px;
+  min-height: 380px;
   color: var(--white);
   overflow: hidden;
 }
@@ -839,15 +840,13 @@ input, textarea { font: inherit; }
   position: absolute;
   inset: 0;
   background-size: cover;
-  background-position: center;
-  transform: scale(1.06);
-  filter: blur(2px) saturate(1.05);
+  background-position: center top;
 }
 .shop-hero__bg::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 26, 19, .66), rgba(8, 26, 19, .88));
+  background: linear-gradient(180deg, rgba(8, 26, 19, .45), rgba(8, 26, 19, .85));
 }
 .shop-hero__content { position: relative; z-index: 1; }
 .shop-hero__back {
@@ -1313,6 +1312,8 @@ body.has-cart .wa-float-wrap { bottom: 96px; }
 @media (max-width: 480px) {
   .commerce-grid, .product-grid { grid-template-columns: 1fr; }
   .container { padding: 0 16px; }
+  .shop-hero { min-height: 300px; }
+  .shop-hero__name { font-size: clamp(26px, 8vw, 40px); }
   .ask-box { padding: 20px; }
   .ask-box .btn { width: 100%; justify-content: center; }
   .topnav__need { font-size: 12.5px; padding: 8px 13px; }
@@ -1339,6 +1340,53 @@ body.has-cart .wa-float-wrap { bottom: 96px; }
   .gallery-grid { gap: 8px; }
   .need__chips .chip { flex: 1 1 auto; }
   .footer__bottom { justify-content: center; text-align: center; }
+}
+
+/* ---------------- Comida ask message ---------------- */
+.comida-ask-msg {
+  text-align: center;
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  border-radius: var(--r);
+  background: var(--cream);
+  border: 1px solid var(--line);
+}
+.comida-ask-msg__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.comida-ask-msg__sub {
+  font-size: .95rem;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.comida-ask-msg__note {
+  font-size: .82rem;
+  color: var(--clay);
+  font-weight: 600;
+}
+
+/* ---------------- Product card badges ---------------- */
+.product-card__badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+.badge--advance {
+  background: #fff3cd;
+  color: #856404;
+}
+.badge--avail {
+  background: #d4edda;
+  color: #155724;
 }
 
 /* ---------------- Descubre El Raal grid ---------------- */

@@ -188,11 +188,14 @@ const I18N = {
     liveBadgeSub: "Cada domingo en TikTok",
     /* --- Comida Casera pre-order --- */
     comidaPreTitle: "Encarga con <em>antelación</em>",
-    comidaPreSub: "Algunos platos necesitan preparación previa. Haz tu pedido con tiempo y te avisamos cuando esté listo.",
-    comidaAdv: "Pedido con antelación",
-    comidaAvail: "Disponible habitualmente",
+    comidaPreSub: "Los platos que requieren preparación previa deben encargarse con al menos 3 horas de antelación.",
+    comidaAdv: "Pedido con 3 horas de antelación",
+    comidaAvail: "Disponible normalmente",
     comidaOrder: "Encargar",
     comidaWant: "Quiero pedir",
+    comidaAskTitle: "¿Qué te apetece? 🍽️",
+    comidaAskSub: "Dinos qué quieres y te lo preparamos.",
+    comidaAskNote: "Los platos que requieren preparación previa deben encargarse con al menos 3 horas de antelación.",
     /* --- Farmacia receta --- */
     recetaTitle: "Envía tu receta",
     recetaSub: "Envíanos una foto de tu receta y te ayudamos a preparar tu pedido.",
@@ -356,11 +359,14 @@ const I18N = {
     liveBadgeSub: "كل أحد على تيك توك",
     /* --- Comida Casera pre-order --- */
     comidaPreTitle: "اطلب <em>مسبقاً</em>",
-    comidaPreSub: "بعض الأطباق تحتاج تحضيراً مسبقاً. اطلب بوقتك ونخبرك عندما يكون جاهزاً.",
-    comidaAdv: "طلب مسبق",
+    comidaPreSub: "الأطباق التي تحتاج تحضيراً مسبقاً يجب طلبها قبل 3 ساعات على الأقل.",
+    comidaAdv: "طلب مسبق — 3 ساعات",
     comidaAvail: "متوفر عادةً",
     comidaOrder: "اطلب مسبقاً",
     comidaWant: "أريد أن أطلب",
+    comidaAskTitle: "شنو بغيتي؟ 🍽️",
+    comidaAskSub: "قول لينا شنو بغيتي ونحضروه ليك.",
+    comidaAskNote: "الأطباق التي تحتاج تحضيراً مسبقاً يجب طلبها قبل 3 ساعات على الأقل.",
     /* --- Farmacia receta --- */
     recetaTitle: "أرسل وصفتك",
     recetaSub: "أرسل لنا صورة وصفتك وسنساعدك في تحضير طلبك.",
@@ -842,7 +848,11 @@ function renderHome() {
 
   /* 5. Comida Casera — with pre-order labels */
   const comidaProducts = comida && comida.products ? comida.products : [];
-  const comidaPreItems = comidaProducts.filter((p) => p.category && (p.category.toLowerCase().indexOf("antelación") >= 0 || p.category.toLowerCase().indexOf("pre-order") >= 0 || p.category.toLowerCase().indexOf("preorder") >= 0));
+  const advanceNames = ["cuscús", "cuscus", "tajín", "tajin", "harira", "pescado", "fish", "hout", "pincho", "pinchos", "carne"];
+  const comidaPreItems = comidaProducts.filter((p) => {
+    const n = ((p.name_es || "") + " " + (p.name_ar || "")).toLowerCase();
+    return advanceNames.some((kw) => n.indexOf(kw) >= 0);
+  });
   const comidaAvailItems = comidaProducts.filter((p) => !comidaPreItems.includes(p));
   const comidaShots = comidaProducts.map((p) => p.img).filter(Boolean).slice(0, 4);
   const comidaSec = el("section", { class: "section section--cream", id: "comida" },
@@ -913,63 +923,10 @@ function renderHome() {
   /* 7. Restaurantes */
   const restSec = railSection("restaurantes", "section--sand", sectionHead(t("restTitle"), t("restTitle"), t("restSub")), rests.map((s) => cardFor(s)));
 
-  /* 8. Otros — incluye Farmacia con receta */
-  const farmacia = others.find((s) => s.type === "farmacia");
+  /* 8. Otros */
   const otherSec = gridSection("otros", "section--cream", sectionHead(t("otherTitle"), t("otherTitle"), t("otherSub")), others.map((s) => cardFor(s)));
 
-  /* 9. Farmacia — envío de receta */
-  const farmaciaSec = farmacia ? (function() {
-    let recetaImg = null;
-    const recetaPreview = el("div", { class: "receta-preview" });
-    const recetaFile = el("input", { class: "receta-file", type: "file", accept: "image/*", id: "receta-file" });
-    const recetaLabel = el("label", { class: "btn btn--dark btn--sm receta-label", for: "receta-file", html: t("recetaPick") });
-    const recetaRemoveBtn = el("button", { class: "btn btn--sm receta-remove", type: "button", html: t("recetaRemove"), style: "display:none" });
-    const recetaSendBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("recetaSend"), disabled: true });
-
-    recetaFile.addEventListener("change", () => {
-      const file = recetaFile.files && recetaFile.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        recetaImg = reader.result;
-        recetaPreview.innerHTML = "";
-        recetaPreview.append(el("img", { src: recetaImg, alt: t("recetaPreview") }));
-        recetaPreview.style.display = "";
-        recetaRemoveBtn.style.display = "";
-        recetaSendBtn.disabled = false;
-      };
-      reader.readAsDataURL(file);
-    });
-    recetaRemoveBtn.addEventListener("click", () => {
-      recetaImg = null;
-      recetaFile.value = "";
-      recetaPreview.innerHTML = "";
-      recetaPreview.style.display = "none";
-      recetaRemoveBtn.style.display = "none";
-      recetaSendBtn.disabled = true;
-    });
-    recetaSendBtn.addEventListener("click", () => {
-      openWA(t("recetaMsg"));
-    });
-
-    return el("section", { class: "section section--sand", id: "farmacia-receta" },
-      el("div", { class: "container" },
-        sectionHead(null, t("recetaTitle"), t("recetaSub")),
-        el("div", { class: "receta-box reveal" },
-          el("div", { class: "receta-box__upload" },
-            recetaLabel,
-            recetaFile,
-            recetaRemoveBtn
-          ),
-          recetaPreview,
-          el("p", { class: "receta-hint", html: t("recetaHint") }),
-          recetaSendBtn
-        )
-      )
-    );
-  })() : null;
-
-  view.append(hero, need, descubre, marketSec, comidaSec, deliverySec, restSec, otherSec, farmaciaSec);
+  view.append(hero, need, descubre, marketSec, comidaSec, deliverySec, restSec, otherSec);
   observeReveals(view);
   parallax();
 }
@@ -1075,13 +1032,22 @@ function renderShop(shop) {
         )
       : null;
 
+  const isComida = shop.slug === "comida-casera";
+  const comidaAskMsg = isComida ? el("div", { class: "comida-ask-msg reveal" },
+    el("h3", { class: "comida-ask-msg__title", html: t("comidaAskTitle") }),
+    el("p", { class: "comida-ask-msg__sub", html: t("comidaAskSub") }),
+    el("p", { class: "comida-ask-msg__note", html: t("comidaAskNote") })
+  ) : null;
+
   const body = el("section", { class: "section section--cream" },
     el("div", { class: "container" },
       askBox,
       marketExp,
       menuSec,
-      products.length ? renderProducts(shop) : renderEmpty(shop),
-      gallery.length ? renderGallery(shop, gallery) : null
+      comidaAskMsg,
+      products.length ? renderProducts(shop, isComida) : renderEmpty(shop),
+      gallery.length ? renderGallery(shop, gallery) : null,
+      shop.type === "farmacia" ? renderFarmaciaReceta() : null
     )
   );
 
@@ -1101,7 +1067,58 @@ function renderEmpty(shop) {
   );
 }
 
-function renderProducts(shop) {
+function renderFarmaciaReceta() {
+  let recetaImg = null;
+  const recetaPreview = el("div", { class: "receta-preview" });
+  const recetaFile = el("input", { class: "receta-file", type: "file", accept: "image/*", id: "receta-file" });
+  const recetaLabel = el("label", { class: "btn btn--dark btn--sm receta-label", for: "receta-file", html: t("recetaPick") });
+  const recetaRemoveBtn = el("button", { class: "btn btn--sm receta-remove", type: "button", html: t("recetaRemove"), style: "display:none" });
+  const recetaSendBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("recetaSend"), disabled: true });
+
+  recetaFile.addEventListener("change", () => {
+    const file = recetaFile.files && recetaFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      recetaImg = reader.result;
+      recetaPreview.innerHTML = "";
+      recetaPreview.append(el("img", { src: recetaImg, alt: t("recetaPreview") }));
+      recetaPreview.style.display = "";
+      recetaRemoveBtn.style.display = "";
+      recetaSendBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+  });
+  recetaRemoveBtn.addEventListener("click", () => {
+    recetaImg = null;
+    recetaFile.value = "";
+    recetaPreview.innerHTML = "";
+    recetaPreview.style.display = "none";
+    recetaRemoveBtn.style.display = "none";
+    recetaSendBtn.disabled = true;
+  });
+  recetaSendBtn.addEventListener("click", () => {
+    openWA(t("recetaMsg"));
+  });
+
+  return el("section", { class: "section section--sand", id: "farmacia-receta" },
+    el("div", { class: "container" },
+      sectionHead(null, t("recetaTitle"), t("recetaSub")),
+      el("div", { class: "receta-box reveal" },
+        el("div", { class: "receta-box__upload" },
+          recetaLabel,
+          recetaFile,
+          recetaRemoveBtn
+        ),
+        recetaPreview,
+        el("p", { class: "receta-hint", html: t("recetaHint") }),
+        recetaSendBtn
+      )
+    )
+  );
+}
+
+function renderProducts(shop, isComida) {
   const wrap = el("div", { class: "products" });
   const groups = new Map();
   shop.products.forEach((p) => {
@@ -1109,14 +1126,24 @@ function renderProducts(shop) {
     if (!groups.has(c)) groups.set(c, []);
     groups.get(c).push(p);
   });
+  const advanceNames = ["cuscús", "cuscus", "tajín", "tajin", "harira", "pescado", "fish", "hout", "pincho", "pinchos", "carne"];
   groups.forEach((list, cat) => {
     const ordered = list.slice().sort((a, b) => {
-      const aScore = (a.img ? 2 : 0) + (a.description_es || a.description_ar ? 1 : 0);
-      const bScore = (b.img ? 2 : 0) + (b.description_es || b.description_ar ? 1 : 0);
+      const aDesc = !!(a.desc_es || a.desc_ar);
+      const bDesc = !!(b.desc_es || b.desc_ar);
+      const aScore = (a.img ? 2 : 0) + (aDesc ? 1 : 0);
+      const bScore = (b.img ? 2 : 0) + (bDesc ? 1 : 0);
       return bScore - aScore;
     });
     const grid = el("div", { class: "product-grid" });
-    ordered.forEach((p) => grid.append(productCard(shop, p)));
+    ordered.forEach((p) => {
+      let badge = null;
+      if (isComida) {
+        const n = ((p.name_es || "") + " " + (p.name_ar || "")).toLowerCase();
+        badge = advanceNames.some((kw) => n.indexOf(kw) >= 0) ? t("comidaAdv") : t("comidaAvail");
+      }
+      grid.append(productCard(shop, p, badge));
+    });
     wrap.append(
       el("div", { class: "category-block" },
         el("div", { class: "category-head" },
@@ -1131,7 +1158,7 @@ function renderProducts(shop) {
   return wrap;
 }
 
-function productCard(shop, p) {
+function productCard(shop, p, badge) {
   const name = esc(displayName(p));
   const ar = p.name_ar ? el("span", { class: "product-card__name-ar ar", html: esc(p.name_ar) }) : null;
   const unit = p.unit && p.unit.toLowerCase() !== "uniti" ? el("span", { class: "product-card__unit", html: esc(p.unit) }) : null;
@@ -1141,12 +1168,14 @@ function productCard(shop, p) {
       : el("span", { class: "product-card__ask", html: t("priceAsk") });
 
   const hasImg = !!p.img;
-  const hasDesc = !!(p.description_es || p.description_ar);
+  const hasDesc = !!(p.desc_es || p.desc_ar);
   const compact = !hasImg && !hasDesc;
 
   const media = p.img
     ? el("div", { class: "product-card__media" }, el("img", { loading: "lazy", src: p.img, alt: name }))
     : null;
+
+  const badgeEl = badge ? el("span", { class: "product-card__badge" + (badge === t("comidaAdv") ? " badge--advance" : " badge--avail"), html: badge }) : null;
 
   const addBtn = el("button", { class: "btn btn--add", type: "button", html: '<span class="btn__label">' + esc(t("cartAdd")) + '</span><span class="btn__qty"></span>' });
   const updateBtn = () => {
@@ -1160,7 +1189,7 @@ function productCard(shop, p) {
   addBtn.addEventListener("click", () => { Cart.add(shop, p); updateBtn(); });
   updateBtn();
 
-  const infoChildren = [el("div", { class: "product-card__name", html: name }), ar, unit, price].filter(Boolean);
+  const infoChildren = [badgeEl, el("div", { class: "product-card__name", html: name }), ar, unit, price].filter(Boolean);
 
   const card = el("div", { class: "product-card" + (compact ? " product-card--compact" : "") }, [
     media,
