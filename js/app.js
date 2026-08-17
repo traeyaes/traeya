@@ -969,18 +969,6 @@ function renderShop(shop) {
     dlvTag
   ]);
 
-  const hero = el("section", { class: "shop-hero" },
-    bg ? el("div", { class: "shop-hero__bg", style: "background-image:url('" + bg + "')" }) : null,
-    bg ? el("div", { class: "shop-hero__overlay" }) : null,
-    el("div", { class: "shop-hero__content" },
-      el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
-      heroTags,
-      el("h1", { class: "shop-hero__name", html: esc(shop.name) }),
-      arName ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
-      products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
-    )
-  );
-
   /* Caja "¿Qué estás buscando?" — bloque importante */
   const askText = el("textarea", { class: "ask-box__textarea", rows: 3, placeholder: t("askShopPlaceholder") });
   const askBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("askShopBtn") });
@@ -994,6 +982,19 @@ function renderShop(shop) {
   const askGo = () => openWA(t("waShop") + " " + shop.name + ": " + (askText.value.trim() || t("askShopPlaceholder")));
   askBtn.addEventListener("click", askGo);
   askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
+
+  const hero = el("section", { class: "shop-hero" },
+    bg ? el("img", { class: "shop-hero__image", src: bg, alt: esc(shop.name) }) : null,
+    bg ? el("div", { class: "shop-hero__overlay" }) : null,
+    el("div", { class: "shop-hero__content" },
+      el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
+      heroTags,
+      el("h1", { class: "shop-hero__name", html: esc(shop.name) }),
+      arName ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
+      products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
+    ),
+    askBox
+  );
 
   const menuSec = shop.menu
     ? el("section", { class: "menu-section reveal" },
@@ -1041,7 +1042,6 @@ function renderShop(shop) {
 
   const body = el("section", { class: "section section--cream" },
     el("div", { class: "container" },
-      askBox,
       marketExp,
       menuSec,
       comidaAskMsg,
@@ -1120,41 +1120,58 @@ function renderFarmaciaReceta() {
 
 function renderProducts(shop, isComida) {
   const wrap = el("div", { class: "products" });
-  const groups = new Map();
-  shop.products.forEach((p) => {
-    const c = p.category || t("productsLabel");
-    if (!groups.has(c)) groups.set(c, []);
-    groups.get(c).push(p);
-  });
   const advanceNames = ["cuscús", "cuscus", "tajín", "tajin", "harira", "pescado", "fish", "hout", "pincho", "pinchos", "carne"];
-  groups.forEach((list, cat) => {
-    const ordered = list.slice().sort((a, b) => {
-      const aDesc = !!(a.desc_es || a.desc_ar);
-      const bDesc = !!(b.desc_es || b.desc_ar);
-      const aScore = (a.img ? 2 : 0) + (aDesc ? 1 : 0);
-      const bScore = (b.img ? 2 : 0) + (bDesc ? 1 : 0);
-      return bScore - aScore;
-    });
-    const grid = el("div", { class: "product-grid" });
-    ordered.forEach((p) => {
-      let badge = null;
-      if (isComida) {
-        const n = ((p.name_es || "") + " " + (p.name_ar || "")).toLowerCase();
-        badge = advanceNames.some((kw) => n.indexOf(kw) >= 0) ? t("comidaAdv") : t("comidaAvail");
-      }
-      grid.append(productCard(shop, p, badge));
-    });
-    wrap.append(
-      el("div", { class: "category-block" },
-        el("div", { class: "category-head" },
-          el("h4", { html: esc(cat) }),
-          el("span", { class: "rule" }),
-          el("span", { class: "count", html: String(list.length) })
-        ),
-        grid
-      )
-    );
+
+  const withImageAndDesc = [];
+  const withImageOnly = [];
+  const withDescOnly = [];
+  const withNeither = [];
+
+  shop.products.forEach((p) => {
+    const hasImg = !!(p.img && p.img.trim());
+    const hasDesc = !!((p.desc_es && p.desc_es.trim()) || (p.desc_ar && p.desc_ar.trim()));
+    if (hasImg && hasDesc) withImageAndDesc.push(p);
+    else if (hasImg) withImageOnly.push(p);
+    else if (hasDesc) withDescOnly.push(p);
+    else withNeither.push(p);
   });
+
+  const orderedProducts = [...withImageAndDesc, ...withImageOnly, ...withDescOnly, ...withNeither];
+
+  console.log("========== PRODUCT GROUPING: " + shop.name + " ==========");
+  console.log("Group 1 (image+description):", withImageAndDesc.length, withImageAndDesc.slice(0, 5).map(p => p.name_es || p.id).join(", "));
+  console.log("Group 2 (image only):", withImageOnly.length, withImageOnly.slice(0, 5).map(p => p.name_es || p.id).join(", "));
+  console.log("Group 3 (description only):", withDescOnly.length, withDescOnly.slice(0, 5).map(p => p.name_es || p.id).join(", "));
+  console.log("Group 4 (neither):", withNeither.length, withNeither.slice(0, 5).map(p => p.name_es || p.id).join(", "));
+  console.log("Total ordered:", orderedProducts.length);
+  orderedProducts.forEach((p, i) => {
+    const hasImg = !!(p.img && p.img.trim());
+    const hasDesc = !!((p.desc_es && p.desc_es.trim()) || (p.desc_ar && p.desc_ar.trim()));
+    const grp = (hasImg && hasDesc) ? "G1" : hasImg ? "G2" : hasDesc ? "G3" : "G4";
+    console.log("  [" + (i + 1) + "] " + grp + " | " + (p.name_es || p.id));
+  });
+
+  const grid = el("div", { class: "product-grid" });
+  orderedProducts.forEach((p) => {
+    let badge = null;
+    if (isComida) {
+      const n = ((p.name_es || "") + " " + (p.name_ar || "")).toLowerCase();
+      badge = advanceNames.some((kw) => n.indexOf(kw) >= 0) ? t("comidaAdv") : t("comidaAvail");
+    }
+    grid.append(productCard(shop, p, badge));
+  });
+
+  wrap.append(
+    el("div", { class: "category-block" },
+      el("div", { class: "category-head" },
+        el("h4", { html: esc(t("productsLabel")) }),
+        el("span", { class: "rule" }),
+        el("span", { class: "count", html: String(shop.products.length) })
+      ),
+      grid
+    )
+  );
+
   return wrap;
 }
 
