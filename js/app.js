@@ -180,6 +180,28 @@ const I18N = {
       "spar-express": "سوبرماركت سبار إكسبريس",
       "venticoitros-24": "فينتيكويتروس 24",
     },
+    /* --- Descubre El Raal --- */
+    descubreTitle: "Descubre <em>El Raal</em>",
+    descubreSub: "Un paseo por el pueblo. Todos los comercios de El Raal, reales y cercanos.",
+    /* --- TikTok LIVE --- */
+    liveBadge: "EN DIRECTO",
+    liveBadgeSub: "Cada domingo en TikTok",
+    /* --- Comida Casera pre-order --- */
+    comidaPreTitle: "Encarga con <em>antelación</em>",
+    comidaPreSub: "Algunos platos necesitan preparación previa. Haz tu pedido con tiempo y te avisamos cuando esté listo.",
+    comidaAdv: "Pedido con antelación",
+    comidaAvail: "Disponible habitualmente",
+    comidaOrder: "Encargar",
+    comidaWant: "Quiero pedir",
+    /* --- Farmacia receta --- */
+    recetaTitle: "Envía tu receta",
+    recetaSub: "Envíanos una foto de tu receta y te ayudamos a preparar tu pedido.",
+    recetaPick: "Seleccionar imagen",
+    recetaPreview: "Vista previa",
+    recetaRemove: "Quitar",
+    recetaSend: "Enviar por WhatsApp",
+    recetaHint: "La imagen se enviará por WhatsApp. Adjúntala en el chat.",
+    recetaMsg: "Hola TRAEYA, quiero enviar una receta médica para preparar mi pedido.",
   },
 
   ar: {
@@ -326,6 +348,28 @@ const I18N = {
       "spar-express": "سوبرماركت سبار إكسبريس",
       "venticoitros-24": "فينتيكويتروس 24",
     },
+    /* --- Descubre El Raal --- */
+    descubreTitle: "اكتشف <em>الرال</em>",
+    descubreSub: "جولة في المدينة. جميع محلات الرال، حقيقية وقريبة.",
+    /* --- TikTok LIVE --- */
+    liveBadge: "مباشر",
+    liveBadgeSub: "كل أحد على تيك توك",
+    /* --- Comida Casera pre-order --- */
+    comidaPreTitle: "اطلب <em>مسبقاً</em>",
+    comidaPreSub: "بعض الأطباق تحتاج تحضيراً مسبقاً. اطلب بوقتك ونخبرك عندما يكون جاهزاً.",
+    comidaAdv: "طلب مسبق",
+    comidaAvail: "متوفر عادةً",
+    comidaOrder: "اطلب مسبقاً",
+    comidaWant: "أريد أن أطلب",
+    /* --- Farmacia receta --- */
+    recetaTitle: "أرسل وصفتك",
+    recetaSub: "أرسل لنا صورة وصفتك وسنساعدك في تحضير طلبك.",
+    recetaPick: "اختر صورة",
+    recetaPreview: "معاينة",
+    recetaRemove: "إزالة",
+    recetaSend: "أرسل عبر واتساب",
+    recetaHint: "ستُرسل الصورة عبر واتساب. أرفقها في المحادثة.",
+    recetaMsg: "مرحباً ترايا، أريد أن أرسل وصفة طبية لتحضير طلبي.",
   },
 };
 
@@ -695,13 +739,10 @@ function renderHome() {
   const byType = (types, loc) => D.shops.filter((s) => types.includes(s.type) && (!loc || s.locality === loc));
   const market = D.shops.find((s) => s.slug === "mercado-domingo");
   const comida = D.shops.find((s) => s.slug === "comida-casera");
-  const carn = byType(["carniceria"], "el-raul");
-  const supers = byType(["supermercado"], "el-raul");
-  const supersOther = byType(["supermercado"]).filter((s) => s.locality !== "el-raul");
   const rests = byType(["restaurante"]);
   const others = byType(["farmacia", "bazar", "tienda24"]);
 
-  /* 1. Hero cinematográfico */
+  /* 1. Hero */
   const hero = el("section", { class: "hero" },
     el("div", { class: "hero__bg", style: "background-image:url('assets/img/hero-el-raal.webp')" }),
     el("div", { class: "hero__content" },
@@ -717,7 +758,7 @@ function renderHome() {
     el("div", { class: "hero__scroll", "aria-hidden": "true" })
   );
 
-  /* 2. Message First — ¿Qué necesitas? */
+  /* 2. Message First — clean card */
   const needInput = el("input", { class: "need__input", type: "text", placeholder: t("needPlaceholder"), "aria-label": t("needTitle") });
   const needForm = el("form", { class: "need__form" }, [
     needInput,
@@ -747,54 +788,34 @@ function renderHome() {
     )
   );
 
-  /* 3-4. Descubre El Raal + muro SOLO de fachadas reales */
-  const intro = el("section", { class: "section section--cream reveal", id: "entrada" },
+  /* 3. Descubre El Raal — ALL shops with facades */
+  const allElRaal = D.shops.filter((s) => s.locality === "el-raul" && s.facade);
+  const descubre = el("section", { class: "section section--cream", id: "discover" },
     el("div", { class: "container" },
-      el("div", { class: "intro" },
-        el("div", { class: "eyebrow", html: t("introKicker") }),
-        el("p", { class: "intro__lead", html: t("introLead") }),
-        el("p", { class: "intro__sub", html: t("introSub") })
-      )
+      sectionHead(null, t("descubreTitle"), t("descubreSub")),
+      el("div", { class: "descubre-grid" }, allElRaal.map((s, i) => {
+        const typeName = t("type")[s.type] || s.type;
+        return el("a", { class: "descubre-card reveal", "data-delay": String((i % 4) + 1), href: "#/tienda/" + s.slug },
+          el("div", { class: "descubre-card__img" },
+            el("img", { loading: "lazy", src: s.facade, alt: esc(s.name) })
+          ),
+          el("div", { class: "descubre-card__body" },
+            el("span", { class: "descubre-card__type", html: typeName }),
+            el("h3", { class: "descubre-card__name", html: esc(s.name) })
+          )
+        );
+      }))
     )
   );
 
-  const facades = D.shops.filter((s) => s.facade);
-  const discover = el("section", { class: "section section--sand", id: "discover" },
-    el("div", { class: "container" },
-      sectionHead(t("discoverKicker"), t("discoverTitle"), t("discoverSub")),
-      el("div", { class: "discover-wall" }, facades.map((s, i) =>
-        el("a", { class: "discover-cell reveal", "data-delay": String((i % 3) + 1), href: "#/tienda/" + s.slug, "aria-label": esc(s.name) },
-          el("img", { loading: "lazy", src: s.facade, alt: esc(s.name) }),
-          el("span", { class: "discover-cell__tag", html: esc(s.name) })
-        )
-      ))
-    )
-  );
-
-  /* 5. Categorías */
-  const catChips = el("div", { class: "cat-strip reveal" }, [
-    [t("carnTitle"), "comercios"],
-    [t("superTitle"), "supermercados"],
-    [t("restTitle"), "restaurantes"],
-    [t("otherTitle"), "otros"],
-  ].map(([label, id]) =>
-    el("a", { class: "chip", href: "#" + id, onclick: (e) => { e.preventDefault(); goSection(id); }, html: label })
-  ));
-  const categorias = el("section", { class: "section section--cream", id: "categorias" },
-    el("div", { class: "container" },
-      sectionHead(t("carnTitle"), t("catTitle"), t("catSub")),
-      catChips
-    )
-  );
-
-  /* 6. Comercios individuales (con fachada, categoría e info) */
-  const comercios = gridSection("comercios", "section--sand", sectionHead(t("carnTitle"), t("carnTitle"), t("carnSub")), carn.map((s) => cardFor(s)));
-  const superSec = gridSection("supermercados", "section--cream", sectionHead(t("superTitle"), t("superTitle"), t("superSub")), supers.concat(supersOther).map((s) => cardFor(s)));
-
-  /* Mercado Domingo — DESTACADO (tras el hero). Solo fotos reales,
-     nunca imágenes generadas. */
+  /* 4. Mercado Domingo + TikTok LIVE badge */
   const marketReal = (D.galleries["mercado-domingo"] || []).filter((g) => g.indexOf("gemini-generated-image") === -1);
   const marketShots = marketReal.slice(0, 5);
+  const tiktokLive = el("a", { class: "live-badge", href: CFG.social?.tiktok || "https://www.tiktok.com/@traeya.es1", target: "_blank", rel: "noopener" },
+    el("span", { class: "live-badge__dot" }),
+    el("span", { class: "live-badge__text", html: t("liveBadge") }),
+    el("span", { class: "live-badge__sub", html: t("liveBadgeSub") })
+  );
   const marketSec = el("section", { class: "section section--ink market-feature", id: "market" },
     el("div", { class: "container" },
       el("div", { class: "split" },
@@ -802,6 +823,7 @@ function renderHome() {
           el("div", { class: "eyebrow eyebrow--light", html: t("marketKicker") }),
           el("h3", { html: t("marketTitle") }),
           el("p", { class: "lede", html: t("marketBody") }),
+          tiktokLive,
           el("a", { class: "btn btn--wa btn--lg", href: "#/tienda/mercado-domingo", html: t("marketCta") })
         ),
         el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/mercado-domingo" },
@@ -818,7 +840,54 @@ function renderHome() {
     )
   );
 
-  /* 7. Entrega — cómo funciona */
+  /* 5. Comida Casera — with pre-order labels */
+  const comidaProducts = comida && comida.products ? comida.products : [];
+  const comidaPreItems = comidaProducts.filter((p) => p.category && (p.category.toLowerCase().indexOf("antelación") >= 0 || p.category.toLowerCase().indexOf("pre-order") >= 0 || p.category.toLowerCase().indexOf("preorder") >= 0));
+  const comidaAvailItems = comidaProducts.filter((p) => !comidaPreItems.includes(p));
+  const comidaShots = comidaProducts.map((p) => p.img).filter(Boolean).slice(0, 4);
+  const comidaSec = el("section", { class: "section section--cream", id: "comida" },
+    el("div", { class: "container" },
+      el("div", { class: "split split--rev" },
+        el("div", { class: "split__body reveal" },
+          el("div", { class: "eyebrow", html: t("comidaKicker") }),
+          el("h3", { html: t("comidaTitle") }),
+          el("p", { class: "lede", html: t("comidaBody") }),
+          el("a", { class: "btn btn--dark", href: "#/tienda/comida-casera", html: t("comidaCta") })
+        ),
+        el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/comida-casera" },
+          el("img", { loading: "lazy", src: shopBg(comida) || "", alt: esc(comida.name) })
+        )
+      ),
+      comidaShots.length ? el("div", { class: "scene-strip reveal", "data-delay": "2" },
+        comidaShots.map((g) =>
+          el("a", { class: "scene-strip__cell", href: "#/tienda/comida-casera" },
+            el("img", { loading: "lazy", src: g, alt: esc(comida.name) })
+          )
+        )
+      ) : null,
+      comidaPreItems.length ? el("div", { class: "comida-preorder reveal", "data-delay": "3" },
+        el("div", { class: "comida-preorder__head" },
+          el("h4", { html: t("comidaPreTitle") }),
+          el("p", { html: t("comidaPreSub") })
+        ),
+        el("div", { class: "comida-preorder__list" },
+          comidaPreItems.map((p) => {
+            const price = p.price != null ? fmtPrice(p.price) : "";
+            return el("div", { class: "comida-preorder__item" },
+              el("div", { class: "comida-preorder__info" },
+                el("span", { class: "comida-preorder__tag tag--advance", html: t("comidaAdv") }),
+                el("span", { class: "comida-preorder__name", html: esc(displayName(p)) }),
+                price ? el("span", { class: "comida-preorder__price", html: price }) : null
+              ),
+              el("a", { class: "btn btn--sm btn--wa", href: WA(t("comidaWant") + " " + displayName(p) + (price ? " — " + price : "")), target: "_blank", rel: "noopener", html: t("comidaOrder") })
+            );
+          })
+        )
+      ) : null
+    )
+  );
+
+  /* 6. Delivery — cómo funciona */
   const deliveryCards = el("div", { class: "delivery-cards" }, [
     { k: "elraul", title: t("deliveryElRaal"), sub: t("deliveryElRaalSub"), amount: DELIVERY.el_raul, free: false },
     { k: "mercado", title: t("deliveryMercado"), sub: t("deliveryMercadoSub"), amount: DELIVERY.mercado, free: false },
@@ -841,36 +910,66 @@ function renderHome() {
     )
   );
 
-  /* 8. Comida Casera — sección propia */
-  const comidaShots = comida && comida.products ? comida.products.map((p) => p.img).filter(Boolean).slice(0, 4) : [];
-  const comidaSec = el("section", { class: "section section--cream", id: "comida" },
-    el("div", { class: "container" },
-      el("div", { class: "split split--rev" },
-        el("div", { class: "split__body reveal" },
-          el("div", { class: "eyebrow", html: t("comidaKicker") }),
-          el("h3", { html: t("comidaTitle") }),
-          el("p", { class: "lede", html: t("comidaBody") }),
-          el("a", { class: "btn btn--dark", href: "#/tienda/comida-casera", html: t("comidaCta") })
-        ),
-        el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/comida-casera" },
-          el("img", { loading: "lazy", src: shopBg(comida) || "", alt: esc(comida.name) })
-        )
-      ),
-      comidaShots.length ? el("div", { class: "scene-strip reveal", "data-delay": "2" },
-        comidaShots.map((g) =>
-          el("a", { class: "scene-strip__cell", href: "#/tienda/comida-casera" },
-            el("img", { loading: "lazy", src: g, alt: esc(comida.name) })
-          )
-        )
-      ) : null
-    )
-  );
-
-  /* 9. Restaurantes y otros */
+  /* 7. Restaurantes */
   const restSec = railSection("restaurantes", "section--sand", sectionHead(t("restTitle"), t("restTitle"), t("restSub")), rests.map((s) => cardFor(s)));
+
+  /* 8. Otros — incluye Farmacia con receta */
+  const farmacia = others.find((s) => s.type === "farmacia");
   const otherSec = gridSection("otros", "section--cream", sectionHead(t("otherTitle"), t("otherTitle"), t("otherSub")), others.map((s) => cardFor(s)));
 
-  view.append(hero, marketSec, need, intro, deliverySec, discover, categorias, comercios, superSec, comidaSec, restSec, otherSec);
+  /* 9. Farmacia — envío de receta */
+  const farmaciaSec = farmacia ? (function() {
+    let recetaImg = null;
+    const recetaPreview = el("div", { class: "receta-preview" });
+    const recetaFile = el("input", { class: "receta-file", type: "file", accept: "image/*", id: "receta-file" });
+    const recetaLabel = el("label", { class: "btn btn--dark btn--sm receta-label", for: "receta-file", html: t("recetaPick") });
+    const recetaRemoveBtn = el("button", { class: "btn btn--sm receta-remove", type: "button", html: t("recetaRemove"), style: "display:none" });
+    const recetaSendBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("recetaSend"), disabled: true });
+
+    recetaFile.addEventListener("change", () => {
+      const file = recetaFile.files && recetaFile.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        recetaImg = reader.result;
+        recetaPreview.innerHTML = "";
+        recetaPreview.append(el("img", { src: recetaImg, alt: t("recetaPreview") }));
+        recetaPreview.style.display = "";
+        recetaRemoveBtn.style.display = "";
+        recetaSendBtn.disabled = false;
+      };
+      reader.readAsDataURL(file);
+    });
+    recetaRemoveBtn.addEventListener("click", () => {
+      recetaImg = null;
+      recetaFile.value = "";
+      recetaPreview.innerHTML = "";
+      recetaPreview.style.display = "none";
+      recetaRemoveBtn.style.display = "none";
+      recetaSendBtn.disabled = true;
+    });
+    recetaSendBtn.addEventListener("click", () => {
+      openWA(t("recetaMsg"));
+    });
+
+    return el("section", { class: "section section--sand", id: "farmacia-receta" },
+      el("div", { class: "container" },
+        sectionHead(null, t("recetaTitle"), t("recetaSub")),
+        el("div", { class: "receta-box reveal" },
+          el("div", { class: "receta-box__upload" },
+            recetaLabel,
+            recetaFile,
+            recetaRemoveBtn
+          ),
+          recetaPreview,
+          el("p", { class: "receta-hint", html: t("recetaHint") }),
+          recetaSendBtn
+        )
+      )
+    );
+  })() : null;
+
+  view.append(hero, need, descubre, marketSec, comidaSec, deliverySec, restSec, otherSec, farmaciaSec);
   observeReveals(view);
   parallax();
 }
@@ -915,6 +1014,7 @@ function renderShop(shop) {
 
   const hero = el("section", { class: "shop-hero" },
     bg ? el("div", { class: "shop-hero__bg", style: "background-image:url('" + bg + "')" }) : null,
+    bg ? el("div", { class: "shop-hero__overlay" }) : null,
     el("div", { class: "shop-hero__content" },
       el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
       heroTags,
@@ -1010,7 +1110,11 @@ function renderProducts(shop) {
     groups.get(c).push(p);
   });
   groups.forEach((list, cat) => {
-    const ordered = list.slice().sort((a, b) => (b.img ? 1 : 0) - (a.img ? 1 : 0));
+    const ordered = list.slice().sort((a, b) => {
+      const aScore = (a.img ? 2 : 0) + (a.description_es || a.description_ar ? 1 : 0);
+      const bScore = (b.img ? 2 : 0) + (b.description_es || b.description_ar ? 1 : 0);
+      return bScore - aScore;
+    });
     const grid = el("div", { class: "product-grid" });
     ordered.forEach((p) => grid.append(productCard(shop, p)));
     wrap.append(
@@ -1036,9 +1140,13 @@ function productCard(shop, p) {
       ? el("span", { class: "product-card__price", html: fmtPrice(p.price) + (p.price2 != null && p.price2 !== p.price ? " <small>·</small> " + fmtPrice(p.price2) : "") })
       : el("span", { class: "product-card__ask", html: t("priceAsk") });
 
+  const hasImg = !!p.img;
+  const hasDesc = !!(p.description_es || p.description_ar);
+  const compact = !hasImg && !hasDesc;
+
   const media = p.img
     ? el("div", { class: "product-card__media" }, el("img", { loading: "lazy", src: p.img, alt: name }))
-    : el("div", { class: "product-card__media" }, el("div", { class: "product-card__fallback", html: esc((p.name_es || p.name_ar || shop.name).charAt(0)) }));
+    : null;
 
   const addBtn = el("button", { class: "btn btn--add", type: "button", html: '<span class="btn__label">' + esc(t("cartAdd")) + '</span><span class="btn__qty"></span>' });
   const updateBtn = () => {
@@ -1052,13 +1160,13 @@ function productCard(shop, p) {
   addBtn.addEventListener("click", () => { Cart.add(shop, p); updateBtn(); });
   updateBtn();
 
-  const card = el("div", { class: "product-card" }, [
+  const infoChildren = [el("div", { class: "product-card__name", html: name }), ar, unit, price].filter(Boolean);
+
+  const card = el("div", { class: "product-card" + (compact ? " product-card--compact" : "") }, [
     media,
-    el("div", { class: "product-card__info" },
-      [el("div", { class: "product-card__name", html: name }), ar, unit, price]
-    ),
+    el("div", { class: "product-card__info" }, infoChildren),
     addBtn
-  ]);
+  ].filter(Boolean));
   return card;
 }
 
