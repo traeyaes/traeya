@@ -5400,7 +5400,7 @@ window.TRAEYA_DATA = {
    "name": "Restaurante Patricia",
    "type": "restaurante",
    "locality": "el-raul",
-   "facade": null,
+    "facade": "assets/img/facades/restaurante-patricia.webp",
    "menu": "assets/img/menus/restaurante-patricia-menu.webp",
    "products": [
     {

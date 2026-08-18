@@ -1018,8 +1018,7 @@ function renderShop(shop) {
       el("h1", { class: "shop-hero__name", html: esc(shop.name) }),
       arName ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
       products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
-    ),
-    askBox
+    )
   );
 
   const menuSec = shop.menu
@@ -1158,6 +1157,7 @@ function renderShop(shop) {
 
   const body = el("section", { class: "section section--cream" },
     el("div", { class: "container" },
+      askBox,
       marketExp,
       menuSec,
       horarioSec,
