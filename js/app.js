@@ -159,6 +159,8 @@ const I18N = {
       carniceria: "Carnicería", bazar: "Bazar", farmacia: "Farmacia", mercado: "Mercado",
       supermercado: "Supermercado", restaurante: "Restaurante", tienda24: "Tienda 24h",
       "comida-casera": "Comida Casera",
+      bodega: "Bodega", locutorio: "Locutorio", panaderia: "Panadería",
+      barberia: "Barbería", tabacos: "Tabacos",
     },
     shopNameAr: {
       "carniceria-el-pelin": "جزارة البيلين",
@@ -179,6 +181,12 @@ const I18N = {
       "supermercado-plaza-de-juan": "سوبرماركت بلازا دي خوان",
       "spar-express": "سوبرماركت سبار إكسبريس",
       "venticoitros-24": "فينتيكويتروس 24",
+      "bodega-asun": "بوديكة أسون",
+      "locutorio-tienda-ayoub": "لوكوتيوريو تienda أيوب",
+      "panaderia-la-boutique-del-pan": "مخبزة بوتيك ديال بان",
+      "barberia-ayoub": "حلاقة أيوب",
+      "tabacos-2-el-raal": "تبغى 2 الرال",
+      "tabacos-el-raal": "تبغى الرال",
     },
     /* --- Descubre El Raal --- */
     descubreTitle: "Descubre <em>El Raal</em>",
@@ -205,6 +213,11 @@ const I18N = {
     recetaSend: "Enviar por WhatsApp",
     recetaHint: "La imagen se enviará por WhatsApp. Adjúntala en el chat.",
     recetaMsg: "Hola TRAEYA, quiero enviar una receta médica para preparar mi pedido.",
+    /* --- Horario --- */
+    horarioTitle: "Horario",
+    horarioClosed: "Cerrado",
+    horarioDays: ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"],
+    horarioDaysShort: ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"],
   },
 
   ar: {
@@ -330,6 +343,8 @@ const I18N = {
       carniceria: "جزارة", bazar: "بازار", farmacia: "صيدلية", mercado: "سوق",
       supermercado: "سوبرماركت", restaurante: "مطعم", tienda24: "متجر 24 ساعة",
       "comida-casera": "طعام منزلي",
+      bodega: "بوديكة", locutorio: "لوكوتيوريو", panaderia: "مخبزة",
+      barberia: "حلاقة", tabacos: "تبغى",
     },
     shopNameAr: {
       "carniceria-el-pelin": "جزارة البيلين",
@@ -350,6 +365,12 @@ const I18N = {
       "supermercado-plaza-de-juan": "سوبرماركت بلازا دي خوان",
       "spar-express": "سوبرماركت سبار إكسبريس",
       "venticoitros-24": "فينتيكويتروس 24",
+      "bodega-asun": "بوديكة أسون",
+      "locutorio-tienda-ayoub": "لوكوتيوريو تienda أيوب",
+      "panaderia-la-boutique-del-pan": "مخبزة بوتيك ديال بان",
+      "barberia-ayoub": "حلاقة أيوب",
+      "tabacos-2-el-raal": "تبغى 2 الرال",
+      "tabacos-el-raal": "تبغى الرال",
     },
     /* --- Descubre El Raal --- */
     descubreTitle: "اكتشف <em>الرال</em>",
@@ -376,6 +397,11 @@ const I18N = {
     recetaSend: "أرسل عبر واتساب",
     recetaHint: "ستُرسل الصورة عبر واتساب. أرفقها في المحادثة.",
     recetaMsg: "مرحباً ترايا، أريد أن أرسل وصفة طبية لتحضير طلبي.",
+    /* --- Horario --- */
+    horarioTitle: "ساعات العمل",
+    horarioClosed: "مغلق",
+    horarioDays: ["الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الأحد"],
+    horarioDaysShort: ["اثن", "ثلا", "أرب", "خمي", "جمع", "سبت", "أحد"],
   },
 };
 
@@ -746,7 +772,7 @@ function renderHome() {
   const market = D.shops.find((s) => s.slug === "mercado-domingo");
   const comida = D.shops.find((s) => s.slug === "comida-casera");
   const rests = byType(["restaurante"]);
-  const others = byType(["farmacia", "bazar", "tienda24"]);
+  const others = byType(["farmacia", "bazar", "tienda24", "bodega", "locutorio", "panaderia", "barberia", "tabacos"]);
 
   /* 1. Hero */
   const hero = el("section", { class: "hero" },
@@ -1040,10 +1066,103 @@ function renderShop(shop) {
     el("p", { class: "comida-ask-msg__note", html: t("comidaAskNote") })
   ) : null;
 
+  /* Horario */
+  const horario = shop.horario;
+  const horarioSec = horario ? (() => {
+    const dayKeys = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"];
+    const days = t("horarioDays");
+    const closedLabel = t("horarioClosed");
+    const rows = dayKeys.map((k, i) => {
+      const val = horario[k] || closedLabel;
+      const isClosed = !horario[k] || val === "Cerrado" || val === "مغلق";
+      return el("div", { class: "horario__row" + (isClosed ? " is-closed" : "") },
+        el("span", { class: "horario__day", html: days[i] }),
+        el("span", { class: "horario__hours", html: isClosed ? closedLabel : val })
+      );
+    });
+    return el("div", { class: "horario reveal" },
+      el("h3", { class: "horario__title", html: t("horarioTitle") }),
+      el("div", { class: "horario__grid" }, rows)
+    );
+  })() : null;
+
+  /* Barbería Ayoub — special features */
+  const isBarberia = shop.slug === "barberia-ayoub";
+  let barberServices = null;
+  let barberReservar = null;
+  let barberDomicilio = null;
+
+  if (isBarberia) {
+    const svcOptions = ["Corte de pelo", "Barba", "Corte + Barba", "Degradado", "Afeitado", "Otro"];
+    const svcOptionsHtml = svcOptions.map((s) => el("option", { value: s }, s));
+
+    /* Reservar cita */
+    const rName = el("input", { class: "barber-form__input", type: "text", placeholder: "Nombre", required: true });
+    const rPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: "Teléfono", required: true });
+    const rSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio que desea"), ...svcOptionsHtml);
+    const rDay = el("input", { class: "barber-form__input", type: "date", required: true });
+    const rTime = el("input", { class: "barber-form__input", type: "time", required: true });
+    const rComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
+    const rSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Reservar cita" });
+    const rForm = el("div", { class: "barber-form" }, rName, rPhone, rSvc, rDay, rTime, rComment, rSubmit);
+    const rResult = el("div", { class: "barber-form__result", style: "display:none" });
+
+    rSubmit.addEventListener("click", () => {
+      if (!rName.value.trim() || !rPhone.value.trim() || !rSvc.value || !rDay.value || !rTime.value) { rResult.style.display = "block"; rResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = "Nueva solicitud de cita - Barbería Ayoub\n\nNombre: " + rName.value.trim() + "\nTeléfono: " + rPhone.value.trim() + "\nServicio: " + rSvc.value + "\nDía preferido: " + rDay.value + "\nHora preferida: " + rTime.value + (rComment.value.trim() ? "\nComentario: " + rComment.value.trim() : "");
+      openWA(msg);
+      rForm.style.display = "none";
+      rResult.style.display = "block";
+      rResult.innerHTML = "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar tu cita.";
+    });
+
+    barberReservar = el("div", { class: "barber-section reveal" },
+      el("div", { class: "barber-promo" },
+        el("h3", { html: "¿Cansado de esperar tu turno?" }),
+        el("p", { html: "<strong>Reserva tu cita</strong> y disfruta de tu corte sin esperas." })
+      ),
+      rForm,
+      rResult
+    );
+
+    /* Barbería privada a domicilio */
+    const dName = el("input", { class: "barber-form__input", type: "text", placeholder: "Nombre", required: true });
+    const dPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: "Teléfono", required: true });
+    const dAddress = el("input", { class: "barber-form__input", type: "text", placeholder: "Dirección", required: true });
+    const dSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio solicitado"), ...svcOptionsHtml);
+    const dDay = el("input", { class: "barber-form__input", type: "date", required: true });
+    const dTime = el("input", { class: "barber-form__input", type: "time", required: true });
+    const dComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
+    const dSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Solicitar servicio a domicilio" });
+    const dForm = el("div", { class: "barber-form" }, dName, dPhone, dAddress, dSvc, dDay, dTime, dComment, dSubmit);
+    const dResult = el("div", { class: "barber-form__result", style: "display:none" });
+
+    dSubmit.addEventListener("click", () => {
+      if (!dName.value.trim() || !dPhone.value.trim() || !dAddress.value.trim() || !dSvc.value || !dDay.value || !dTime.value) { dResult.style.display = "block"; dResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = "Solicitud - Barbería privada a domicilio\n\nNombre: " + dName.value.trim() + "\nTeléfono: " + dPhone.value.trim() + "\nDirección: " + dAddress.value.trim() + "\nServicio: " + dSvc.value + "\nDía preferido: " + dDay.value + "\nHora preferida: " + dTime.value + (dComment.value.trim() ? "\nComentario: " + dComment.value.trim() : "");
+      openWA(msg);
+      dForm.style.display = "none";
+      dResult.style.display = "block";
+      dResult.innerHTML = "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar el servicio.";
+    });
+
+    barberDomicilio = el("div", { class: "barber-section reveal" },
+      el("div", { class: "barber-promo" },
+        el("h3", { html: "¿Prefieres quedarte en casa?" }),
+        el("p", { html: "<strong>Ayoub se desplaza hasta tu domicilio.</strong> Disfruta de tu servicio de barbería en casa, sin desplazarte y sin esperar tu turno en el local." })
+      ),
+      dForm,
+      dResult
+    );
+  }
+
   const body = el("section", { class: "section section--cream" },
     el("div", { class: "container" },
       marketExp,
       menuSec,
+      horarioSec,
+      barberReservar,
+      barberDomicilio,
       comidaAskMsg,
       products.length ? renderProducts(shop, isComida) : renderEmpty(shop),
       gallery.length ? renderGallery(shop, gallery) : null,

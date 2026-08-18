@@ -6851,9 +6851,117 @@ window.TRAEYA_DATA = {
    "locality": "el-raul",
    "facade": "assets/img/facades/venticoitros-24.webp",
    "menu": null,
-   "products": []
-  }
- ],
+    "products": []
+   },
+   {
+    "slug": "bodega-asun",
+    "name": "Bodega Asun",
+    "type": "bodega",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/bodega-asun.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "09:30 – 14:30",
+     "martes": "09:30 – 14:30",
+     "miercoles": "09:30 – 14:30",
+     "jueves": "09:30 – 14:30",
+     "viernes": "09:30 – 14:30",
+     "sabado": "09:30 – 14:00",
+     "domingo": "Cerrado"
+    }
+   },
+   {
+    "slug": "locutorio-tienda-ayoub",
+    "name": "Locutorio Tienda Ayoub",
+    "type": "locutorio",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/locutorio-tienda-ayoub.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 22:00",
+     "martes": "10:00 – 22:00",
+     "miercoles": "10:00 – 22:00",
+     "jueves": "10:00 – 22:00",
+     "viernes": "10:00 – 22:00",
+     "sabado": "10:00 – 22:00",
+     "domingo": "10:00 – 22:00"
+    }
+   },
+   {
+    "slug": "panaderia-la-boutique-del-pan",
+    "name": "Panadería Confitería La Boutique Del Pan",
+    "type": "panaderia",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/panaderia-la-boutique-del-pan.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "06:00 – 14:30",
+     "martes": "06:00 – 14:30",
+     "miercoles": "06:00 – 14:30",
+     "jueves": "06:00 – 14:30",
+     "viernes": "06:00 – 14:30",
+     "sabado": "Cerrado",
+     "domingo": "Cerrado"
+    }
+   },
+   {
+    "slug": "barberia-ayoub",
+    "name": "Peluquería y Barbería Ayoub",
+    "type": "barberia",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/barberia-ayoub.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 22:00",
+     "martes": "10:00 – 22:00",
+     "miercoles": "10:00 – 22:00",
+     "jueves": "10:00 – 22:00",
+     "viernes": "10:00 – 22:00",
+     "sabado": "10:00 – 22:00",
+     "domingo": "10:00 – 22:00"
+    }
+   },
+   {
+    "slug": "tabacos-2-el-raal",
+    "name": "Tabacos 2 El Raal",
+    "type": "tabacos",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/tabacos-2-el-raal.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 22:00",
+     "martes": "10:00 – 22:00",
+     "miercoles": "10:00 – 22:00",
+     "jueves": "10:00 – 22:00",
+     "viernes": "10:00 – 22:00",
+     "sabado": "10:00 – 22:00",
+     "domingo": "10:00 – 22:00"
+    }
+   },
+   {
+    "slug": "tabacos-el-raal",
+    "name": "Tabacos El Raal",
+    "type": "tabacos",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/tabacos-el-raal.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 22:00",
+     "martes": "10:00 – 22:00",
+     "miercoles": "10:00 – 22:00",
+     "jueves": "10:00 – 22:00",
+     "viernes": "10:00 – 22:00",
+     "sabado": "10:00 – 22:00",
+     "domingo": "10:00 – 22:00"
+    }
+   }
+  ],
  "galleries": {
   "carniceria-el-pelin": [
    "assets/img/gallery/carniceria-el-pelin--gemini-generated-image-2doyib2doyib2doy.webp",
@@ -7326,11 +7434,42 @@ window.TRAEYA_DATA = {
    "assets/img/gallery/spar-express--gemini-generated-image-vk8s4xvk8s4xvk8s.webp",
    "assets/img/gallery/spar-express--gemini-generated-image-y1qy7by1qy7by1qy.webp"
   ],
-  "venticoitros-24": [
-   "assets/img/gallery/venticoitros-24--gemini-generated-image-ke7ut7ke7ut7ke7u.webp",
-   "assets/img/gallery/venticoitros-24--gemini-generated-image-kn1a1lkn1a1lkn1a.webp",
-   "assets/img/gallery/venticoitros-24--gemini-generated-image-rfubqrrfubqrrfub.webp",
-   "assets/img/gallery/venticoitros-24--gemini-generated-image-wqhr3iwqhr3iwqhr.webp"
-  ]
- }
+   "venticoitros-24": [
+    "assets/img/gallery/venticoitros-24--gemini-generated-image-ke7ut7ke7ut7ke7u.webp",
+    "assets/img/gallery/venticoitros-24--gemini-generated-image-kn1a1lkn1a1lkn1a.webp",
+    "assets/img/gallery/venticoitros-24--gemini-generated-image-rfubqrrfubqrrfub.webp",
+    "assets/img/gallery/venticoitros-24--gemini-generated-image-wqhr3iwqhr3iwqhr.webp"
+   ],
+   "bodega-asun": [
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_869vhw869vhw869v.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_o9w0ito9w0ito9w0.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_oja8wmoja8wmoja8.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_sy97mmsy97mmsy97.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_t0r6b4t0r6b4t0r6.webp"
+   ],
+   "locutorio-tienda-ayoub": [
+    "assets/img/gallery/locutorio-tienda-ayoub/Gemini_Generated_Image_4mgkpi4mgkpi4mgk.webp"
+   ],
+   "panaderia-la-boutique-del-pan": [
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_auw64oauw64oauw6.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_de6hptde6hptde6h.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_kcz468kcz468kcz4.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_o9cytho9cytho9cy.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_xit3t6xit3t6xit3.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_zargc1zargc1zarg.webp"
+   ],
+   "barberia-ayoub": [
+    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_cquhpocquhpocquh.webp",
+    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_no8tj6no8tj6no8t.webp",
+    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_u0knodu0knodu0kn.webp",
+    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_uyrz2auyrz2auyrz.webp"
+   ],
+   "tabacos-2-el-raal": [
+    "assets/img/gallery/tabacos-2-el-raal/Gemini_Generated_Image_xx7hlmxx7hlmxx7h.webp"
+   ],
+   "tabacos-el-raal": [
+    "assets/img/gallery/tabacos-el-raal/Gemini_Generated_Image_869vhw869vhw869v (1).webp",
+    "assets/img/gallery/tabacos-el-raal/Gemini_Generated_Image_v6lrvwv6lrvwv6lr.webp"
+   ]
+  }
 };
