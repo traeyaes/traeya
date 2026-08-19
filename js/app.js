@@ -1127,7 +1127,7 @@ function renderShop(shop) {
       rResult.innerHTML = isAr ? "<strong>تم إرسال الطلب.</strong> س تتواصل معك TRAEYA لتأكيد موعدك." : "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar tu cita.";
     });
 
-    barberReservar = el("div", { class: "barber-section reveal" },
+    barberReservar = el("div", { class: "barber-section" },
       el("div", { class: "barber-promo" },
         el("h3", { html: isAr ? "هل سئمت الانتظار؟" : "¿Cansado de esperar tu turno?" }),
         el("p", { html: isAr ? "<strong>احجز موعدك</strong> واستمتع بقص شعرك بدون انتظار." : "<strong>Reserva tu cita</strong> y disfruta de tu corte sin esperas." })
@@ -1157,7 +1157,7 @@ function renderShop(shop) {
       dResult.innerHTML = isAr ? "<strong>تم إرسال الطلب.</strong> س تتواصل معك TRAEYA لتأكيد الخدمة." : "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar el servicio.";
     });
 
-    barberDomicilio = el("div", { class: "barber-section reveal" },
+    barberDomicilio = el("div", { class: "barber-section" },
       el("div", { class: "barber-promo" },
         el("h3", { html: isAr ? "بغيتي تبقى فدارك؟" : "¿Prefieres quedarte en casa?" }),
         el("p", { html: isAr ? "<strong>عيوب كيجي عندك للدار.</strong> استمتع بخدمة الحلاقة بلا ما تتحرك وبلا ما تتسنى." : "<strong>Ayoub se desplaza hasta tu domicilio.</strong> Disfruta de tu servicio de barbería en casa, sin desplazarte y sin esperar tu turno en el local." })
@@ -1183,7 +1183,27 @@ function renderShop(shop) {
     )
   );
 
-  view.append(hero, body);
+  /* Descubre El Raal — other shops at the bottom */
+  const otherShops = D.shops.filter((s) => s.slug !== shop.slug);
+  const shuffled = otherShops.sort(() => Math.random() - 0.5).slice(0, 6);
+  const discoverCards = shuffled.map((s) => {
+    const bg = shopBg(s);
+    return el("a", { class: "discover-card", href: "#/tienda/" + s.slug },
+      bg ? el("img", { class: "discover-card__img", loading: "lazy", src: bg, alt: esc(s.name) }) : el("div", { class: "discover-card__img discover-card__placeholder", html: esc((s.name || "T").charAt(0)) }),
+      el("div", { class: "discover-card__info" },
+        el("span", { class: "discover-card__name", html: esc(s.name) }),
+        el("span", { class: "discover-card__type", html: t("type")[s.type] || s.type })
+      )
+    );
+  });
+  const discoverSec = el("section", { class: "section section--discover" },
+    el("div", { class: "container" },
+      el("h3", { class: "discover__title", html: t("discoverTitle") || "Descubre El Raal" }),
+      el("div", { class: "discover-grid" }, discoverCards)
+    )
+  );
+
+  view.append(hero, body, discoverSec);
   observeReveals(view);
   window.scrollTo(0, 0);
 }
