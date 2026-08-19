@@ -973,6 +973,17 @@ input, textarea { font: inherit; }
 }
 
 /* ---------------- Barbería Ayoub ---------------- */
+.barber-featured {
+  margin-bottom: 30px;
+  border-radius: 18px;
+  overflow: hidden;
+}
+.barber-featured img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
 .barber-section {
   background: var(--cream);
   border: 1px solid rgba(18, 54, 42, .1);

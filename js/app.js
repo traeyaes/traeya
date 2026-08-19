@@ -448,7 +448,7 @@ function el(tag, attrs, ...contents) {
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 const fmtPrice = (n) => new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + " €";
-const displayName = (p) => p.name_es || p.name_ar || p.id;
+const displayName = (p) => STATE.lang === "ar" ? (p.name_ar || p.name_es || p.id) : (p.name_es || p.name_ar || p.id);
 const shopBg = (s) => s.facade || (D.galleries[s.slug] && D.galleries[s.slug][0]) || null;
 
 function openWA(text) { window.open(WA(text), "_blank", "noopener"); }
@@ -716,7 +716,7 @@ function parallax() {
 /* ---------- Shared blocks ---------- */
 function cardFor(s, mediaClass) {
   const bg = shopBg(s);
-  const arName = I18N[STATE.lang].shopNameAr[s.slug] || "";
+  const arName = STATE.lang === "ar" ? (I18N[STATE.lang].shopNameAr[s.slug] || "") : "";
   const media = bg
     ? el("div", { class: "card__media " + (mediaClass || "") }, el("img", { loading: "lazy", src: bg, alt: esc(s.name) }))
     : el("div", { class: "card__media " + (mediaClass || "") },
@@ -984,7 +984,7 @@ function renderShop(shop) {
   const products = shop.products;
   const gallery = D.galleries[shop.slug] || [];
   const bg = shopBg(shop);
-  const arName = I18N[STATE.lang].shopNameAr[shop.slug] || "";
+  const arName = STATE.lang === "ar" ? (I18N[STATE.lang].shopNameAr[shop.slug] || "") : "";
   const isMarket = shop.type === "mercado";
 
   const dlv = deliveryFor(shop);
@@ -1100,15 +1100,14 @@ function renderShop(shop) {
     const rPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: "Teléfono", required: true });
     const rSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio que desea"), ...svcOptionsHtml);
     const rDay = el("input", { class: "barber-form__input", type: "date", required: true });
-    const rTime = el("input", { class: "barber-form__input", type: "time", required: true });
     const rComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
     const rSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Reservar cita" });
-    const rForm = el("div", { class: "barber-form" }, rName, rPhone, rSvc, rDay, rTime, rComment, rSubmit);
+    const rForm = el("div", { class: "barber-form" }, rName, rPhone, rSvc, rDay, rComment, rSubmit);
     const rResult = el("div", { class: "barber-form__result", style: "display:none" });
 
     rSubmit.addEventListener("click", () => {
-      if (!rName.value.trim() || !rPhone.value.trim() || !rSvc.value || !rDay.value || !rTime.value) { rResult.style.display = "block"; rResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
-      const msg = "Nueva solicitud de cita - Barbería Ayoub\n\nNombre: " + rName.value.trim() + "\nTeléfono: " + rPhone.value.trim() + "\nServicio: " + rSvc.value + "\nDía preferido: " + rDay.value + "\nHora preferida: " + rTime.value + (rComment.value.trim() ? "\nComentario: " + rComment.value.trim() : "");
+      if (!rName.value.trim() || !rPhone.value.trim() || !rSvc.value || !rDay.value) { rResult.style.display = "block"; rResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = "Nueva solicitud de cita - Barbería Ayoub\n\nNombre: " + rName.value.trim() + "\nTeléfono: " + rPhone.value.trim() + "\nServicio: " + rSvc.value + "\nDía preferido: " + rDay.value + (rComment.value.trim() ? "\nComentario: " + rComment.value.trim() : "");
       openWA(msg);
       rForm.style.display = "none";
       rResult.style.display = "block";
@@ -1130,15 +1129,14 @@ function renderShop(shop) {
     const dAddress = el("input", { class: "barber-form__input", type: "text", placeholder: "Dirección", required: true });
     const dSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio solicitado"), ...svcOptionsHtml);
     const dDay = el("input", { class: "barber-form__input", type: "date", required: true });
-    const dTime = el("input", { class: "barber-form__input", type: "time", required: true });
     const dComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
     const dSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Solicitar servicio a domicilio" });
-    const dForm = el("div", { class: "barber-form" }, dName, dPhone, dAddress, dSvc, dDay, dTime, dComment, dSubmit);
+    const dForm = el("div", { class: "barber-form" }, dName, dPhone, dAddress, dSvc, dDay, dComment, dSubmit);
     const dResult = el("div", { class: "barber-form__result", style: "display:none" });
 
     dSubmit.addEventListener("click", () => {
-      if (!dName.value.trim() || !dPhone.value.trim() || !dAddress.value.trim() || !dSvc.value || !dDay.value || !dTime.value) { dResult.style.display = "block"; dResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
-      const msg = "Solicitud - Barbería privada a domicilio\n\nNombre: " + dName.value.trim() + "\nTeléfono: " + dPhone.value.trim() + "\nDirección: " + dAddress.value.trim() + "\nServicio: " + dSvc.value + "\nDía preferido: " + dDay.value + "\nHora preferida: " + dTime.value + (dComment.value.trim() ? "\nComentario: " + dComment.value.trim() : "");
+      if (!dName.value.trim() || !dPhone.value.trim() || !dAddress.value.trim() || !dSvc.value || !dDay.value) { dResult.style.display = "block"; dResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = "Solicitud - Barbería privada a domicilio\n\nNombre: " + dName.value.trim() + "\nTeléfono: " + dPhone.value.trim() + "\nDirección: " + dAddress.value.trim() + "\nServicio: " + dSvc.value + "\nDía preferido: " + dDay.value + (dComment.value.trim() ? "\nComentario: " + dComment.value.trim() : "");
       openWA(msg);
       dForm.style.display = "none";
       dResult.style.display = "block";
@@ -1158,6 +1156,7 @@ function renderShop(shop) {
   const body = el("section", { class: "section section--cream" },
     el("div", { class: "container" },
       askBox,
+      isBarberia ? el("div", { class: "barber-featured reveal" }, el("img", { src: "assets/img/gallery/barberia-ayoub/FIRST_ONE.webp", alt: esc(shop.name) })) : null,
       marketExp,
       menuSec,
       horarioSec,
@@ -1296,7 +1295,7 @@ function renderProducts(shop, isComida) {
 
 function productCard(shop, p, badge) {
   const name = esc(displayName(p));
-  const ar = p.name_ar ? el("span", { class: "product-card__name-ar ar", html: esc(p.name_ar) }) : null;
+  const ar = (STATE.lang === "ar" && p.name_ar) ? el("span", { class: "product-card__name-ar", html: esc(p.name_ar) }) : null;
   const unit = p.unit && p.unit.toLowerCase() !== "uniti" ? el("span", { class: "product-card__unit", html: esc(p.unit) }) : null;
   const price =
     p.price != null

@@ -7445,24 +7445,26 @@ window.TRAEYA_DATA = {
     "assets/img/gallery/bodega-asun/Gemini_Generated_Image_o9w0ito9w0ito9w0.webp",
     "assets/img/gallery/bodega-asun/Gemini_Generated_Image_oja8wmoja8wmoja8.webp",
     "assets/img/gallery/bodega-asun/Gemini_Generated_Image_sy97mmsy97mmsy97.webp",
-    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_t0r6b4t0r6b4t0r6.webp"
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_t0r6b4t0r6b4t0r6.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_u0knodu0knodu0kn.webp",
+    "assets/img/gallery/bodega-asun/Gemini_Generated_Image_uyrz2auyrz2auyrz.webp"
    ],
    "locutorio-tienda-ayoub": [
     "assets/img/gallery/locutorio-tienda-ayoub/Gemini_Generated_Image_4mgkpi4mgkpi4mgk.webp"
    ],
    "panaderia-la-boutique-del-pan": [
     "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_auw64oauw64oauw6.webp",
-    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_de6hptde6hptde6h.webp",
     "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_kcz468kcz468kcz4.webp",
     "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_o9cytho9cytho9cy.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_u0knodu0knodu0kn.webp",
+    "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_uyrz2auyrz2auyrz.webp",
     "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_xit3t6xit3t6xit3.webp",
     "assets/img/gallery/panaderia-la-boutique-del-pan/Gemini_Generated_Image_zargc1zargc1zarg.webp"
    ],
    "barberia-ayoub": [
     "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_cquhpocquhpocquh.webp",
     "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_no8tj6no8tj6no8t.webp",
-    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_u0knodu0knodu0kn.webp",
-    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_uyrz2auyrz2auyrz.webp"
+    "assets/img/gallery/barberia-ayoub/Gemini_Generated_Image_s8flm9s8flm9s8fl.webp"
    ],
    "tabacos-2-el-raal": [
     "assets/img/gallery/tabacos-2-el-raal/Gemini_Generated_Image_xx7hlmxx7hlmxx7h.webp"
