@@ -990,6 +990,8 @@ input, textarea { font: inherit; }
   border-radius: 20px;
   padding: 32px 30px;
   margin-bottom: 34px;
+  position: relative;
+  z-index: 1;
 }
 .barber-promo {
   margin-bottom: 24px;
@@ -1006,7 +1008,8 @@ input, textarea { font: inherit; }
   line-height: 1.6;
 }
 .barber-form {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 12px;
 }
 .barber-form__input {

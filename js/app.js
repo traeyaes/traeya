@@ -1110,8 +1110,8 @@ function renderShop(shop) {
     /* Reservar cita */
     const rName = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "الاسم" : "Nombre", required: true });
     const rPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: isAr ? "الهاتف" : "Teléfono", required: true });
-    const rSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
-    const rAge = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
+    const rSvc = el("select", { class: "barber-form__input" }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
+    const rAge = el("select", { class: "barber-form__input" }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
     const rDay = el("input", { class: "barber-form__input", type: "date", required: true });
     const rComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: isAr ? "تعليق اختياري" : "Comentario opcional" });
     const rSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: isAr ? "حجز موعد" : "Reservar cita" });
@@ -1140,8 +1140,8 @@ function renderShop(shop) {
     const dName = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "الاسم" : "Nombre", required: true });
     const dPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: isAr ? "الهاتف" : "Teléfono", required: true });
     const dAddress = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "العنوان" : "Dirección", required: true });
-    const dSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
-    const dAge = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
+    const dSvc = el("select", { class: "barber-form__input" }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
+    const dAge = el("select", { class: "barber-form__input" }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
     const dDay = el("input", { class: "barber-form__input", type: "date", required: true });
     const dComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: isAr ? "تعليق اختياري" : "Comentario opcional" });
     const dSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: isAr ? "طلب خدمة منزلية" : "Solicitar servicio a domicilio" });
