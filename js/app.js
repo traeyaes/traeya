@@ -1087,66 +1087,80 @@ function renderShop(shop) {
 
   /* Barbería Ayoub — special features */
   const isBarberia = shop.slug === "barberia-ayoub";
-  let barberServices = null;
   let barberReservar = null;
   let barberDomicilio = null;
 
   if (isBarberia) {
-    const svcOptions = ["Corte de pelo", "Barba", "Corte + Barba", "Degradado", "Afeitado", "Otro"];
-    const svcOptionsHtml = svcOptions.map((s) => el("option", { value: s }, s));
+    const isAr = STATE.lang === "ar";
+
+    /* Service options — bilingual */
+    const svcEs = ["Corte de pelo", "Barba", "Corte + Barba", "Arreglo capilar completo", "Régulo de barba", "Servicio para eventos", "Otro"];
+    const svcAr = ["قص الشعر", "اللحية", "قص الشعر + اللحية", "تصفيف شامل", "تسوية اللحية", "خدمة المناسبات", "أخرى"];
+    const svcLabels = isAr ? svcAr : svcEs;
+    const svcDefault = isAr ? "الخدمة المطلوبة" : "Servicio que desea";
+    const svcOptionsHtml = svcLabels.map((s, i) => el("option", { value: svcEs[i] }, s));
+
+    /* Age options — bilingual */
+    const ageEs = ["Menor de 18 años", "Mayor de 18 años", "Niño/a"];
+    const ageAr = ["أقل من 18 سنة", "فوق 18 سنة", "طفل/طفلة"];
+    const ageLabels = isAr ? ageAr : ageEs;
+    const ageDefault = isAr ? "العمر" : "Edad";
+    const ageOptionsHtml = ageLabels.map((s, i) => el("option", { value: ageEs[i] }, s));
 
     /* Reservar cita */
-    const rName = el("input", { class: "barber-form__input", type: "text", placeholder: "Nombre", required: true });
-    const rPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: "Teléfono", required: true });
-    const rSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio que desea"), ...svcOptionsHtml);
+    const rName = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "الاسم" : "Nombre", required: true });
+    const rPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: isAr ? "الهاتف" : "Teléfono", required: true });
+    const rSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
+    const rAge = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
     const rDay = el("input", { class: "barber-form__input", type: "date", required: true });
-    const rComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
-    const rSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Reservar cita" });
-    const rForm = el("div", { class: "barber-form" }, rName, rPhone, rSvc, rDay, rComment, rSubmit);
+    const rComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: isAr ? "تعليق اختياري" : "Comentario opcional" });
+    const rSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: isAr ? "حجز موعد" : "Reservar cita" });
+    const rForm = el("div", { class: "barber-form" }, rName, rPhone, rSvc, rAge, rDay, rComment, rSubmit);
     const rResult = el("div", { class: "barber-form__result", style: "display:none" });
 
     rSubmit.addEventListener("click", () => {
-      if (!rName.value.trim() || !rPhone.value.trim() || !rSvc.value || !rDay.value) { rResult.style.display = "block"; rResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
-      const msg = "Nueva solicitud de cita - Barbería Ayoub\n\nNombre: " + rName.value.trim() + "\nTeléfono: " + rPhone.value.trim() + "\nServicio: " + rSvc.value + "\nDía preferido: " + rDay.value + (rComment.value.trim() ? "\nComentario: " + rComment.value.trim() : "");
+      if (!rName.value.trim() || !rPhone.value.trim() || !rSvc.value || !rAge.value || !rDay.value) { rResult.style.display = "block"; rResult.textContent = isAr ? "يرجى ملء جميع الحقول المطلوبة." : "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = (isAr ? "طلب موعد جديد - حلاقة عيوب\n\nالاسم: " : "Nueva solicitud de cita - Barbería Ayoub\n\nNombre: ") + rName.value.trim() + (isAr ? "\nالهاتف: " : "\nTeléfono: ") + rPhone.value.trim() + (isAr ? "\nالخدمة: " : "\nServicio: ") + rSvc.value + (isAr ? "\nالعمر: " : "\nEdad: ") + rAge.value + (isAr ? "\nاليوم المفضل: " : "\nDía preferido: ") + rDay.value + (rComment.value.trim() ? (isAr ? "\nتعليق: " : "\nComentario: ") + rComment.value.trim() : "");
       openWA(msg);
       rForm.style.display = "none";
       rResult.style.display = "block";
-      rResult.innerHTML = "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar tu cita.";
+      rResult.innerHTML = isAr ? "<strong>تم إرسال الطلب.</strong> س تتواصل معك TRAEYA لتأكيد موعدك." : "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar tu cita.";
     });
 
     barberReservar = el("div", { class: "barber-section reveal" },
       el("div", { class: "barber-promo" },
-        el("h3", { html: "¿Cansado de esperar tu turno?" }),
-        el("p", { html: "<strong>Reserva tu cita</strong> y disfruta de tu corte sin esperas." })
+        el("h3", { html: isAr ? "هل سئمت الانتظار؟" : "¿Cansado de esperar tu turno?" }),
+        el("p", { html: isAr ? "<strong>احجز موعدك</strong> واستمتع بقص شعرك بدون انتظار." : "<strong>Reserva tu cita</strong> y disfruta de tu corte sin esperas." })
       ),
       rForm,
       rResult
     );
 
     /* Barbería privada a domicilio */
-    const dName = el("input", { class: "barber-form__input", type: "text", placeholder: "Nombre", required: true });
-    const dPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: "Teléfono", required: true });
-    const dAddress = el("input", { class: "barber-form__input", type: "text", placeholder: "Dirección", required: true });
-    const dSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, "Servicio solicitado"), ...svcOptionsHtml);
+    const dName = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "الاسم" : "Nombre", required: true });
+    const dPhone = el("input", { class: "barber-form__input", type: "tel", placeholder: isAr ? "الهاتف" : "Teléfono", required: true });
+    const dAddress = el("input", { class: "barber-form__input", type: "text", placeholder: isAr ? "العنوان" : "Dirección", required: true });
+    const dSvc = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, svcDefault), ...svcOptionsHtml);
+    const dAge = el("select", { class: "barber-form__input", required: true }, el("option", { value: "", disabled: true, selected: true }, ageDefault), ...ageOptionsHtml);
     const dDay = el("input", { class: "barber-form__input", type: "date", required: true });
-    const dComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: "Comentario opcional" });
-    const dSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: "Solicitar servicio a domicilio" });
-    const dForm = el("div", { class: "barber-form" }, dName, dPhone, dAddress, dSvc, dDay, dComment, dSubmit);
+    const dComment = el("textarea", { class: "barber-form__input", rows: 2, placeholder: isAr ? "تعليق اختياري" : "Comentario opcional" });
+    const dSubmit = el("button", { class: "btn btn--wa btn--lg", type: "button", html: isAr ? "طلب خدمة منزلية" : "Solicitar servicio a domicilio" });
+    const dForm = el("div", { class: "barber-form" }, dName, dPhone, dAddress, dSvc, dAge, dDay, dComment, dSubmit);
     const dResult = el("div", { class: "barber-form__result", style: "display:none" });
 
     dSubmit.addEventListener("click", () => {
-      if (!dName.value.trim() || !dPhone.value.trim() || !dAddress.value.trim() || !dSvc.value || !dDay.value) { dResult.style.display = "block"; dResult.textContent = "Por favor, rellena todos los campos obligatorios."; return; }
-      const msg = "Solicitud - Barbería privada a domicilio\n\nNombre: " + dName.value.trim() + "\nTeléfono: " + dPhone.value.trim() + "\nDirección: " + dAddress.value.trim() + "\nServicio: " + dSvc.value + "\nDía preferido: " + dDay.value + (dComment.value.trim() ? "\nComentario: " + dComment.value.trim() : "");
+      if (!dName.value.trim() || !dPhone.value.trim() || !dAddress.value.trim() || !dSvc.value || !dAge.value || !dDay.value) { dResult.style.display = "block"; dResult.textContent = isAr ? "يرجى ملء جميع الحقول المطلوبة." : "Por favor, rellena todos los campos obligatorios."; return; }
+      const msg = (isAr ? "طلب خدمة منزلية - حلاقة عيوب\n\nالاسم: " : "Solicitud - Barbería privada a domicilio\n\nNombre: ") + dName.value.trim() + (isAr ? "\nالهاتف: " : "\nTeléfono: ") + dPhone.value.trim() + (isAr ? "\nالعنوان: " : "\nDirección: ") + dAddress.value.trim() + (isAr ? "\nالخدمة: " : "\nServicio: ") + dSvc.value + (isAr ? "\nالعمر: " : "\nEdad: ") + dAge.value + (isAr ? "\nاليوم المفضل: " : "\nDía preferido: ") + dDay.value + (dComment.value.trim() ? (isAr ? "\nتعليق: " : "\nComentario: ") + dComment.value.trim() : "");
       openWA(msg);
       dForm.style.display = "none";
       dResult.style.display = "block";
-      dResult.innerHTML = "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar el servicio.";
+      dResult.innerHTML = isAr ? "<strong>تم إرسال الطلب.</strong> س تتواصل معك TRAEYA لتأكيد الخدمة." : "<strong>Solicitud enviada.</strong> TRAEYA se pondrá en contacto contigo para confirmar el servicio.";
     });
 
     barberDomicilio = el("div", { class: "barber-section reveal" },
       el("div", { class: "barber-promo" },
-        el("h3", { html: "¿Prefieres quedarte en casa?" }),
-        el("p", { html: "<strong>Ayoub se desplaza hasta tu domicilio.</strong> Disfruta de tu servicio de barbería en casa, sin desplazarte y sin esperar tu turno en el local." })
+        el("h3", { html: isAr ? "بغيتي تبقى فدارك؟" : "¿Prefieres quedarte en casa?" }),
+        el("p", { html: isAr ? "<strong>عيوب كيجي عندك للدار.</strong> استمتع بخدمة الحلاقة بلا ما تتحرك وبلا ما تتسنى." : "<strong>Ayoub se desplaza hasta tu domicilio.</strong> Disfruta de tu servicio de barbería en casa, sin desplazarte y sin esperar tu turno en el local." })
       ),
       dForm,
       dResult
