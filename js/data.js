@@ -6914,7 +6914,28 @@ window.TRAEYA_DATA = {
     "locality": "el-raul",
     "facade": "assets/img/facades/barberia-ayoub.webp",
     "menu": null,
-    "products": [],
+    "products": [
+     {
+      "id": "prod-byoub-1",
+      "name_es": "Dr. Lana - Exfoliante Corporal Fresa y Nata",
+      "name_ar": "دكتور لانا - مقشر الجسم بالفراولة والكريمة",
+      "price": 6.50,
+      "unit": "unidad",
+      "img": "assets/img/products/barberia-ayoub/Gemini_Generated_Image_7utrxy7utrxy7utr.webp",
+      "desc_es": "Exfoliante y aclarante corporal con gránulos suaves. Elimina células muertas, hidrata y unifica el tono.",
+      "desc_ar": "مقشر ومبيض للجسم بحبيبات ناعمة. يزيل الخلايا الميتة ويمنح البشرة نعومة وترطيباً عميقاً."
+     },
+     {
+      "id": "prod-byoub-2",
+      "name_es": "Disaar - Champú Tinte Capilar Rápido",
+      "name_ar": "ديسار - شامبو صبغ الشعر السريع",
+      "price": 9.90,
+      "unit": "unidad",
+      "img": "assets/img/products/barberia-ayoub/Gemini_Generated_Image_oz0bs9oz0bs9oz0b.webp",
+      "desc_es": "Champú colorante con colágeno y aceite de argán. Cubre canas en 8 min. 400 ml.",
+      "desc_ar": "شامبو صبغ سريع بالكولاجين وزيت الأرغان. يغطي الشيب في 8 دقائق. 400 مل."
+     }
+    ],
     "horario": {
      "lunes": "10:00 – 22:00",
      "martes": "10:00 – 22:00",
