@@ -45,7 +45,7 @@ const I18N = {
     heroCtaWa: "Hablar por WhatsApp",
     navShops: "Comercios",
     navMarket: "Mercado",
-    navComida: "Comida Casera",
+    navComida: "LA COSINA DEL MIMA",
     navNeed: "¿Qué necesitas?",
     introKicker: "Bienvenido a El Raal",
     introLead: "El Raal está abierto. <em>TRAEYA</em> acerca sus comercios a tu móvil.",
@@ -61,7 +61,7 @@ const I18N = {
     marketBody: "Cada domingo, El Raal cobra vida. Descubre los puestos, productos y sabores de nuestro mercado en un solo lugar.",
     marketCta: "Ver Mercado",
     comidaKicker: "Hecho en casa",
-    comidaTitle: "Comida <em>Casera</em>",
+    comidaTitle: "La <em>Cosina</em> del Mima",
     comidaBody: "Cuscús, tajín, harira, msemen… los platos de siempre, preparados del día.",
     comidaCta: "Ver los platos",
     carnTitle: "Carnicerías",
@@ -81,7 +81,7 @@ const I18N = {
     needSub: "Escribe qué quieres y te lo dejamos listo. Te avisamos cuando puedas pasar a recoger.",
     needPlaceholder: "Ej.: 2 kg de tomates del Mercado",
     needBtn: "Pedir por WhatsApp",
-    needChips: ["Mercado Domingo", "Comida Casera", "Carnicería", "Kebab", "Farmacia"],
+    needChips: ["Mercado Domingo", "LA COSINA DEL MIMA", "Carnicería", "Kebab", "Farmacia"],
     footerCtaTitle: "Tu pueblo, <em>a un mensaje</em>.",
     footerCtaSub: "Escribe al WhatsApp de TRAEYA y lo resolvemos.",
     footerCtaBtn: "Escribir a TRAEYA",
@@ -112,6 +112,8 @@ const I18N = {
     gateTitle: "¿En qué idioma quieres continuar?",
     gateSub: "El Raal · Murcia",
     gateHint: "Puedes cambiarlo más tarde.",
+    gateSave: "Guardar TRAEYA",
+    gateSaveSub: "Guarda nuestro contacto en tu móvil y pide cuando quieras.",
     socialFollow: "Síguenos",
     socialSoon: "Próximamente",
     cartAdd: "Añadir",
@@ -141,7 +143,7 @@ const I18N = {
     deliveryMercadoSub: "Tu pedido del mercado, en tu puerta",
     deliveryFuera: "Fuera de El Raal",
     deliveryFueraSub: "Santomera, Beniel y alrededores",
-    deliveryComida: "Comida Casera",
+    deliveryComida: "LA COSINA DEL MIMA",
     deliveryComidaSub: "Entrega siempre gratis",
     deliveryNote: "Recogida en el comercio sin coste. La entrega se confirma por WhatsApp.",
     deliveryShop: "Entrega",
@@ -158,7 +160,7 @@ const I18N = {
     type: {
       carniceria: "Carnicería", bazar: "Bazar", farmacia: "Farmacia", mercado: "Mercado",
       supermercado: "Supermercado", restaurante: "Restaurante", tienda24: "Tienda 24h",
-      "comida-casera": "Comida Casera",
+      "comida-casera": "LA COSINA DEL MIMA",
       bodega: "Bodega", locutorio: "Locutorio", panaderia: "Panadería",
       barberia: "Barbería", tabacos: "Tabacos",
     },
@@ -168,7 +170,7 @@ const I18N = {
       "carniceria-halal-said": "جزارة ومونة حلال سعيد",
       "chino-1": "البازار الصيني 1",
       "chino-2": "البازار الصيني 2",
-      "comida-casera": "الطعام المنزلي",
+      "comida-casera": "LA COSINA DEL MIMA",
       "farmacia-haro": "صيدلية هارو",
       "mercado-domingo": "سوق الأحد",
       "mercadona-santomera": "ميركادونا سانتوميرا",
@@ -229,7 +231,7 @@ const I18N = {
     heroCtaWa: "تحدث معنا واتساب",
     navShops: "المحلات",
     navMarket: "السوق",
-    navComida: "الطعام المنزلي",
+    navComida: "LA COSINA DEL MIMA",
     navNeed: "بماذا تحتاج؟",
     introKicker: "مرحباً بك في الرال",
     introLead: "الرال مفتوح. <em>ترايا</em> تقرّب محلاته إلى جوالك.",
@@ -245,7 +247,7 @@ const I18N = {
     marketBody: "كل أحد، الرال ينبض بالحياة. اكتشف البسطات والمنتجات والنكهات من سوقنا في مكان واحد.",
     marketCta: "عرض السوق",
     comidaKicker: "مصنوع في البيت",
-    comidaTitle: "الطعام <em>المنزلي</em>",
+    comidaTitle: "لا <em>كوسينا</em> ديل ميما",
     comidaBody: "كسكس، طاجين، حريرة، مسمن… أطباق الدار، محضرة كل يوم.",
     comidaCta: "عرض الأطباق",
     carnTitle: "الجزارات",
@@ -296,6 +298,8 @@ const I18N = {
     gateTitle: "بأي لغة تريد المتابعة؟",
     gateSub: "الرال · مرسية",
     gateHint: "يمكنك تغييرها لاحقاً.",
+    gateSave: "احفظ TRAEYA",
+    gateSaveSub: "احفظ رقمنا في هاتفك واطلب منا وقتما تحتاج.",
     socialFollow: "تابعنا",
     socialSoon: "قريباً",
     cartAdd: "أضف",
@@ -325,7 +329,7 @@ const I18N = {
     deliveryMercadoSub: "طلبك من السوق حتى باب بيتك",
     deliveryFuera: "خارج الرال",
     deliveryFueraSub: "سانتوميرا، بينيل والمناطق المجاورة",
-    deliveryComida: "الطعام المنزلي",
+    deliveryComida: "LA COSINA DEL MIMA",
     deliveryComidaSub: "التوصيل دائماً مجاناً",
     deliveryNote: "الاستلام من المحل بدون تكلفة. التوصيل يُؤكد عبر واتساب.",
     deliveryShop: "التوصيل",
@@ -342,7 +346,7 @@ const I18N = {
     type: {
       carniceria: "جزارة", bazar: "بازار", farmacia: "صيدلية", mercado: "سوق",
       supermercado: "سوبرماركت", restaurante: "مطعم", tienda24: "متجر 24 ساعة",
-      "comida-casera": "طعام منزلي",
+      "comida-casera": "LA COSINA DEL MIMA",
       bodega: "بوديكة", locutorio: "لوكوتيوريو", panaderia: "مخبزة",
       barberia: "حلاقة", tabacos: "تبغى",
     },
@@ -352,7 +356,7 @@ const I18N = {
       "carniceria-halal-said": "جزارة ومونة حلال سعيد",
       "chino-1": "البازار الصيني 1",
       "chino-2": "البازار الصيني 2",
-      "comida-casera": "الطعام المنزلي",
+      "comida-casera": "LA COSINA DEL MIMA",
       "farmacia-haro": "صيدلية هارو",
       "mercado-domingo": "سوق الأحد",
       "mercadona-santomera": "ميركادونا سانتوميرا",
@@ -449,9 +453,112 @@ function el(tag, attrs, ...contents) {
 const esc = (s) => String(s).replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]));
 const fmtPrice = (n) => new Intl.NumberFormat("es-ES", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(n) + " €";
 const displayName = (p) => STATE.lang === "ar" ? (p.name_ar || p.name_es || p.id) : (p.name_es || p.name_ar || p.id);
-const shopBg = (s) => s.facade || (D.galleries[s.slug] && D.galleries[s.slug][0]) || null;
+
+/* --- Rebranding / overrides por tienda ---
+   Mantenemos los slugs y rutas internos (comida-casera) a la vez que mostramos
+   el nombre comercial deseado en toda la interfaz. */
+const SHOP_TITLE = { "comida-casera": "LA COSINA DEL MIMA" };
+const SHOP_ASSET_OVERRIDE = {
+  "comida-casera": {
+    facade: "assets/img/facades/la-cosina-del-mima.webp",
+    menu: "assets/img/menus/la-cosina-del-mima-menu.webp",
+  },
+};
+const shopTitle = (s) => SHOP_TITLE[s.slug] || s.name;
+const shopOverride = (s) => SHOP_ASSET_OVERRIDE[s.slug] || {};
+const shopFacade = (s) => (shopOverride(s).facade) || s.facade || (D.galleries[s.slug] && D.galleries[s.slug][0]) || null;
+const shopMenu = (s) => (shopOverride(s).menu) || s.menu || null;
+
+const shopBg = (s) => shopFacade(s);
+
+/* --- Marketing personalizado por tipo de comercio ---
+   Cada tienda recibe un mensaje de bienvenida y un ejemplo propio en su
+   buscador, en ES y AR. Se permite un override por slug (tiendas concretas). */
+const MARKETING = {
+  carniceria: {
+    es: "🥩 Carne fresca y calidad para tu mesa.",
+    ar: "🥩 لحم طازج بجودة عالية لمائدتك.",
+    ph: "Ej: 1 kg de ternera, medio kilo de pollo o 4 hamburguesas",
+    phAr: "مثال: 1 كلغ لحم بقري، نصف كلغ دجاج أو 4 برغر",
+  },
+  supermercado: {
+    es: "🛒 Todo lo que necesitas para tu día a día, más cerca de ti.",
+    ar: "🛒 كل ما تحتاجه ليومك، أقرب منك.",
+    ph: "Ej: 1 litro de leche, pan, huevos y arroz",
+    phAr: "مثال: 1 لتر حليب، خبز، بيض وأرز",
+  },
+  farmacia: {
+    es: "💊 Tu farmacia de confianza. Cuéntanos qué necesitas y te ayudaremos.",
+    ar: "💊 صيدليتك الموثوقة. قل لنا ما تحتاجه وسنساعدك.",
+    ph: "Ej: Paracetamol, vitaminas o crema solar",
+    phAr: "مثال: باراسيتامول، فيتامينات أو كريم شمسي",
+  },
+  restaurante: {
+    es: "🍽️ Disfruta de buena comida y elige lo que más te apetece.",
+    ar: "🍽️ استمتع بطعام جيد واختر ما يشهيك أكثر.",
+    ph: "Ej: Un plato de pollo, una ensalada y una bebida",
+    phAr: "مثال: طبق دجاج، سلطة ومشروب",
+  },
+  mercado: {
+    es: "🥕 Lo mejor del Mercado del Domingo, directamente para ti.",
+    ar: "🥕 أفضل ما في سوق الأحد، مباشرة إلى بابك.",
+    ph: "Ej: 1 kg de tomates, patatas, naranjas y fresas",
+    phAr: "مثال: 1 كلغ طماطم، بطاطس، برتقال وفراولة",
+  },
+  "comida-casera": {
+    es: "❤️ Bienvenido a LA COSINA DEL MIMA. Comida casera hecha con cariño, como en casa. ¿Qué te apetece hoy? Cuéntanos qué quieres comer y te lo preparamos con cariño.",
+    ar: "❤️ مرحباً بكم في لا كوسينا ديل ميمـا. طعام منزلي محضّر بحب، مثل البيت. شحال تحب تأكل اليوم؟ قل لنا شنو بغيتي ونحضروه لك بحب.",
+    ph: "Ej: Un cuscús para 2 personas, tajín o harira",
+    phAr: "مثال: كسكس لشخصين، طاجين أو حريرة",
+  },
+};
+const MARKETING_OVERRIDE = {
+  "carniceria-boujaad": {
+    es: "🥩 Bienvenido a Carnicería El Haj, tu carnicería de confianza en El Raal. Carne fresca y productos seleccionados para tu mesa.",
+    ar: "🥩 مرحباً بكم في جزارة الحاج، جزارتكم الموثوقة بالرال. لحم طازج ومنتجات مختارة لمائدتكم.",
+    ph: "Ej: 1 kg de ternera, medio kilo de pollo o 4 hamburguesas",
+    phAr: "مثال: 1 كلغ لحم بقري، نصف كلغ دجاج أو 4 برغر",
+  },
+  "the-hot-buffalo": {
+    es: "🔥 Sabor intenso para los que tienen hambre de verdad.",
+    ar: "🔥 نكهة قوية لمن جاعوا بجد.",
+    ph: "Ej: 6 alitas, una hamburguesa y patatas",
+    phAr: "مثال: 6 أجنحة، برغر وبطاطس",
+  },
+  "mercadona-santomera": {
+    es: "🛒 Todo lo que necesitas para tu compra diaria, fácil y cerca de ti.",
+    ar: "🛒 كل ما تحتاجه لتسوقك اليومي، بسهولة وقريب منك.",
+    ph: "Ej: 1 litro de leche, pan, huevos y arroz",
+    phAr: "مثال: 1 لتر حليب، خبز، بيض وأرز",
+  },
+  "barberia-ayoub": {
+    es: "💈 Bienvenido a la Barbería Ayoub. Pide tu servicio de barbería favorito y reserva tu hora.",
+    ar: "💈 مرحباً بك في حلاقة أيوب. اطلب خدمة الحلاقة المفضلة لديك واحجز موعدك.",
+    ph: "Buscar servicios o productos… Ej: Corte de pelo, Corte + barba, Fade / Degradado, Arreglo de barba…",
+    phAr: "ابحث عن الخدمات أو المنتجات… مثال: قص شعر، قص + لحية، فايد / دغرع، ترتيب اللحية…",
+  },
+};
+function marketingFor(shop) {
+  const override = MARKETING_OVERRIDE[shop.slug] || MARKETING[shop.type];
+  if (!override) return null;
+  return STATE.lang === "ar"
+    ? { title: override.ar, placeholder: override.phAr }
+    : { title: override.es, placeholder: override.ph };
+}
 
 function openWA(text) { window.open(WA(text), "_blank", "noopener"); }
+
+/* Sugerencias de búsqueda (chips) por comercio. Solo se muestran si existen. */
+const SEARCH_SUGGESTIONS = {
+  "barberia-ayoub": {
+    es: ["Corte de pelo", "Corte + barba", "Fade / Degradado", "Arreglo de barba", "Perfilado de barba", "Lavado de pelo", "Peinado", "Champú", "Gel para el cabello", "Cera / Pomada", "Aceite para barba"],
+    ar: ["قص شعر", "قص + لحية", "فايد / دغرعدو", "ترتيب اللحية", "تنعيم اللحية", "غسل الشعر", "تسريحة", "شامبو", "جل للشعر", "شمع / بوماد", "زيت للحية"],
+  },
+};
+function searchSuggestionsFor(shop) {
+  const all = SEARCH_SUGGESTIONS[shop.slug];
+  return all ? (STATE.lang === "ar" ? all.ar : all.es) : null;
+}
 
 /* ---------- Redes sociales ---------- */
 function socialIcon(name) {
@@ -560,7 +667,8 @@ function renderTopbar() {
       el("a", { class: "topnav__link", href: "#/", html: t("navMarket"), onclick: (e) => { e.preventDefault(); location.hash = "#/"; setTimeout(() => goSection("market"), 60); } }),
       el("a", { class: "topnav__link", href: "#/", html: t("navComida"), onclick: (e) => { e.preventDefault(); location.hash = "#/"; setTimeout(() => goSection("comida"), 60); } }),
     ]),
-    el("button", { class: "btn btn--wa btn--small topnav__need", html: t("navNeed"), onclick: () => { location.hash = "#/"; setTimeout(() => goSection("need"), 60); } })
+    el("button", { class: "btn btn--wa btn--small topnav__need", html: t("navNeed"), onclick: () => { location.hash = "#/"; setTimeout(() => goSection("need"), 60); } }),
+    el("button", { class: "btn btn--ghost btn--small topnav__save", type: "button", onclick: saveContact, html: t("gateSave") })
   );
   const lang = el("div", { class: "lang" });
   lang.append(
@@ -591,23 +699,24 @@ function renderFooter() {
   const raul = D.shops.filter((s) => s.locality === "el-raul");
 
   const ctaBtn = el("a", { class: "btn btn--wa", href: WA(t("waGeneric") + CFG.brand), target: "_blank", rel: "noopener", html: t("footerCtaBtn") });
+  const saveBtn = el("button", { class: "btn btn--primary btn--small", type: "button", onclick: saveContact, html: t("gateSave") });
   const cta = el("section", { class: "footer__cta" },
     el("div", { class: "eyebrow eyebrow--sand", html: "TRAEYA" }),
     el("h2", { html: t("footerCtaTitle") }),
     el("p", { html: t("footerCtaSub") }),
-    ctaBtn
+    el("div", { class: "footer__cta-actions" }, [ctaBtn, saveBtn])
   );
 
   const ulShops = el("ul", null);
   raul.forEach((s) => {
     const li = el("li");
-    li.append(el("a", { href: "#/tienda/" + s.slug, html: esc(s.name) }));
+    li.append(el("a", { href: "#/tienda/" + s.slug, html: esc(shopTitle(s)) }));
     ulShops.append(li);
   });
   const colShops = el("div", { class: "footer__col" }, [el("h5", null, t("footerColShops")), ulShops]);
 
   const ulMore = el("ul", null);
-  [["Mercado Domingo", "#/tienda/mercado-domingo"], ["Comida Casera", "#/tienda/comida-casera"], [t("locality")["el-raul"], "#/"]]
+  [["Mercado Domingo", "#/tienda/mercado-domingo"], [shopTitle({ slug: "comida-casera", name: "" }) || "LA COSINA DEL MIMA", "#/tienda/comida-casera"], [t("locality")["el-raul"], "#/"]]
     .forEach(([label, href]) => {
       const li = el("li");
       li.append(el("a", { href, html: label }));
@@ -648,6 +757,37 @@ function setLang(lang) {
   window.scrollTo({ top: 0, behavior: "auto" });
 }
 
+/* Genera y descarga una tarjeta de contacto .vcf (vCard) de TRAEYA.
+   Sin servidor: se crea localmente con un Blob y se descarga. */
+function saveContact() {
+  const vcf = [
+    "BEGIN:VCARD",
+    "VERSION:3.0",
+    "FN:TRAEYA El Raal",
+    "TEL;TYPE=CELL,VOICE:+34743099830",
+    "END:VCARD",
+  ].join("\r\n");
+  try {
+    const blob = new Blob([vcf], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "TRAEYA El Raal.vcf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  } catch (e) {
+    /* Fallback: abrir como enlace data:. */
+    const a = document.createElement("a");
+    a.href = "data:text/vcard;charset=utf-8," + encodeURIComponent(vcf);
+    a.download = "TRAEYA El Raal.vcf";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+}
+
 function renderLangGate() {
   if (localStorage.getItem("traeya.lang")) return;
   const overlay = el("div", { class: "lang-gate", "data-lang-gate": "" });
@@ -676,6 +816,13 @@ function renderLangGate() {
           el("span", { class: "lang-gate__flag", html: "🇲🇦" }),
           el("span", { class: "lang-gate__name", html: "العربية" })
         )
+      ),
+      el("div", { class: "lang-gate__save" },
+        el("button", { class: "lang-gate__save-btn", type: "button", onclick: saveContact },
+          el("span", { class: "lang-gate__save-icon", html: "📱" }),
+          el("span", { class: "lang-gate__save-label", html: esc(t("gateSave")) })
+        ),
+        el("span", { class: "lang-gate__save-sub", html: esc(t("gateSaveSub")) })
       ),
       el("div", { class: "lang-gate__hint", html: t("gateHint") })
     )
@@ -718,13 +865,13 @@ function cardFor(s, mediaClass) {
   const bg = shopBg(s);
   const arName = STATE.lang === "ar" ? (I18N[STATE.lang].shopNameAr[s.slug] || "") : "";
   const media = bg
-    ? el("div", { class: "card__media " + (mediaClass || "") }, el("img", { loading: "lazy", src: bg, alt: esc(s.name) }))
+    ? el("div", { class: "card__media " + (mediaClass || "") }, el("img", { loading: "lazy", src: bg, alt: esc(shopTitle(s)) }))
     : el("div", { class: "card__media " + (mediaClass || "") },
-        el("div", { class: "product-card__fallback", html: esc((s.name || "T").charAt(0)) }));
+        el("div", { class: "product-card__fallback", html: esc((shopTitle(s) || "T").charAt(0)) }));
   return el("a", { class: "card", href: "#/tienda/" + s.slug, "data-shop": s.slug },
     media,
     el("div", { class: "card__body" },
-      el("h3", { class: "card__title", html: esc(s.name) }),
+      el("h3", { class: "card__title", html: esc(shopTitle(s)) }),
       arName ? el("span", { class: "card__ar ar", html: arName }) : null,
       el("div", { class: "card__meta" },
         el("span", { class: "card__type", html: t("type")[s.type] }),
@@ -806,7 +953,7 @@ function renderHome() {
   $$(".chip", needChips).forEach((ch) => ch.addEventListener("click", () => {
     const v = ch.textContent;
     if (v.indexOf("سوق") >= 0 || v === "Mercado Domingo") goSection("market");
-    else if (v.indexOf("طعام") >= 0 || v === "Comida Casera") goSection("comida");
+    else if (v.indexOf("طعام") >= 0 || v === "LA COSINA DEL MIMA") goSection("comida");
     else goSection("comercios");
   }));
 
@@ -829,11 +976,11 @@ function renderHome() {
         const typeName = t("type")[s.type] || s.type;
         return el("a", { class: "descubre-card reveal", "data-delay": String((i % 4) + 1), href: "#/tienda/" + s.slug },
           el("div", { class: "descubre-card__img" },
-            el("img", { loading: "lazy", src: s.facade, alt: esc(s.name) })
+            el("img", { loading: "lazy", src: shopFacade(s), alt: esc(shopTitle(s)) })
           ),
           el("div", { class: "descubre-card__body" },
             el("span", { class: "descubre-card__type", html: typeName }),
-            el("h3", { class: "descubre-card__name", html: esc(s.name) })
+            el("h3", { class: "descubre-card__name", html: esc(shopTitle(s)) })
           )
         );
       }))
@@ -891,13 +1038,13 @@ function renderHome() {
           el("a", { class: "btn btn--dark", href: "#/tienda/comida-casera", html: t("comidaCta") })
         ),
         el("a", { class: "split__media reveal", "data-delay": "1", href: "#/tienda/comida-casera" },
-          el("img", { loading: "lazy", src: shopBg(comida) || "", alt: esc(comida.name) })
+          el("img", { loading: "lazy", src: shopBg(comida) || "", alt: esc(shopTitle(comida)) })
         )
       ),
       comidaShots.length ? el("div", { class: "scene-strip reveal", "data-delay": "2" },
         comidaShots.map((g) =>
           el("a", { class: "scene-strip__cell", href: "#/tienda/comida-casera" },
-            el("img", { loading: "lazy", src: g, alt: esc(comida.name) })
+            el("img", { loading: "lazy", src: g, alt: esc(shopTitle(comida)) })
           )
         )
       ) : null,
@@ -952,7 +1099,13 @@ function renderHome() {
   /* 8. Otros */
   const otherSec = gridSection("otros", "section--cream", sectionHead(t("otherTitle"), t("otherTitle"), t("otherSub")), others.map((s) => cardFor(s)));
 
-  view.append(hero, need, descubre, marketSec, comidaSec, deliverySec, restSec, otherSec);
+  /* 9. En otros pueblos — comercios de fuera de El Raal (ej. Mercadona Santomera) */
+  const otrosPueblos = D.shops.filter((s) => s.locality !== "el-raul" && s.type !== "restaurante");
+  const otrosSec = otrosPueblos.length
+    ? gridSection("otros-pueblos", "section--sand", sectionHead(t("otherTitleLocs"), t("otherTitleLocs"), t("otherSubLocs")), otrosPueblos.map((s) => cardFor(s)))
+    : null;
+
+  view.append(hero, need, descubre, marketSec, comidaSec, deliverySec, restSec, otherSec, otrosSec);
   observeReveals(view);
   parallax();
 }
@@ -979,11 +1132,11 @@ function goSection(id) {
 function renderShop(shop) {
   const view = $("#view");
   view.innerHTML = "";
-  document.title = shop.name + " · TRAEYA · El Raal";
+  document.title = shopTitle(shop) + " · TRAEYA · El Raal";
   STATE.shop = shop;
   const products = shop.products;
   const gallery = D.galleries[shop.slug] || [];
-  const bg = shopBg(shop);
+  const bg = shopFacade(shop);
   const arName = STATE.lang === "ar" ? (I18N[STATE.lang].shopNameAr[shop.slug] || "") : "";
   const isMarket = shop.type === "mercado";
 
@@ -995,41 +1148,46 @@ function renderShop(shop) {
     dlvTag
   ]);
 
-  /* Caja "¿Qué estás buscando?" — bloque importante */
-  const askText = el("textarea", { class: "ask-box__textarea", rows: 3, placeholder: t("askShopPlaceholder") });
+  /* Caja "¿Qué estás buscando?" — bloque importante (mensaje + ejemplo por tienda) */
+  const mk = marketingFor(shop) || { title: t("askShopSub"), placeholder: t("askShopPlaceholder") };
+  const askText = el("textarea", { class: "ask-box__textarea", rows: 3, placeholder: mk.placeholder });
   const askBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("askShopBtn") });
-  const askBox = el("div", { class: "ask-box" },
-    el("div", { class: "ask-box__icon", html: "✆" }),
-    el("h3", { html: t("askShopTitle") }),
-    el("p", { class: "ask-box__sub", html: t("askShopSub") }),
-    askText,
-    askBtn
-  );
-  const askGo = () => openWA(t("waShop") + " " + shop.name + ": " + (askText.value.trim() || t("askShopPlaceholder")));
+  const askBoxEls = [el("div", { class: "ask-box__icon", html: "✆" }), el("h3", { html: esc(shopTitle(shop)) }), el("p", { class: "ask-box__sub", html: esc(mk.title) }), askText];
+  const suggest = searchSuggestionsFor(shop);
+  if (suggest) {
+    const chips = el("div", { class: "ask-box__chips" });
+    suggest.forEach((c) => chips.append(el("button", { class: "chip", type: "button", html: esc(c) })));
+    $$(".chip", chips).forEach((ch) => ch.addEventListener("click", () => { askText.value = ch.textContent; askText.focus(); }));
+    askBoxEls.push(chips);
+  }
+  askBoxEls.push(askBtn);
+  const askBox = el("div", { class: "ask-box" }, askBoxEls);
+  const askGo = () => openWA(t("waShop") + " " + shopTitle(shop) + ": " + (askText.value.trim() || mk.placeholder));
   askBtn.addEventListener("click", askGo);
   askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
 
   const hero = el("section", { class: "shop-hero" },
-    bg ? el("img", { class: "shop-hero__image", src: bg, alt: esc(shop.name) }) : null,
+    bg ? el("img", { class: "shop-hero__image", src: bg, alt: esc(shopTitle(shop)) }) : null,
     bg ? el("div", { class: "shop-hero__overlay" }) : null,
     el("div", { class: "shop-hero__content" },
       el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
       heroTags,
-      el("h1", { class: "shop-hero__name", html: esc(shop.name) }),
-      arName ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
+      el("h1", { class: "shop-hero__name", html: esc(shopTitle(shop)) }),
+      arName && shopTitle(shop) !== "LA COSINA DEL MIMA" ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
       products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
     )
   );
 
-  const menuSec = shop.menu
+  const mnu = shopMenu(shop);
+  const menuSec = mnu
     ? el("section", { class: "menu-section reveal" },
         el("div", { class: "menu-section__head" },
           el("div", { class: "eyebrow", html: t("menuKicker") }),
-          el("h3", { html: esc(shop.name) }),
+          el("h3", { html: esc(shopTitle(shop)) }),
           el("span", { class: "menu-section__hint", html: t("menuHint") })
         ),
         el("div", { class: "menu-section__frame" },
-          el("img", { loading: "lazy", src: shop.menu, alt: "Menú · " + shop.name })
+          el("img", { loading: "lazy", src: mnu, alt: "Menú · " + shopTitle(shop) })
         )
       )
     : null;
@@ -1187,11 +1345,11 @@ function renderShop(shop) {
   const otherShops = D.shops.filter((s) => s.slug !== shop.slug);
   const shuffled = otherShops.sort(() => Math.random() - 0.5).slice(0, 6);
   const discoverCards = shuffled.map((s) => {
-    const bg = shopBg(s);
+    const bg = shopFacade(s);
     return el("a", { class: "discover-card", href: "#/tienda/" + s.slug },
-      bg ? el("img", { class: "discover-card__img", loading: "lazy", src: bg, alt: esc(s.name) }) : el("div", { class: "discover-card__img discover-card__placeholder", html: esc((s.name || "T").charAt(0)) }),
+      bg ? el("img", { class: "discover-card__img", loading: "lazy", src: bg, alt: esc(shopTitle(s)) }) : el("div", { class: "discover-card__img discover-card__placeholder", html: esc((shopTitle(s) || "T").charAt(0)) }),
       el("div", { class: "discover-card__info" },
-        el("span", { class: "discover-card__name", html: esc(s.name) }),
+        el("span", { class: "discover-card__name", html: esc(shopTitle(s)) }),
         el("span", { class: "discover-card__type", html: t("type")[s.type] || s.type })
       )
     );
@@ -1214,7 +1372,7 @@ function renderEmpty(shop) {
     el("h3", null, t("emptyTitle")),
     el("p", null, t("emptyBody")),
     el("div", { class: "empty-state__wa" },
-      el("a", { class: "btn btn--wa", href: WA(t("waShop") + " " + shop.name), target: "_blank", rel: "noopener", html: t("askShopBtn") })
+      el("a", { class: "btn btn--wa", href: WA(t("waShop") + " " + shopTitle(shop)), target: "_blank", rel: "noopener", html: t("askShopBtn") })
     )
   );
 }
@@ -1443,7 +1601,7 @@ const CartDrawer = {
         )
       );
     } else {
-      panel.append(el("div", { class: "cart-drawer__shop", html: "<span>" + esc(t("cartShop")) + "</span><strong>" + esc(shop.name) + "</strong>" }));
+      panel.append(el("div", { class: "cart-drawer__shop", html: "<span>" + esc(t("cartShop")) + "</span><strong>" + esc(shopTitle(shop)) + "</strong>" }));
 
       const list = el("div", { class: "cart-drawer__list" });
       items.forEach((it) => {
@@ -1537,7 +1695,7 @@ const CartDrawer = {
 function buildOrderMessage(shop, items, note) {
   const lines = [];
   lines.push("TRAEYA · EL RAAL");
-  lines.push(t("cartShop") + ": " + shop.name);
+  lines.push(t("cartShop") + ": " + shopTitle(shop));
   lines.push("");
   lines.push(t("cartView") + ":");
   items.forEach((it) => {
