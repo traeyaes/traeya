@@ -1489,8 +1489,18 @@ function renderShop(shop) {
   const shuffled = otherShops.sort(() => Math.random() - 0.5).slice(0, 6);
   const discoverCards = shuffled.map((s) => {
     const bg = shopFacade(s);
+    const st = shopStatus(s);
+    const media = bg
+      ? el("div", { class: "discover-card__media status-frame status--" + st.code },
+          el("img", { class: "discover-card__img", loading: "lazy", src: bg, alt: esc(shopTitle(s)) }),
+          el("span", { class: "status-badge status--" + st.code, html: st.label })
+        )
+      : el("div", { class: "discover-card__media status-frame status--" + st.code },
+          el("div", { class: "discover-card__img discover-card__placeholder", html: esc((shopTitle(s) || "T").charAt(0)) }),
+          el("span", { class: "status-badge status--" + st.code, html: st.label })
+        );
     return el("a", { class: "discover-card", href: "#/tienda/" + s.slug },
-      bg ? el("img", { class: "discover-card__img", loading: "lazy", src: bg, alt: esc(shopTitle(s)) }) : el("div", { class: "discover-card__img discover-card__placeholder", html: esc((shopTitle(s) || "T").charAt(0)) }),
+      media,
       el("div", { class: "discover-card__info" },
         el("span", { class: "discover-card__name", html: esc(shopTitle(s)) }),
         el("span", { class: "discover-card__type", html: t("type")[s.type] || s.type })
