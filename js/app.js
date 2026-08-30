@@ -35,6 +35,33 @@ function deliveryFor(shop) {
   return { amount: DELIVERY.fuera_el_raul, free: false };
 }
 
+/* ---------- Estado de apertura (hora de Murcia / España) ----------
+   Calculado según la zona horaria Europe/Madrid (DST incluido), nunca
+   según el reloj del visitante. Normal/resto: 10-14 y 17-22 (pausa 14-17).
+   Tabacos: 10-14 y 17-20. SPAR: cerrado todo el domingo. Venticuatro: 24h. */
+function murciaNow() {
+  return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
+}
+function shopStatus(shop) {
+  const d = murciaNow();
+  const mins = d.getHours() * 60 + d.getMinutes();
+  const day = d.getDay();
+  const slug = shop.slug;
+  const openL = "ABIERTO", pauseL = "EN PAUSA", closedL = "CERRADO";
+  if (slug === "venticoitros-24") return { code: "open", label: openL };
+  if (slug === "spar-express" && day === 0) return { code: "closed", label: closedL };
+  if (shop.type === "tabacos") {
+    if (mins >= 600 && mins < 840) return { code: "open", label: openL };
+    if (mins >= 840 && mins < 1020) return { code: "pause", label: pauseL };
+    if (mins >= 1020 && mins < 1200) return { code: "open", label: openL };
+    return { code: "closed", label: closedL };
+  }
+  if (mins >= 600 && mins < 840) return { code: "open", label: openL };
+  if (mins >= 840 && mins < 1020) return { code: "pause", label: pauseL };
+  if (mins >= 1020 && mins < 1320) return { code: "open", label: openL };
+  return { code: "closed", label: closedL };
+}
+
 const I18N = {
   es: {
     brandSub: "El Raal · Murcia",
@@ -70,7 +97,7 @@ const I18N = {
     catSub: "Elige qué necesitas y te llevamos hasta el comercio de El Raal que lo tiene.",
     superTitle: "Supermercados",
     superSub: "Lo de cada día, cerca de casa.",
-    restTitle: "Restaurantes y Kebab",
+    restTitle: "Restaurantes",
     restSub: "Los restaurantes de El Raal y alrededores.",
     otherTitle: "Otros comercios",
     otherSub: "Farmacia, bazares y servicios del pueblo.",
@@ -81,7 +108,7 @@ const I18N = {
     needSub: "Escribe qué quieres y te lo dejamos listo. Te avisamos cuando puedas pasar a recoger.",
     needPlaceholder: "Ej.: 2 kg de tomates del Mercado",
     needBtn: "Pedir por WhatsApp",
-    needChips: ["Mercado Domingo", "LA COSINA DEL MIMA", "Carnicería", "Kebab", "Farmacia"],
+    needChips: ["Mercado Domingo", "LA COSINA DEL MIMA", "Carnicería", "Restaurantes", "Farmacia"],
     footerCtaTitle: "Tu pueblo, <em>a un mensaje</em>.",
     footerCtaSub: "Escribe al WhatsApp de TRAEYA y lo resolvemos.",
     footerCtaBtn: "Escribir a TRAEYA",
@@ -162,7 +189,7 @@ const I18N = {
       supermercado: "Supermercado", restaurante: "Restaurante", tienda24: "Tienda 24h",
       "comida-casera": "LA COSINA DEL MIMA",
       bodega: "Bodega", locutorio: "Locutorio", panaderia: "Panadería",
-      barberia: "Barbería", tabacos: "Tabacos",
+      barberia: "Barbería", tabacos: "Tabacos", floristeria: "Floristería",
     },
     shopNameAr: {
       "carniceria-el-pelin": "جزارة البيلين",
@@ -189,6 +216,10 @@ const I18N = {
       "barberia-ayoub": "حلاقة أيوب",
       "tabacos-2-el-raal": "تبغى 2 الرال",
       "tabacos-el-raal": "تبغى الرال",
+      "comercial-soto-y-maiquez": "سوتو وماكيز",
+      "garden-center-el-parral": "حديقة البارال",
+      "supermercado-navarro": "سوبرماركت نافارو",
+      "boca-pizza": "بوكا بيتزا",
     },
     /* --- Descubre El Raal --- */
     descubreTitle: "Descubre <em>El Raal</em>",
@@ -256,7 +287,7 @@ const I18N = {
     catSub: "اختر ما تحتاجه وسنوصلك إلى محل الرال الذي يملكه.",
     superTitle: "السوبرماركت",
     superSub: "حاجياتك اليومية، قريبة من البيت.",
-    restTitle: "مطاعم وكباب",
+    restTitle: "المطاعم",
     restSub: "مطاعم الرال والمناطق المجاورة.",
     otherTitle: "محلات أخرى",
     otherSub: "صيدلية، بازارات وخدمات المدينة.",
@@ -267,7 +298,7 @@ const I18N = {
     needSub: "اكتب ما تريد وسنتركه جاهزاً لك. نرسل لك رسالة عندما يكون بإمكانك الاستلام.",
     needPlaceholder: "مثال: 2 كيلو طماطم من السوق",
     needBtn: "اطلب عبر واتساب",
-    needChips: ["سوق الأحد", "الطعام المنزلي", "الجزارة", "كباب", "الصيدلية"],
+    needChips: ["سوق الأحد", "الطعام المنزلي", "الجزارة", "المطاعم", "الصيدلية"],
     footerCtaTitle: "مدينتك، <em>برسالة واحدة</em>.",
     footerCtaSub: "اكتب إلى واتساب ترايا وسنحل الأمر.",
     footerCtaBtn: "اكتب إلى ترايا",
@@ -348,7 +379,7 @@ const I18N = {
       supermercado: "سوبرماركت", restaurante: "مطعم", tienda24: "متجر 24 ساعة",
       "comida-casera": "LA COSINA DEL MIMA",
       bodega: "بوديكة", locutorio: "لوكوتيوريو", panaderia: "مخبزة",
-      barberia: "حلاقة", tabacos: "تبغى",
+      barberia: "حلاقة", tabacos: "تبغى", floristeria: "محل ورود وزراعة",
     },
     shopNameAr: {
       "carniceria-el-pelin": "جزارة البيلين",
@@ -375,6 +406,10 @@ const I18N = {
       "barberia-ayoub": "حلاقة أيوب",
       "tabacos-2-el-raal": "تبغى 2 الرال",
       "tabacos-el-raal": "تبغى الرال",
+      "comercial-soto-y-maiquez": "سوتو وماكيز",
+      "garden-center-el-parral": "حديقة البارال",
+      "supermercado-navarro": "سوبرماركت نافارو",
+      "boca-pizza": "بوكا بيتزا",
     },
     /* --- Descubre El Raal --- */
     descubreTitle: "اكتشف <em>الرال</em>",
@@ -510,6 +545,24 @@ const MARKETING = {
     ar: "❤️ مرحباً بكم في لا كوسينا ديل ميمـا. طعام منزلي محضّر بحب، مثل البيت. شحال تحب تأكل اليوم؟ قل لنا شنو بغيتي ونحضروه لك بحب.",
     ph: "Ej: Un cuscús para 2 personas, tajín o harira",
     phAr: "مثال: كسكس لشخصين، طاجين أو حريرة",
+  },
+  bazar: {
+    es: "🏪 Tu tienda de barrio. Todo lo que necesitas para el día a día, más cerca de ti.",
+    ar: "🏪 متجر الحيّ. كل ما تحتاجه ليومك، أقرب منك.",
+    ph: "Ej: una cerveza, una baguette, una botella de agua",
+    phAr: "مثال: بيرة، باكيت، قنينة ماء",
+  },
+  tabacos: {
+    es: "🚬 Tu estanco de confianza. Tabaco, cigarrillos, bebidas y snacks.",
+    ar: "🚬 مخزنك الموثوق. تبغ، سجائر، مشروبات ومقبلات.",
+    ph: "Ej: Marlboro, una cerveza, una bebida",
+    phAr: "مثال: مارلبورو، بيرة، مشروب",
+  },
+  floristeria: {
+    es: "💐 Flores, plantas y jardín para tu hogar.",
+    ar: "💐 ورود ونباتات وحديقة لمنزلك.",
+    ph: "Ej: un ramo de rosas, una planta, tierra para macetas",
+    phAr: "مثال: باقة ورود، نبتة، تربة للأصص",
   },
 };
 const MARKETING_OVERRIDE = {
@@ -864,10 +917,13 @@ function parallax() {
 function cardFor(s, mediaClass) {
   const bg = shopBg(s);
   const arName = STATE.lang === "ar" ? (I18N[STATE.lang].shopNameAr[s.slug] || "") : "";
+  const st = shopStatus(s);
+  const statusBadge = el("span", { class: "status-badge status--" + st.code, html: st.label });
   const media = bg
-    ? el("div", { class: "card__media " + (mediaClass || "") }, el("img", { loading: "lazy", src: bg, alt: esc(shopTitle(s)) }))
-    : el("div", { class: "card__media " + (mediaClass || "") },
-        el("div", { class: "product-card__fallback", html: esc((shopTitle(s) || "T").charAt(0)) }));
+    ? el("div", { class: "card__media " + (mediaClass || "") + " status-frame status--" + st.code }, el("img", { loading: "lazy", src: bg, alt: esc(shopTitle(s)) }), statusBadge)
+    : el("div", { class: "card__media " + (mediaClass || "") + " status-frame status--" + st.code },
+        el("div", { class: "product-card__fallback", html: esc((shopTitle(s) || "T").charAt(0)) }),
+        statusBadge);
   return el("a", { class: "card", href: "#/tienda/" + s.slug, "data-shop": s.slug },
     media,
     el("div", { class: "card__body" },
@@ -919,7 +975,7 @@ function renderHome() {
   const market = D.shops.find((s) => s.slug === "mercado-domingo");
   const comida = D.shops.find((s) => s.slug === "comida-casera");
   const rests = byType(["restaurante"]);
-  const others = byType(["farmacia", "bazar", "tienda24", "bodega", "locutorio", "panaderia", "barberia", "tabacos"]);
+  const others = byType(["farmacia", "bazar", "tienda24", "bodega", "locutorio", "panaderia", "barberia", "tabacos", "floristeria"]);
 
   /* 1. Hero */
   const hero = el("section", { class: "hero" },
@@ -954,6 +1010,7 @@ function renderHome() {
     const v = ch.textContent;
     if (v.indexOf("سوق") >= 0 || v === "Mercado Domingo") goSection("market");
     else if (v.indexOf("طعام") >= 0 || v === "LA COSINA DEL MIMA") goSection("comida");
+    else if (v.indexOf("مطاعم") >= 0 || v === "Restaurantes") goSection("restaurantes");
     else goSection("comercios");
   }));
 
@@ -1128,6 +1185,87 @@ function goSection(id) {
   }
 }
 
+/* ---------- Boca Pizza — carrusel 3D interactivo de menús ----------
+   Ligero: CSS perspective + rotateY + translateZ. Front menu grande y
+   nítido; los demás aparecen a los lados con profundidad. Arrastre/
+   swipe, flechas y puntos. No usa librerías. */
+function renderBocaMenu() {
+  const N = 7;
+  const srcs = [1, 2, 3, 4, 5, 6, 7].map((n) => "assets/img/menus/boca-pizza-menu-" + n + ".webp");
+
+  const stage = el("div", { class: "bp3d__stage" });
+  const faces = srcs.map((s, i) =>
+    el("div", { class: "bp3d__face" },
+      el("img", { src: s, alt: "Menú " + (i + 1) + " · Boca Pizza", draggable: "false" })
+    )
+  );
+  faces.forEach((f) => stage.append(f));
+
+  const prev = el("button", { class: "bp3d__arrow", type: "button", "aria-label": "Anterior", html: "‹" });
+  const next = el("button", { class: "bp3d__arrow", type: "button", "aria-label": "Siguiente", html: "›" });
+  const count = el("span", { class: "bp3d__count", html: "1 / " + N });
+  const dots = el("div", { class: "bp3d__dots" });
+  const dotArr = srcs.map(() => el("button", { class: "bp3d__dot", type: "button" }));
+  dotArr.forEach((d) => dots.append(d));
+
+  const viewport = el("div", { class: "bp3d__viewport" }, stage);
+  const sec = el("section", { class: "bp3d reveal" },
+    el("div", { class: "bp3d__head" },
+      el("div", { class: "eyebrow", html: t("menuKicker") }),
+      el("h3", { html: STATE.lang === "ar" ? "منيو بوكا بيتزا" : "Menú · Boca Pizza" })
+    ),
+    viewport,
+    el("div", { class: "bp3d__bar" }, prev, count, next, dots)
+  );
+
+  let index = 0;
+  function layout() {
+    const w = stage.clientWidth || 340;
+    const R = Math.round((w / 2) / Math.tan(Math.PI / N));
+    faces.forEach((f, i) => { f.style.transform = "rotateY(" + (i * (360 / N)) + "deg) translateZ(" + R + "px)"; });
+  }
+  function apply() {
+    stage.style.transform = "rotateY(" + (-index * (360 / N)) + "deg)";
+    dotArr.forEach((d, i) => { if (i === index) d.classList.add("is-on"); else d.classList.remove("is-on"); });
+    count.textContent = (index + 1) + " / " + N;
+    faces.forEach((f, i) => {
+      const a = ((i - index) % N + N) % N;
+      const dist = Math.min(a, N - a);
+      f.style.opacity = String((1 - dist / (N / 2)) * 0.28 + 0.72);
+    });
+  }
+  const go = (i) => { index = ((i % N) + N) % N; apply(); };
+  const step = (d) => go(index + d);
+
+  layout(); apply();
+  prev.addEventListener("click", () => step(-1));
+  next.addEventListener("click", () => step(1));
+  dotArr.forEach((d, i) => d.addEventListener("click", () => go(i)));
+
+  let startX = null, startIdx = 0;
+  function endDrag(e) {
+    if (startX == null) return;
+    const dx = e ? e.clientX - startX : 0;
+    const th = Math.round(dx / 90);
+    if (th !== 0) go(startIdx - th);
+    else apply();
+    startX = null;
+  }
+  stage.addEventListener("pointerdown", (e) => { startX = e.clientX; startIdx = index; if (stage.setPointerCapture) stage.setPointerCapture(e.pointerId); });
+  stage.addEventListener("pointermove", (e) => {
+    if (startX == null) return;
+    const th = Math.round((e.clientX - startX) / 90);
+    stage.style.transform = "rotateY(" + (-(startIdx + th) * (360 / N)) + "deg)";
+  });
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", endDrag);
+
+  const onResize = () => { if (!document.body.contains(sec)) { window.removeEventListener("resize", onResize); return; } layout(); apply(); };
+  window.addEventListener("resize", onResize);
+
+  return sec;
+}
+
 /* ---------- Shop page ---------- */
 function renderShop(shop) {
   const view = $("#view");
@@ -1166,12 +1304,16 @@ function renderShop(shop) {
   askBtn.addEventListener("click", askGo);
   askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
 
-  const hero = el("section", { class: "shop-hero" },
+  const st = shopStatus(shop);
+  const hero = el("section", { class: "shop-hero status-frame status--" + st.code },
     bg ? el("img", { class: "shop-hero__image", src: bg, alt: esc(shopTitle(shop)) }) : null,
     bg ? el("div", { class: "shop-hero__overlay" }) : null,
     el("div", { class: "shop-hero__content" },
       el("a", { class: "shop-hero__back", href: "#/", html: "← " + t("backHome") }),
-      heroTags,
+      el("div", { class: "shop-hero__row" },
+        el("span", { class: "status-badge status-badge--hero status--" + st.code, html: st.label }),
+        heroTags
+      ),
       el("h1", { class: "shop-hero__name", html: esc(shopTitle(shop)) }),
       arName && shopTitle(shop) !== "LA COSINA DEL MIMA" ? el("div", { class: "shop-hero__name-ar ar", html: arName }) : null,
       products.length ? el("div", { class: "shop-hero__count", html: t("productsCount", products.length) }) : null
@@ -1330,6 +1472,7 @@ function renderShop(shop) {
       askBox,
       isBarberia ? el("div", { class: "barber-featured reveal" }, el("img", { src: "assets/img/gallery/barberia-ayoub/FIRST_ONE.webp", alt: esc(shop.name) })) : null,
       marketExp,
+      shop.slug === "boca-pizza" ? renderBocaMenu() : null,
       menuSec,
       horarioSec,
       barberReservar,

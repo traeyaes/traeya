@@ -6981,6 +6981,78 @@ window.TRAEYA_DATA = {
      "sabado": "10:00 – 22:00",
      "domingo": "10:00 – 22:00"
     }
+   },
+   {
+    "slug": "comercial-soto-y-maiquez",
+    "name": "Comercial Soto Y Maiquez S L",
+    "type": "floristeria",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/comercial-soto-y-maiquez.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 14:00, 17:00 – 22:00",
+     "martes": "10:00 – 14:00, 17:00 – 22:00",
+     "miercoles": "10:00 – 14:00, 17:00 – 22:00",
+     "jueves": "10:00 – 14:00, 17:00 – 22:00",
+     "viernes": "10:00 – 14:00, 17:00 – 22:00",
+     "sabado": "10:00 – 14:00, 17:00 – 22:00",
+     "domingo": "10:00 – 14:00, 17:00 – 22:00"
+    }
+   },
+   {
+    "slug": "garden-center-el-parral",
+    "name": "Garden Center El Parral",
+    "type": "floristeria",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/garden-center-el-parral.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 14:00, 17:00 – 22:00",
+     "martes": "10:00 – 14:00, 17:00 – 22:00",
+     "miercoles": "10:00 – 14:00, 17:00 – 22:00",
+     "jueves": "10:00 – 14:00, 17:00 – 22:00",
+     "viernes": "10:00 – 14:00, 17:00 – 22:00",
+     "sabado": "10:00 – 14:00, 17:00 – 22:00",
+     "domingo": "10:00 – 14:00, 17:00 – 22:00"
+    }
+   },
+   {
+    "slug": "supermercado-navarro",
+    "name": "Supermercado Navarro",
+    "type": "supermercado",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/supermercado-navarro.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 14:00, 17:00 – 22:00",
+     "martes": "10:00 – 14:00, 17:00 – 22:00",
+     "miercoles": "10:00 – 14:00, 17:00 – 22:00",
+     "jueves": "10:00 – 14:00, 17:00 – 22:00",
+     "viernes": "10:00 – 14:00, 17:00 – 22:00",
+     "sabado": "10:00 – 14:00, 17:00 – 22:00",
+     "domingo": "10:00 – 14:00, 17:00 – 22:00"
+    }
+   },
+   {
+    "slug": "boca-pizza",
+    "name": "Boca Pizza",
+    "type": "restaurante",
+    "locality": "el-raul",
+    "facade": "assets/img/facades/boca-pizza.webp",
+    "menu": null,
+    "products": [],
+    "horario": {
+     "lunes": "10:00 – 14:00, 17:00 – 22:00",
+     "martes": "10:00 – 14:00, 17:00 – 22:00",
+     "miercoles": "10:00 – 14:00, 17:00 – 22:00",
+     "jueves": "10:00 – 14:00, 17:00 – 22:00",
+     "viernes": "10:00 – 14:00, 17:00 – 22:00",
+     "sabado": "10:00 – 14:00, 17:00 – 22:00",
+     "domingo": "10:00 – 14:00, 17:00 – 22:00"
+    }
    }
   ],
  "galleries": {
@@ -7493,6 +7565,52 @@ window.TRAEYA_DATA = {
    "tabacos-el-raal": [
     "assets/img/gallery/tabacos-el-raal/Gemini_Generated_Image_869vhw869vhw869v (1).webp",
     "assets/img/gallery/tabacos-el-raal/Gemini_Generated_Image_v6lrvwv6lrvwv6lr.webp"
+   ],
+   "comercial-soto-y-maiquez": [
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-21xecs21xecs21xe.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-2q5qug2q5qug2q5q.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-4oa2wa4oa2wa4oa2.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-5fou8m5fou8m5fou.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-6vkaej6vkaej6vka.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-9s8b069s8b069s8b.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-e47rfme47rfme47r.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-nc4a94nc4a94nc4a.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-rs8djzrs8djzrs8d.webp",
+    "assets/img/gallery/comercial-soto-y-maiquez--gemini-generated-image-t6f79it6f79it6f7.webp"
+   ],
+   "garden-center-el-parral": [
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-1an0101an0101an0.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-5ui5o5ui5o5ui5o5-1.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-5ui5o5ui5o5ui5o5.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-75d1wg75d1wg75d1.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-8f29sp8f29sp8f29.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-a10q2ia10q2ia10q.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-cd6zy5cd6zy5cd6z.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-dylwyldylwyldylw.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-ha7ckkha7ckkha7c.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-jtfgsgjtfgsgjtfg.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-uf26kkuf26kkuf26.webp",
+    "assets/img/gallery/garden-center-el-parral--gemini-generated-image-xklz1dxklz1dxklz.webp"
+   ],
+   "supermercado-navarro": [
+    "assets/img/gallery/supermercado-navarro--gemini-generated-image-23c45223c45223c4.webp",
+    "assets/img/gallery/supermercado-navarro--gemini-generated-image-5pxgnv5pxgnv5pxg.webp",
+    "assets/img/gallery/supermercado-navarro--gemini-generated-image-fy27vfy27vfy27vf.webp",
+    "assets/img/gallery/supermercado-navarro--gemini-generated-image-lva8fhlva8fhlva8.webp"
+   ],
+   "boca-pizza": [
+    "assets/img/gallery/boca-pizza--gemini-generated-image-7y442e7y442e7y44-1.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-7y442e7y442e7y44.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-d4b6lrd4b6lrd4b6.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-e70e4ze70e4ze70e.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-g9q4lkg9q4lkg9q4.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-jmytujmytujmytuj.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-joydo5joydo5joyd.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-jpas3sjpas3sjpas.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-lo3kzylo3kzylo3k.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-mu33n8mu33n8mu33.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-tnomibtnomibtnom.webp",
+    "assets/img/gallery/boca-pizza--gemini-generated-image-wf5a6xwf5a6xwf5a.webp"
    ]
   }
-};
+ };
