@@ -1031,9 +1031,11 @@ function renderHome() {
       sectionHead(null, t("descubreTitle"), t("descubreSub")),
       el("div", { class: "descubre-grid" }, allElRaal.map((s, i) => {
         const typeName = t("type")[s.type] || s.type;
+        const st = shopStatus(s);
         return el("a", { class: "descubre-card reveal", "data-delay": String((i % 4) + 1), href: "#/tienda/" + s.slug },
-          el("div", { class: "descubre-card__img" },
-            el("img", { loading: "lazy", src: shopFacade(s), alt: esc(shopTitle(s)) })
+          el("div", { class: "descubre-card__img status-frame status--" + st.code },
+            el("img", { loading: "lazy", src: shopFacade(s), alt: esc(shopTitle(s)) }),
+            el("span", { class: "status-badge status--" + st.code, html: st.label })
           ),
           el("div", { class: "descubre-card__body" },
             el("span", { class: "descubre-card__type", html: typeName }),
