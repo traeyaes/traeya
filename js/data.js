@@ -7414,7 +7414,20 @@ window.TRAEYA_DATA = {
    "assets/img/gallery/carniceria-halal-said--s-l1600.webp",
    "assets/img/gallery/carniceria-halal-said--tarro-1l-frutas-mezcladas-950x950-600x600.webp"
   ],
-  "chino-1": [],
+  "chino-1": [
+   "assets/img/gallery/chino-1--gemini-generated-image-55qa1155qa1155qa.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-5dvno65dvno65dvn.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-7ecsm7ecsm7ecsm7.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-7vupvt7vupvt7vup.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-ajpn8gajpn8gajpn.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-cksd24cksd24cksd.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-hsd78ahsd78ahsd7.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-i2a1hxi2a1hxi2a1.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-io5ip2io5ip2io5i.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-kzyphfkzyphfkzyp.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-ve5wj9ve5wj9ve5w.webp",
+   "assets/img/gallery/chino-1--gemini-generated-image-vvgzcyvvgzcyvvgz.webp"
+  ],
   "chino-2": [],
   "comida-casera": [],
   "farmacia-haro": [

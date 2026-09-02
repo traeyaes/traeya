@@ -224,6 +224,12 @@ const I18N = {
     /* --- Descubre El Raal --- */
     descubreTitle: "Descubre <em>El Raal</em>",
     descubreSub: "Un paseo por el pueblo. Todos los comercios de El Raal, reales y cercanos.",
+    /* --- ¿Tu tienda cerrada? --- */
+    questKicker: "TRAEYA te ayuda",
+    questTitle: "¿No encuentras tu tienda abierta?",
+    questSub: "Dinos qué necesitas. Nosotros lo buscamos por ti.",
+    questCta: "Pedir por WhatsApp",
+    questDefault: "no encuentro mi tienda abierta, necesito ",
     /* --- TikTok LIVE --- */
     liveBadge: "EN DIRECTO",
     liveBadgeSub: "Cada domingo en TikTok",
@@ -414,6 +420,12 @@ const I18N = {
     /* --- Descubre El Raal --- */
     descubreTitle: "اكتشف <em>الرال</em>",
     descubreSub: "جولة في المدينة. جميع محلات الرال، حقيقية وقريبة.",
+    /* --- المحل مقفول؟ --- */
+    questKicker: "ترايا تعاونك",
+    questTitle: "ما لقيتي المحل المفتوح؟",
+    questSub: "قولنا شنو محتاج. حنا نلقاوه ليك.",
+    questCta: "اطلب عبر واتساب",
+    questDefault: "ما لقيت المحل المفتوح، كنجتاج ",
     /* --- TikTok LIVE --- */
     liveBadge: "مباشر",
     liveBadgeSub: "كل أحد على تيك توك",
@@ -1042,7 +1054,13 @@ function renderHome() {
             el("h3", { class: "descubre-card__name", html: esc(shopTitle(s)) })
           )
         );
-      }))
+      })),
+      el("div", { class: "open-quest reveal" },
+        el("div", { class: "open-quest__kicker", html: t("questKicker") }),
+        el("h3", { class: "open-quest__title", html: t("questTitle") }),
+        el("p", { class: "open-quest__sub", html: t("questSub") }),
+        el("a", { class: "btn btn--wa", href: WA(t("waGeneric") + t("questDefault")), target: "_blank", rel: "noopener", html: t("questCta") })
+      )
     )
   );
 
