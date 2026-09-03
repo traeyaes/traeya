@@ -651,6 +651,12 @@ const MARKETING_OVERRIDE = {
     ph: "Buscar servicios o productos… Ej: Corte de pelo, Corte + barba, Fade / Degradado, Arreglo de barba…",
     phAr: "ابحث عن الخدمات أو المنتجات… مثال: قص شعر، قص + لحية، فايد / دغرع، ترتيب اللحية…",
   },
+  "locutorio-tienda-ayoub": {
+    es: "📠 Locutorio y tienda de servicios. Fotocopias, imprimir, enviar dinero y pago de tasas.",
+    ar: "📠 لوكوتيوريو ومتجر الخدمات. تصوير، طباعة، تحويل الأموال ودفع الرسوم.",
+    ph: "Ej: hacer fotocopias, enviar dinero, imprimir un documento, pagar una tasa",
+    phAr: "مثال: تصوير، تحويل الأموال، طباعة وثيقة، دفع رسوم",
+  },
 };
 function marketingFor(shop) {
   const override = MARKETING_OVERRIDE[shop.slug] || MARKETING[shop.type];
@@ -667,6 +673,10 @@ const SEARCH_SUGGESTIONS = {
   "barberia-ayoub": {
     es: ["Corte de pelo", "Corte + barba", "Fade / Degradado", "Arreglo de barba", "Perfilado de barba", "Lavado de pelo", "Peinado", "Champú", "Gel para el cabello", "Cera / Pomada", "Aceite para barba"],
     ar: ["قص شعر", "قص + لحية", "فايد / دغرعدو", "ترتيب اللحية", "تنعيم اللحية", "غسل الشعر", "تسريحة", "شامبو", "جل للشعر", "شمع / بوماد", "زيت للحية"],
+  },
+  "locutorio-tienda-ayoub": {
+    es: ["Hacer fotocopias", "Enviar dinero", "Imprimir un documento", "Pagar una tasa", "Recargas"],
+    ar: ["تصوير", "تحويل الأموال", "طباعة وثيقة", "دفع رسوم", "تعبئة رصيد"],
   },
 };
 function searchSuggestionsFor(shop) {
