@@ -37,28 +37,59 @@ function deliveryFor(shop) {
 
 /* ---------- Estado de apertura (hora de Murcia / España) ----------
    Calculado según la zona horaria Europe/Madrid (DST incluido), nunca
-   según el reloj del visitante. Normal/resto: 10-14 y 17-22 (pausa 14-17).
-   Tabacos: 10-14 y 17-20. SPAR: cerrado todo el domingo. Venticuatro: 24h. */
+   según el reloj del visitante.
+   Si el comercio tiene `horario` en data.js, se lee de ahí (con soporte
+   para cierre a medianoche, horario continuo sin pausa y horario
+   partido). Si no lo tiene, se usa el horario por defecto por tipo. */
+const DAYS_KEY = ["domingo", "lunes", "martes", "miercoles", "jueves", "viernes", "sabado"];
 function murciaNow() {
   return new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Madrid" }));
 }
+/* "10:00 – 14:00, 17:00 – 22:00" -> [{o:600,c:840},{o:1020,c:1320}] (minutos).
+   Soporta "HH:MM – HH:MM" con "–", "-" o "a", y cualquier nº de tramos. */
+function parseHorarioStr(str) {
+  const blocks = [];
+  const parts = String(str || "").split(/[,;]|\s+y\s+/i);
+  parts.forEach((p) => {
+    const m = p.match(/(\d{1,2}):(\d{2})\s*(?:–|-|a|hasta)\s*(\d{1,2}):(\d{2})/i);
+    if (!m) return;
+    const o = (+m[1]) * 60 + (+m[2]);
+    let c = (+m[3]) * 60 + (+m[4]);
+    if (c <= o) c += 1440;
+    blocks.push({ o, c });
+  });
+  return blocks;
+}
 function shopStatus(shop) {
   const d = murciaNow();
-  const mins = d.getHours() * 60 + d.getMinutes();
+  const t = d.getHours() * 60 + d.getMinutes();
   const day = d.getDay();
   const slug = shop.slug;
   const openL = "ABIERTO", pauseL = "EN PAUSA", closedL = "CERRADO";
   if (slug === "venticoitros-24") return { code: "open", label: openL };
-  if (slug === "spar-express" && day === 0) return { code: "closed", label: closedL };
-  if (shop.type === "tabacos") {
-    if (mins >= 600 && mins < 840) return { code: "open", label: openL };
-    if (mins >= 840 && mins < 1020) return { code: "pause", label: pauseL };
-    if (mins >= 1020 && mins < 1200) return { code: "open", label: openL };
+  if (shop.horario) {
+    const today = shop.horario[DAYS_KEY[day]];
+    if (!today) return { code: "closed", label: closedL };
+    const blocks = parseHorarioStr(today);
+    if (!blocks.length) return { code: "closed", label: closedL };
+    const totalMins = t + (day === 0 && t < 240 ? 1440 : 0);
+    for (let i = 0; i < blocks.length; i++) {
+      const b = blocks[i];
+      if (totalMins >= b.o && totalMins < b.c) return { code: "open", label: openL };
+      if (i > 0 && totalMins >= blocks[i - 1].c && totalMins < b.o) return { code: "pause", label: pauseL };
+    }
     return { code: "closed", label: closedL };
   }
-  if (mins >= 600 && mins < 840) return { code: "open", label: openL };
-  if (mins >= 840 && mins < 1020) return { code: "pause", label: pauseL };
-  if (mins >= 1020 && mins < 1320) return { code: "open", label: openL };
+  if (slug === "spar-express" && day === 0) return { code: "closed", label: closedL };
+  if (shop.type === "tabacos") {
+    if (t >= 600 && t < 840) return { code: "open", label: openL };
+    if (t >= 840 && t < 1020) return { code: "pause", label: pauseL };
+    if (t >= 1020 && t < 1200) return { code: "open", label: openL };
+    return { code: "closed", label: closedL };
+  }
+  if (t >= 600 && t < 840) return { code: "open", label: openL };
+  if (t >= 840 && t < 1020) return { code: "pause", label: pauseL };
+  if (t >= 1020 && t < 1320) return { code: "open", label: openL };
   return { code: "closed", label: closedL };
 }
 
@@ -67,7 +98,7 @@ const I18N = {
     brandSub: "El Raal · Murcia",
     heroEyebrow: "TRAEYA · El Raal, Murcia",
     heroTitle: "Tu pueblo, en tu móvil.",
-    heroSub: "Los comercios de El Raal, reales y cercanos. Mira, escribe y recoge. Todo por WhatsApp.",
+    heroSub: "Mira, pide y te lo llevamos. Los comercios de El Raal, en tu móvil.",
     heroCta: "Entrar en El Raal",
     heroCtaWa: "Hablar por WhatsApp",
     navShops: "Comercios",
@@ -78,7 +109,7 @@ const I18N = {
     introLead: "El Raal está abierto. <em>TRAEYA</em> acerca sus comercios a tu móvil.",
     introSub: "Sin catálogos infinitos ni páginas genéricas. Los lugares reales de tu pueblo, cada uno con su historia.",
     feature1: ["Comercios reales", "Las fachadas y los productos que ves son los de El Raal."],
-    feature2: ["Cercano", "Pide desde tu sofá y recoge en pocos minutos."],
+    feature2: ["Entrega local", "Pide desde tu móvil y te lo llevamos a casa."],
     feature3: ["Por WhatsApp", "Un solo mensaje. Sin apps, sin cuentas, sin esperas."],
     discoverKicker: "Descubre El Raal",
     discoverTitle: "Un paseo por el pueblo",
@@ -105,7 +136,7 @@ const I18N = {
     otherSubLocs: "TRAEYA va creciendo. Estos comercios también están en la red.",
     needKicker: "Message first",
     needTitle: "¿Qué necesitas?",
-    needSub: "Escribe qué quieres y te lo dejamos listo. Te avisamos cuando puedas pasar a recoger.",
+    needSub: "Escribe qué quieres y te lo llevamos. Te avisamos cuando esté listo.",
     needPlaceholder: "Ej.: 2 kg de tomates del Mercado",
     needBtn: "Pedir por WhatsApp",
     needChips: ["Mercado Domingo", "LA COSINA DEL MIMA", "Carnicería", "Restaurantes", "Farmacia"],
@@ -129,10 +160,19 @@ const I18N = {
     showMore: "Ver más",
     galleryLabel: "Galería",
     askFor: "Añadir al pedido",
-    askShopTitle: "¿Qué estás buscando?",
-    askShopSub: "Escríbenos lo que necesitas y te ayudamos.",
+    askShopTitle: "¿Qué necesitas de este comercio?",
+    askShopSub: "Escribe tu pedido, dirección y teléfono. Te lo llevamos por WhatsApp.",
     askShopPlaceholder: "Ej.: medio kilo de carne picada, dos brochetas, 1 kg de cebollas…",
     askShopBtn: "Enviar por WhatsApp",
+    deliveryBadgeHome: "🛵 Entrega local · 2 €",
+    askShopAddress: "Tu dirección",
+    askShopPhone: "Tu teléfono",
+    waOrderTitle: "🛵 Pedido en ",
+    waOrderLabel: "\n\nPedido: ",
+    waAddrLabel: "\n\nDirección: ",
+    waPhoneLabel: "\nTeléfono: ",
+    waDeliveryFree: "\n\nEntrega gratis",
+    waDeliveryLocal: "\n\nEntrega local: ",
     productsCount: (n) => n + (n === 1 ? " producto" : " productos"),
     waGeneric: "Hola TRAEYA, necesito ",
     waShop: "Hola TRAEYA, quiero pedir en",
@@ -263,7 +303,7 @@ const I18N = {
     brandSub: "الرال · مرسية",
     heroEyebrow: "ترايا · الرال، مرسية",
     heroTitle: "مدينتك، في جوالك.",
-    heroSub: "محلات الرال، حقيقية وقريبة. شاهد، اكتب، واستلم. كل شيء عبر واتساب.",
+    heroSub: "شوف، طلب، وكنوصلك. محلات الرال، في جوالك.",
     heroCta: "ادخل إلى الرال",
     heroCtaWa: "تحدث معنا واتساب",
     navShops: "المحلات",
@@ -274,7 +314,7 @@ const I18N = {
     introLead: "الرال مفتوح. <em>ترايا</em> تقرّب محلاته إلى جوالك.",
     introSub: "بدون كتالوجات لا نهائية أو صفحات عامة. الأماكن الحقيقية لمدينتك، لكل واحد قصته.",
     feature1: ["محلات حقيقية", "الواجهات والمنتجات التي تراها هي محلات الرال نفسها."],
-    feature2: ["قريب", "اطلب من مكانك واستلم خلال دقائق."],
+    feature2: ["توصيل محلي", "اطلب من جوالك وكنوصلك لدارك."],
     feature3: ["عبر واتساب", "رسالة واحدة فقط. بدون تطبيقات أو حسابات أو انتظار."],
     discoverKicker: "اكتشف الرال",
     discoverTitle: "جولة في المدينة",
@@ -301,7 +341,7 @@ const I18N = {
     otherSubLocs: "ترايا تكبر. هذه المحلات أيضاً ضمن الشبكة.",
     needKicker: "رسالة أولاً",
     needTitle: "بماذا تحتاج؟",
-    needSub: "اكتب ما تريد وسنتركه جاهزاً لك. نرسل لك رسالة عندما يكون بإمكانك الاستلام.",
+    needSub: "اكتب شنو بغيتي وكنوصلك. نرسل لك رسالة كي يكون جاهز.",
     needPlaceholder: "مثال: 2 كيلو طماطم من السوق",
     needBtn: "اطلب عبر واتساب",
     needChips: ["سوق الأحد", "الطعام المنزلي", "الجزارة", "المطاعم", "الصيدلية"],
@@ -325,10 +365,19 @@ const I18N = {
     showMore: "عرض المزيد",
     galleryLabel: "المعرض",
     askFor: "أضف إلى الطلب",
-    askShopTitle: "عم تبحث؟",
-    askShopSub: "اكتب ما تحتاجه وسنساعدك.",
+    askShopTitle: "شنو محتاج من هاد المحل؟",
+    askShopSub: "كتب طلبك، العنوان، والهاتف. كنوصلك عبر واتساب.",
     askShopPlaceholder: "مثال: نصف كيلو لحم مفروم، حبتا بروشيت، 1 كيلو بصل…",
     askShopBtn: "أرسل عبر واتساب",
+    deliveryBadgeHome: "🛵 توصيل محلي · ٢ يورو",
+    askShopAddress: "العنوان ديالك",
+    askShopPhone: "الهاتف ديالك",
+    waOrderTitle: "🛵 طلب من ",
+    waOrderLabel: "\n\nالطلب: ",
+    waAddrLabel: "\n\nالعنوان: ",
+    waPhoneLabel: "\nالهاتف: ",
+    waDeliveryFree: "\n\nتوصيل مجاني",
+    waDeliveryLocal: "\n\nتوصيل محلي: ",
     productsCount: (n) => n + (n === 1 ? " منتج" : " منتجات"),
     waGeneric: "مرحباً ترايا، أحتاج ",
     waShop: "مرحباً ترايا، أريد أن أطلب من",
@@ -997,6 +1046,7 @@ function renderHome() {
       el("div", { class: "hero__eyebrow", html: t("heroEyebrow") }),
       el("h1", { class: "hero__title", html: t("heroTitle").replace(/, ([^<]+)/, ", <em>$1</em>") }),
       el("p", { class: "hero__sub", html: t("heroSub") }),
+      el("span", { class: "hero__delivery", html: t("deliveryBadgeHome") }),
       el("div", { class: "hero__actions" },
         el("a", { class: "btn btn--primary", href: "#need", onclick: (e) => { e.preventDefault(); goSection("need"); }, html: t("heroCta") }),
         el("a", { class: "btn btn--ghost", href: WA(t("waGeneric")), target: "_blank", rel: "noopener", html: t("heroCtaWa") })
@@ -1306,11 +1356,13 @@ function renderShop(shop) {
     dlvTag
   ]);
 
-  /* Caja "¿Qué estás buscando?" — bloque importante (mensaje + ejemplo por tienda) */
+  /* Caja "¿Qué necesitas de este comercio?" — mensaje estructurado por WhatsApp */
   const mk = marketingFor(shop) || { title: t("askShopSub"), placeholder: t("askShopPlaceholder") };
   const askText = el("textarea", { class: "ask-box__textarea", rows: 3, placeholder: mk.placeholder });
+  const askAddress = el("input", { class: "ask-box__field", type: "text", placeholder: t("askShopAddress"), value: localStorage.getItem("traeya.addr") || "" });
+  const askPhone = el("input", { class: "ask-box__field", type: "tel", inputmode: "tel", placeholder: t("askShopPhone"), value: localStorage.getItem("traeya.phone") || "" });
   const askBtn = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("askShopBtn") });
-  const askBoxEls = [el("div", { class: "ask-box__icon", html: "✆" }), el("h3", { html: esc(shopTitle(shop)) }), el("p", { class: "ask-box__sub", html: esc(mk.title) }), askText];
+  const askBoxEls = [el("div", { class: "ask-box__icon", html: "✆" }), el("h3", { html: esc(shopTitle(shop)) }), el("p", { class: "ask-box__sub", html: esc(mk.title) }), askText, askAddress, askPhone];
   const suggest = searchSuggestionsFor(shop);
   if (suggest) {
     const chips = el("div", { class: "ask-box__chips" });
@@ -1320,7 +1372,19 @@ function renderShop(shop) {
   }
   askBoxEls.push(askBtn);
   const askBox = el("div", { class: "ask-box" }, askBoxEls);
-  const askGo = () => openWA(t("waShop") + " " + shopTitle(shop) + ": " + (askText.value.trim() || mk.placeholder));
+  const deliveryCost = (shop.type === "mercado" ? "5" : shop.slug === "comida-casera" ? "0" : "2");
+  const askGo = () => {
+    const addr = askAddress.value.trim();
+    const phone = askPhone.value.trim();
+    if (addr) localStorage.setItem("traeya.addr", addr);
+    if (phone) localStorage.setItem("traeya.phone", phone);
+    const pedido = askText.value.trim() || mk.placeholder;
+    let msg = t("waOrderTitle") + shopTitle(shop) + t("waOrderLabel") + pedido;
+    if (addr) msg += t("waAddrLabel") + addr;
+    if (phone) msg += t("waPhoneLabel") + phone;
+    msg += deliveryCost === "0" ? t("waDeliveryFree") : t("waDeliveryLocal") + deliveryCost + " €";
+    openWA(msg);
+  };
   askBtn.addEventListener("click", askGo);
   askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
 

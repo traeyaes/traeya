@@ -346,6 +346,21 @@ input, textarea { font: inherit; }
   font-size: 17px;
   color: rgba(255, 253, 246, .88);
 }
+.hero__delivery {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: -12px 0 26px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(47, 158, 111, .18);
+  border: 1px solid rgba(47, 158, 111, .45);
+  color: #ffe9c9;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  box-shadow: 0 0 18px rgba(47, 158, 111, .25);
+}
 .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; }
 .hero__scroll {
   position: absolute;
@@ -977,6 +992,19 @@ input, textarea { font: inherit; }
 }
 .ask-box__textarea::placeholder { color: rgba(255, 253, 246, .5); }
 .ask-box__textarea:focus { border-color: var(--green-bright); background: rgba(255, 253, 246, .15); }
+.ask-box__field {
+  width: 100%;
+  border-radius: var(--r-sm);
+  border: 1px solid rgba(255, 253, 246, .22);
+  background: rgba(255, 253, 246, .1);
+  color: var(--white);
+  padding: 13px 16px;
+  outline: none;
+  font-size: 15px;
+  transition: border .2s ease, background .2s ease;
+}
+.ask-box__field::placeholder { color: rgba(255, 253, 246, .5); }
+.ask-box__field:focus { border-color: var(--green-bright); background: rgba(255, 253, 246, .15); }
 .ask-box .btn { justify-self: start; }
 
 .ask-box__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
