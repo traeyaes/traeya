@@ -5009,10 +5009,19 @@ window.TRAEYA_DATA = {
      "price2": null,
      "desc_es": "",
      "desc_ar": "",
-     "img": "assets/img/products/kebab-casa-mayor--rkcm039.webp"
+      "img": "assets/img/products/kebab-casa-mayor--rkcm039.webp"
+     }
+    ],
+    "horario": {
+      "lunes": "12:00 – 16:00, 18:00 – 00:00",
+      "martes": "12:00 – 16:00, 18:00 – 00:00",
+      "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+      "jueves": "12:00 – 16:00, 18:00 – 00:00",
+      "viernes": "12:00 – 16:00, 18:00 – 00:00",
+      "sabado": "12:00 – 16:00, 18:00 – 00:00",
+      "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
-   ]
-  },
+   },
   {
    "slug": "kebab-khan-ali-beniel",
    "name": "Restaurante Kebab Khan Ali Beniel",
@@ -5382,19 +5391,28 @@ window.TRAEYA_DATA = {
      "img": null
     },
     {
-     "id": "RKAK031",
-     "name_es": "",
-     "name_ar": "",
-     "category": "إضافات (Extras)",
-     "unit": "",
-     "price": null,
-     "price2": null,
-     "desc_es": "",
-     "desc_ar": "",
-     "img": null
+      "id": "RKAK031",
+      "name_es": "",
+      "name_ar": "",
+      "category": "إضافات (Extras)",
+      "unit": "",
+      "price": null,
+      "price2": null,
+      "desc_es": "",
+      "desc_ar": "",
+      "img": null
+     }
+    ],
+    "horario": {
+      "lunes": "12:00 – 16:00, 18:00 – 00:00",
+      "martes": "12:00 – 16:00, 18:00 – 00:00",
+      "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+      "jueves": "12:00 – 16:00, 18:00 – 00:00",
+      "viernes": "12:00 – 16:00, 18:00 – 00:00",
+      "sabado": "12:00 – 16:00, 18:00 – 00:00",
+      "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
-   ]
-  },
+   },
   {
    "slug": "restaurante-patricia",
    "name": "Restaurante Patricia",
@@ -5728,19 +5746,28 @@ window.TRAEYA_DATA = {
      "img": null
     },
     {
-     "id": "RPTC028",
-     "name_es": "Cerezas",
-     "name_ar": "كرز",
-     "category": "Postres | الحلويات",
-     "unit": "",
-     "price": null,
-     "price2": null,
-     "desc_es": "",
-     "desc_ar": "",
-     "img": null
+      "id": "RPTC028",
+      "name_es": "Cerezas",
+      "name_ar": "كرز",
+      "category": "Postres | الحلويات",
+      "unit": "",
+      "price": null,
+      "price2": null,
+      "desc_es": "",
+      "desc_ar": "",
+      "img": null
+     }
+    ],
+    "horario": {
+      "lunes": "12:00 – 16:00, 18:00 – 00:00",
+      "martes": "12:00 – 16:00, 18:00 – 00:00",
+      "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+      "jueves": "12:00 – 16:00, 18:00 – 00:00",
+      "viernes": "12:00 – 16:00, 18:00 – 00:00",
+      "sabado": "12:00 – 16:00, 18:00 – 00:00",
+      "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
-   ]
-  },
+   },
   {
    "slug": "the-hot-buffalo",
    "name": "The Hot Buffalo El Raal",
@@ -6422,19 +6449,28 @@ window.TRAEYA_DATA = {
      "img": null
     },
     {
-     "id": "RTHB057",
-     "name_es": "Ensalada de Queso de Cabra",
-     "name_ar": "سلطة جبن الماعز",
-     "category": "Ensaladas | السلطات",
-     "unit": "",
-     "price": 11.0,
-     "price2": null,
-     "desc_es": "",
-     "desc_ar": "",
-     "img": null
+      "id": "RTHB057",
+      "name_es": "Ensalada de Queso de Cabra",
+      "name_ar": "سلطة جبن الماعز",
+      "category": "Ensaladas | السلطات",
+      "unit": "",
+      "price": 11.0,
+      "price2": null,
+      "desc_es": "",
+      "desc_ar": "",
+      "img": null
+     }
+    ],
+    "horario": {
+      "lunes": "12:00 – 16:00, 18:00 – 00:00",
+      "martes": "12:00 – 16:00, 18:00 – 00:00",
+      "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+      "jueves": "12:00 – 16:00, 18:00 – 00:00",
+      "viernes": "12:00 – 16:00, 18:00 – 00:00",
+      "sabado": "12:00 – 16:00, 18:00 – 00:00",
+      "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
-   ]
-  },
+   },
   {
    "slug": "kebab-khan-ali-el-raal",
    "name": "Restaurante Khan Ali El Raal",
@@ -6804,19 +6840,28 @@ window.TRAEYA_DATA = {
      "img": "assets/img/products/kebab-khan-ali-el-raal--rkak030.webp"
     },
     {
-     "id": "RKAK031",
-     "name_es": "",
-     "name_ar": "",
-     "category": "إضافات (Extras)",
-     "unit": "",
-     "price": 6.0,
-     "price2": null,
-     "desc_es": "",
-     "desc_ar": "",
-     "img": null
+      "id": "RKAK031",
+      "name_es": "",
+      "name_ar": "",
+      "category": "إضافات (Extras)",
+      "unit": "",
+      "price": 6.0,
+      "price2": null,
+      "desc_es": "",
+      "desc_ar": "",
+      "img": null
+     }
+    ],
+    "horario": {
+      "lunes": "12:00 – 16:00, 18:00 – 00:00",
+      "martes": "12:00 – 16:00, 18:00 – 00:00",
+      "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+      "jueves": "12:00 – 16:00, 18:00 – 00:00",
+      "viernes": "12:00 – 16:00, 18:00 – 00:00",
+      "sabado": "12:00 – 16:00, 18:00 – 00:00",
+      "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
-   ]
-  },
+   },
   {
    "slug": "consum-el-raal",
    "name": "Supermercado Consum El Raal",
@@ -7045,13 +7090,13 @@ window.TRAEYA_DATA = {
     "menu": null,
     "products": [],
     "horario": {
-     "lunes": "10:00 – 14:00, 17:00 – 22:00",
-     "martes": "10:00 – 14:00, 17:00 – 22:00",
-     "miercoles": "10:00 – 14:00, 17:00 – 22:00",
-     "jueves": "10:00 – 14:00, 17:00 – 22:00",
-     "viernes": "10:00 – 14:00, 17:00 – 22:00",
-     "sabado": "10:00 – 14:00, 17:00 – 22:00",
-     "domingo": "10:00 – 14:00, 17:00 – 22:00"
+     "lunes": "12:00 – 16:00, 18:00 – 00:00",
+     "martes": "12:00 – 16:00, 18:00 – 00:00",
+     "miercoles": "12:00 – 16:00, 18:00 – 00:00",
+     "jueves": "12:00 – 16:00, 18:00 – 00:00",
+     "viernes": "12:00 – 16:00, 18:00 – 00:00",
+     "sabado": "12:00 – 16:00, 18:00 – 00:00",
+     "domingo": "12:00 – 16:00, 18:00 – 00:00"
     }
    }
   ],
