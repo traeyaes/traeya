@@ -57,6 +57,9 @@
   /* Cliente elige idioma (es / ar). */
   window.trackSelectLanguage = function (lang) { send("select_language", { language: lang === "ar" ? "ar" : "es" }); };
 
+  /* Botones de acción de la primera página (sin tocar eventos existentes). */
+  window.trackCta = function (name) { send("cta_click", { cta: name || "otro" }); };
+
   /* Delegación global: detecta cualquier enlace de WhatsApp (wa.me) y lo
      registra como click_whatsapp. Cubre botones flotantes, pie, hero y
      enlaces generales sin duplicar los que ya pasan por openWA(). */

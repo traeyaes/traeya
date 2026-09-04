@@ -181,6 +181,16 @@ const I18N = {
     gateHint: "Puedes cambiarlo más tarde.",
     gateSave: "Guardar TRAEYA",
     gateSaveSub: "Guarda nuestro contacto en tu móvil y pide cuando quieras.",
+    landingHero: "¿Qué necesitas? Te lo llevamos a casa.",
+    landingHeroSub: "Compra en tu pueblo. Nosotros te lo llevamos.",
+    landingCtaOrder: "🛒 PEDIR AHORA",
+    landingCtaShops: "🏪 VER TIENDAS",
+    landingCtaWa: "💬 PEDIR POR WHATSAPP",
+    landingWaMsg: "Hola TRAEYA, quiero hacer un pedido y me lo lleváis a casa.",
+    landingNoShopsTitle: "¿No encuentras tu tienda abierta?",
+    landingNoShopsSub: "Dinos qué necesitas. Nosotros lo buscamos por ti.",
+    landingNoShopsBtn: "💬 DÍNOSLO",
+    landingNeedMsg: "Hola TRAEYA, no encuentro mi tienda. Necesito:",
     socialFollow: "Síguenos",
     socialSoon: "Próximamente",
     cartAdd: "Añadir",
@@ -283,6 +293,13 @@ const I18N = {
     comidaAskTitle: "¿Qué te apetece? 🍽️",
     comidaAskSub: "Dinos qué quieres y te lo preparamos.",
     comidaAskNote: "Los platos que requieren preparación previa deben encargarse con al menos 3 horas de antelación.",
+    serves2: "Para 2 personas",
+    menuDelDiaKicker: "Especial del día",
+    menuDelDiaTitle: "Menú del Día",
+    menuDelDiaPrimero: "Primero",
+    menuDelDiaSegundo: "Segundo",
+    menuDelDiaBebida: "Bebida",
+    menuDelDiaOrder: "Pedir el menú",
     /* --- Farmacia receta --- */
     recetaTitle: "Envía tu receta",
     recetaSub: "Envíanos una foto de tu receta y te ayudamos a preparar tu pedido.",
@@ -386,6 +403,16 @@ const I18N = {
     gateHint: "يمكنك تغييرها لاحقاً.",
     gateSave: "احفظ TRAEYA",
     gateSaveSub: "احفظ رقمنا في هاتفك واطلب منا وقتما تحتاج.",
+    landingHero: "شنو محتاج؟ كنوصلو لدارك.",
+    landingHeroSub: "اشري من بلادك. ونحن كنوصلو.",
+    landingCtaOrder: "🛒 اطلب دابا",
+    landingCtaShops: "🏪 شوف المحلات",
+    landingCtaWa: "💬 طلب بالوواتساب",
+    landingWaMsg: "مرحباً ترايا، بغيت ندير طلب وكنوصولوه لدار.",
+    landingNoShopsTitle: "ما لقيتي حتى محل مفتوح؟",
+    landingNoShopsSub: "قول لنا شنو محتاج. نحن نلتمو ليك.",
+    landingNoShopsBtn: "💬 قول لنا",
+    landingNeedMsg: "مرحباً ترايا، ما لقيتش المحل ديالي. محتاج:",
     socialFollow: "تابعنا",
     socialSoon: "قريباً",
     cartAdd: "أضف",
@@ -488,6 +515,13 @@ const I18N = {
     comidaAskTitle: "شنو بغيتي؟ 🍽️",
     comidaAskSub: "قول لينا شنو بغيتي ونحضروه ليك.",
     comidaAskNote: "الأطباق التي تحتاج تحضيراً مسبقاً يجب طلبها قبل 3 ساعات على الأقل.",
+    serves2: "لشخصين",
+    menuDelDiaKicker: "عرض اليوم",
+    menuDelDiaTitle: "منيو اليوم",
+    menuDelDiaPrimero: "الأول",
+    menuDelDiaSegundo: "الثاني",
+    menuDelDiaBebida: "المشروب",
+    menuDelDiaOrder: "اطلب المنيو",
     /* --- Farmacia receta --- */
     recetaTitle: "أرسل وصفتك",
     recetaSub: "أرسل لنا صورة وصفتك وسنساعدك في تحضير طلبك.",
@@ -919,23 +953,53 @@ function saveContact() {
 function renderLangGate() {
   if (localStorage.getItem("traeya.lang")) return;
   const overlay = el("div", { class: "lang-gate", "data-lang-gate": "" });
-  const choose = (lang) => {
+
+  /* Elegir idioma y continuar. `after` es la sección destino (aparece solo
+     cuando NO venimos de un QR de tienda). Si el hash apunta a un comercio
+     (#/tienda/slug), renderAll() -> route() abre ESE comercio, preservando el
+     contexto del QR tras elegir idioma. */
+  const choose = (lang, after) => {
     localStorage.setItem("traeya.lang", lang);
     STATE.lang = lang;
     try { if (window.trackSelectLanguage) trackSelectLanguage(lang); } catch (e) {}
     applyLangAttrs();
+    const fromShopQr = /^#\/tienda\//.test(location.hash);
     overlay.classList.add("is-leaving");
     setTimeout(() => {
       overlay.remove();
       document.body.classList.remove("gate-pending");
       renderAll();
+      if (after && !fromShopQr) goSection(after);
     }, 450);
   };
+  /* Usa el idioma por defecto ya calculado en STATE.lang (es/ar por navegador). */
+  const selectDefault = (after) => choose(STATE.lang, after);
+  /* CTA WhatsApp / "Dínoslo": el enlace <a href=wa.me> navega y dispara
+     click_whatsapp vía el listener global de ga.js. Aquí solo desbloqueamos
+     el sitio (fijamos idioma y quitamos la primera página) y preservamos el
+     contexto QR (#/tienda) para cuando el usuario regrese. */
+  const enterWa = () => {
+    if (!localStorage.getItem("traeya.lang")) {
+      localStorage.setItem("traeya.lang", STATE.lang);
+      applyLangAttrs();
+    }
+    const fromShopQr = /^#\/tienda\//.test(location.hash);
+    overlay.classList.add("is-leaving");
+    setTimeout(() => {
+      overlay.remove();
+      document.body.classList.remove("gate-pending");
+      renderAll();
+      if (!fromShopQr) goSection("need");
+    }, 450);
+  };
+
   overlay.append(
     el("div", { class: "lang-gate__card" },
       el("div", { class: "lang-gate__logo", html: 'TRAEYA<span>.</span>' }),
       el("div", { class: "eyebrow lang-gate__eyebrow", html: esc(t("gateSub")) }),
-      el("div", { class: "lang-gate__title", html: t("gateTitle") }),
+      el("h1", { class: "lang-gate__title landing-hero", html: esc(t("landingHero")) }),
+      el("p", { class: "lang-gate__hero-sub", html: esc(t("landingHeroSub")) }),
+
       el("div", { class: "lang-gate__options" },
         el("button", { class: "lang-gate__opt", onclick: () => choose("es") },
           el("span", { class: "lang-gate__flag", html: "🇪🇸" }),
@@ -946,6 +1010,23 @@ function renderLangGate() {
           el("span", { class: "lang-gate__name", html: "العربية" })
         )
       ),
+
+      el("div", { class: "landing-ctas" },
+        el("button", { class: "btn btn--primary btn--lg landing-cta", type: "button",
+            onclick: () => { try { if (window.trackCta) trackCta("pedir_ahora"); } catch (e) {} selectDefault("need"); }, html: esc(t("landingCtaOrder")) }),
+        el("button", { class: "btn btn--dark btn--lg landing-cta", type: "button",
+            onclick: () => { try { if (window.trackCta) trackCta("ver_tiendas"); } catch (e) {} selectDefault("discover"); }, html: esc(t("landingCtaShops")) }),
+        el("a", { class: "btn btn--wa btn--lg landing-cta", href: WA(t("landingWaMsg")), target: "_blank", rel: "noopener",
+            onclick: () => enterWa(), html: esc(t("landingCtaWa")) })
+      ),
+
+      el("div", { class: "landing-noshops" },
+        el("p", { class: "landing-noshops__title", html: esc(t("landingNoShopsTitle")) }),
+        el("p", { class: "landing-noshops__sub", html: esc(t("landingNoShopsSub")) }),
+        el("a", { class: "landing-noshops__btn", href: WA(t("landingNeedMsg")), target: "_blank", rel: "noopener",
+            onclick: () => enterWa(), html: esc(t("landingNoShopsBtn")) })
+      ),
+
       el("div", { class: "lang-gate__save" },
         el("button", { class: "lang-gate__save-btn", type: "button", onclick: saveContact },
           el("span", { class: "lang-gate__save-icon", html: "📱" }),
@@ -1579,6 +1660,7 @@ function renderShop(shop) {
       barberReservar,
       barberDomicilio,
       comidaAskMsg,
+      isComida ? renderMenuDelDia() : null,
       products.length ? renderProducts(shop, isComida) : renderEmpty(shop),
       gallery.length ? renderGallery(shop, gallery) : null,
       shop.type === "farmacia" ? renderFarmaciaReceta() : null
@@ -1682,6 +1764,48 @@ function renderFarmaciaReceta() {
   );
 }
 
+/* Menú del Día — LA COSINA DEL MIMA (editable). Cambia los platos y el precio aquí. */
+const COMIDA_MENU_DEL_DIA = {
+  available: true,
+  day: "Viernes",
+  day_ar: "الجمعة",
+  primero: { es: "Lentejas caseras con verduras", ar: "عدس ديال الدار بالخضر" },
+  segundo: { es: "Pollo asado con patatas", ar: "دجاج مشوي مع البطاطس" },
+  bebida: { es: "Refresco o agua", ar: "مشروب ولا الماء" },
+  precio: 8
+};
+
+function renderMenuDelDia() {
+  const m = COMIDA_MENU_DEL_DIA;
+  if (!m || !m.available) return null;
+  const isAr = STATE.lang === "ar";
+  const first = (isAr ? m.primero.ar : m.primero.es) || "";
+  const second = (isAr ? m.segundo.ar : m.segundo.es) || "";
+  const drink = (isAr ? m.bebida.ar : m.bebida.es) || "";
+  const day = (isAr ? (m.day_ar || m.day) : m.day) || "";
+
+  const orderHref = WA(t("menuDelDiaOrder") + " " + displayName({ name_es: "Menú del día", name_ar: "منيو اليوم" }) + (m.precio != null ? " — " + fmtPrice(m.precio) : ""));
+  const orderBtn = el("a", { class: "btn btn--wa btn--sm", href: orderHref, target: "_blank", rel: "noopener", html: esc(t("menuDelDiaOrder")) });
+
+  const row = (label, val) => el("li", { class: "menu-del-dia__row" },
+    el("span", { class: "menu-del-dia__label", html: esc(label) }),
+    el("span", { class: "menu-del-dia__val", html: esc(val) })
+  );
+
+  return el("section", { class: "menu-del-dia reveal" },
+    el("div", { class: "menu-del-dia__badge", html: esc(t("menuDelDiaKicker")) }),
+    el("h3", { class: "menu-del-dia__title", html: esc(t("menuDelDiaTitle")) }),
+    el("p", { class: "menu-del-dia__day", html: esc(day) }),
+    el("ul", { class: "menu-del-dia__courses" },
+      row(t("menuDelDiaPrimero"), first),
+      row(t("menuDelDiaSegundo"), second),
+      row(t("menuDelDiaBebida"), drink)
+    ),
+    m.precio != null ? el("div", { class: "menu-del-dia__price", html: fmtPrice(m.precio) }) : null,
+    orderBtn
+  );
+}
+
 function renderProducts(shop, isComida) {
   const wrap = el("div", { class: "products" });
   const advanceNames = ["cuscús", "cuscus", "tajín", "tajin", "harira", "pescado", "fish", "hout", "pincho", "pinchos", "carne"];
@@ -1770,7 +1894,11 @@ function productCard(shop, p, badge) {
   addBtn.addEventListener("click", () => { Cart.add(shop, p); updateBtn(); });
   updateBtn();
 
-  const infoChildren = [badgeEl, el("div", { class: "product-card__name", html: name }), ar, unit, price].filter(Boolean);
+  const servesTag = p.serves === 2 ? el("span", { class: "product-card__serves", html: esc(t("serves2")) }) : null;
+  const desc = p.desc_show
+    ? el("p", { class: "product-card__desc", html: esc(STATE.lang === "ar" ? (p.desc_ar || p.desc_es || "") : (p.desc_es || p.desc_ar || "")) })
+    : null;
+  const infoChildren = [badgeEl, el("div", { class: "product-card__name", html: name }), ar, unit, price, servesTag, desc].filter(Boolean);
 
   const card = el("div", { class: "product-card" + (compact ? " product-card--compact" : "") }, [
     media,

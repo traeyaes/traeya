@@ -886,6 +886,64 @@ input, textarea { font: inherit; }
   margin: 0 auto;
 }
 
+/* ---------------- Landing (primera página) extra ---------------- */
+.lang-gate { overflow-y: auto; align-items: safe center; }
+.lang-gate__card { width: min(420px, 100%); max-width: 100%; }
+.lang-gate__card { padding-top: 36px; padding-bottom: 24px; }
+.landing-hero {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 6vw, 32px);
+  color: var(--ink);
+  margin-top: 12px;
+  line-height: 1.15;
+}
+.lang-gate__hero-sub {
+  font-size: 14.5px;
+  color: var(--muted);
+  margin: 10px auto 0;
+  max-width: 30ch;
+  line-height: 1.5;
+}
+.lang-gate__options { margin: 20px 0 14px; }
+.landing-ctas {
+  display: grid;
+  gap: 10px;
+  margin: 6px 0 18px;
+}
+.landing-cta { width: 100%; min-height: 52px; white-space: normal; }
+.landing-noshops {
+  background: var(--sand);
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 6px;
+}
+.landing-noshops__title { font-weight: 800; color: var(--ink); font-size: 14.5px; }
+.landing-noshops__sub { font-size: 13px; color: var(--muted); margin-top: 4px; line-height: 1.45; }
+.landing-noshops__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 0;
+  background: var(--wa);
+  color: #fff;
+  font-weight: 800;
+  font-size: 14.5px;
+  cursor: pointer;
+  box-shadow: 0 10px 22px -12px rgba(31, 178, 88, .7);
+  transition: all .2s ease;
+}
+.landing-noshops__btn:hover { background: #1d9f50; transform: translateY(-1px); }
+[dir="rtl"] .landing-noshops__btn, [dir="rtl"] .landing-cta { letter-spacing: 0; }
+
+@media (max-width: 420px) {
+  .lang-gate { padding: 16px; }
+  .lang-gate__card { padding: 28px 20px 22px; }
+}
+
 /* ---------------- Shop hero ---------------- */
 .shop-hero {
   position: relative;
@@ -1202,6 +1260,24 @@ input, textarea { font: inherit; }
 .product-card__ask { font-size: 13.5px; font-weight: 700; color: var(--clay); }
 .product-card .btn--add { margin: 0 16px 16px; }
 .btn__qty { font-weight: 800; }
+.product-card__serves {
+  display: inline-block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--green);
+  background: rgba(18, 110, 82, .1);
+  padding: 2px 8px;
+  border-radius: 4px;
+  justify-self: start;
+}
+.product-card__desc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--muted);
+  margin-top: 2px;
+}
 
 /* ---------------- Empty state ---------------- */
 .empty-state {
