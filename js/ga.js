@@ -9,7 +9,7 @@
    Measurement ID (formato G-XXXXXXXXXX).
 */
 (function () {
-  var GA_MEASUREMENT_ID = "G-XXXXXXXXXX";
+  var GA_MEASUREMENT_ID = "G-Z5PV737W5M";
 
   /* Carga el Google tag (gtag.js) una sola vez y configura la propiedad.
      Se inyecta en el <head> para no bloquear el render, con async. */
