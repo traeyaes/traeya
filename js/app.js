@@ -294,12 +294,14 @@ const I18N = {
     comidaAskSub: "Dinos qué quieres y te lo preparamos.",
     comidaAskNote: "Los platos que requieren preparación previa deben encargarse con al menos 3 horas de antelación.",
     serves2: "Para 2 personas",
-    menuDelDiaKicker: "Especial del día",
-    menuDelDiaTitle: "Menú del Día",
-    menuDelDiaPrimero: "Primero",
-    menuDelDiaSegundo: "Segundo",
-    menuDelDiaBebida: "Bebida",
-    menuDelDiaOrder: "Pedir el menú",
+    dailyOfferBadge: "🔥 HOY EN LA COSINA DEL MIMA",
+    dailyOfferTitle: "¿Qué tenemos hoy?",
+    dailyOfferSub: "Comida casera, recién preparada y lista para disfrutar.",
+    dailyOfferDelivery: "ENTREGA GRATIS EN EL RAAL",
+    dailyOfferFree: "Entrega GRATIS",
+    dailyOfferOrder: "Pedir por WhatsApp",
+    dailyOfferWaMsg: "Hola, quiero pedir 1",
+    dailyOfferWaFrom: "de",
     /* --- Farmacia receta --- */
     recetaTitle: "Envía tu receta",
     recetaSub: "Envíanos una foto de tu receta y te ayudamos a preparar tu pedido.",
@@ -516,12 +518,14 @@ const I18N = {
     comidaAskSub: "قول لينا شنو بغيتي ونحضروه ليك.",
     comidaAskNote: "الأطباق التي تحتاج تحضيراً مسبقاً يجب طلبها قبل 3 ساعات على الأقل.",
     serves2: "لشخصين",
-    menuDelDiaKicker: "عرض اليوم",
-    menuDelDiaTitle: "منيو اليوم",
-    menuDelDiaPrimero: "الأول",
-    menuDelDiaSegundo: "الثاني",
-    menuDelDiaBebida: "المشروب",
-    menuDelDiaOrder: "اطلب المنيو",
+    dailyOfferBadge: "🔥 اليوم في La Cosina del Mima",
+    dailyOfferTitle: "شنو كاين اليوم؟",
+    dailyOfferSub: "أكل منزلي محضر بعناية وجاهز للاستمتاع.",
+    dailyOfferDelivery: "التوصيل مجاناً داخل الرال",
+    dailyOfferFree: "التوصيل مجاناً",
+    dailyOfferOrder: "اطلب عبر واتساب",
+    dailyOfferWaMsg: "مرحبا، بغيت نطلب 1",
+    dailyOfferWaFrom: "من",
     /* --- Farmacia receta --- */
     recetaTitle: "أرسل وصفتك",
     recetaSub: "أرسل لنا صورة وصفتك وسنساعدك في تحضير طلبك.",
@@ -1660,7 +1664,7 @@ function renderShop(shop) {
       barberReservar,
       barberDomicilio,
       comidaAskMsg,
-      isComida ? renderMenuDelDia() : null,
+      isComida ? renderDailyOffer() : null,
       products.length ? renderProducts(shop, isComida) : renderEmpty(shop),
       gallery.length ? renderGallery(shop, gallery) : null,
       shop.type === "farmacia" ? renderFarmaciaReceta() : null
@@ -1764,46 +1768,94 @@ function renderFarmaciaReceta() {
   );
 }
 
-/* Menú del Día — LA COSINA DEL MIMA (editable). Cambia los platos y el precio aquí. */
-const COMIDA_MENU_DEL_DIA = {
+/* Daily Offer — LA COSINA DEL MIMA (editable). Change items here. */
+const COMIDA_DAILY_OFFER = {
   available: true,
-  day: "Viernes",
-  day_ar: "الجمعة",
-  primero: { es: "Lentejas caseras con verduras", ar: "عدس ديال الدار بالخضر" },
-  segundo: { es: "Pollo asado con patatas", ar: "دجاج مشوي مع البطاطس" },
-  bebida: { es: "Refresco o agua", ar: "مشروب ولا الماء" },
-  precio: 8
+  items: [
+    {
+      id: "CC010",
+      img: "assets/img/products/comida-casera--cc010.webp",
+      name_es: "Pollo entero a la brasa",
+      name_ar: "دجاجة مشوية كاملة",
+      desc_es: "Pollo entero + hígado de pollo + patatas fritas + pan",
+      desc_ar: "دجاجة كاملة + كبد الدجاج + بطاطس مقلية + خبز",
+      price: 12
+    },
+    {
+      id: "CC009",
+      img: "assets/img/products/comida-casera--cc009.webp",
+      name_es: "Medio pollo",
+      name_ar: "نصف دجاجة",
+      desc_es: "Medio pollo + hígado de pollo + patatas fritas + pan",
+      desc_ar: "نصف دجاجة + كبد الدجاج + بطاطس مقلية + خبز",
+      price: 7
+    },
+    {
+      id: "CC012",
+      img: "assets/img/products/comida-casera--cc012.webp",
+      name_es: "Tajín para 2 personas",
+      name_ar: "طاجين لشخصين",
+      desc_es: "Tajín casero para compartir",
+      desc_ar: "طاجين منزلي لشخصين",
+      price: 7
+    },
+    {
+      id: "CC011",
+      img: "assets/img/products/comida-casera--cc011.webp",
+      name_es: "Tajín individual",
+      name_ar: "طاجين لشخص واحد",
+      desc_es: "Tajín casero para 1 persona",
+      desc_ar: "طاجين منزلي لشخص واحد",
+      price: 12
+    }
+  ]
 };
 
-function renderMenuDelDia() {
-  const m = COMIDA_MENU_DEL_DIA;
-  if (!m || !m.available) return null;
+function renderDailyOffer() {
+  const m = COMIDA_DAILY_OFFER;
+  if (!m || !m.available || !m.items || !m.items.length) return null;
   const isAr = STATE.lang === "ar";
-  const first = (isAr ? m.primero.ar : m.primero.es) || "";
-  const second = (isAr ? m.segundo.ar : m.segundo.es) || "";
-  const drink = (isAr ? m.bebida.ar : m.bebida.es) || "";
-  const day = (isAr ? (m.day_ar || m.day) : m.day) || "";
 
-  const orderHref = WA(t("menuDelDiaOrder") + " " + displayName({ name_es: "Menú del día", name_ar: "منيو اليوم" }) + (m.precio != null ? " — " + fmtPrice(m.precio) : ""));
-  const orderBtn = el("a", { class: "btn btn--wa btn--sm", href: orderHref, target: "_blank", rel: "noopener", html: esc(t("menuDelDiaOrder")) });
+  const shop = D.shops.find(s => s.slug === "comida-casera");
+  const shopName = shopTitle(shop);
 
-  const row = (label, val) => el("li", { class: "menu-del-dia__row" },
-    el("span", { class: "menu-del-dia__label", html: esc(label) }),
-    el("span", { class: "menu-del-dia__val", html: esc(val) })
+  const header = el("div", { class: "daily-offer__header" },
+    el("div", { class: "daily-offer__badge", html: esc(t("dailyOfferBadge")) }),
+    el("h2", { class: "daily-offer__title", html: esc(t("dailyOfferTitle")) }),
+    el("p", { class: "daily-offer__sub", html: esc(t("dailyOfferSub")) }),
+    el("div", { class: "daily-offer__delivery" },
+      el("span", { class: "daily-offer__delivery-icon", html: "🛵" }),
+      el("span", { class: "daily-offer__delivery-text", html: esc(t("dailyOfferDelivery")) })
+    )
   );
 
-  return el("section", { class: "menu-del-dia reveal" },
-    el("div", { class: "menu-del-dia__badge", html: esc(t("menuDelDiaKicker")) }),
-    el("h3", { class: "menu-del-dia__title", html: esc(t("menuDelDiaTitle")) }),
-    el("p", { class: "menu-del-dia__day", html: esc(day) }),
-    el("ul", { class: "menu-del-dia__courses" },
-      row(t("menuDelDiaPrimero"), first),
-      row(t("menuDelDiaSegundo"), second),
-      row(t("menuDelDiaBebida"), drink)
-    ),
-    m.precio != null ? el("div", { class: "menu-del-dia__price", html: fmtPrice(m.precio) }) : null,
-    orderBtn
-  );
+  const cards = m.items.map((item, i) => {
+    const name = isAr ? (item.name_ar || item.name_es) : (item.name_es || item.name_ar);
+    const desc = isAr ? (item.desc_ar || item.desc_es) : (item.desc_es || item.desc_ar);
+    const priceStr = fmtPrice(item.price);
+    const waMsg = t("dailyOfferWaMsg") + " " + item.name_es + " " + t("dailyOfferWaFrom") + " " + shopName;
+    const waHref = WA(waMsg);
+
+    return el("div", { class: "daily-offer__card reveal", "data-delay": String(i + 1) },
+      el("div", { class: "daily-offer__card-img" },
+        el("img", { loading: "lazy", src: item.img, alt: esc(name) }),
+        el("span", { class: "daily-offer__card-price", html: esc(priceStr) })
+      ),
+      el("div", { class: "daily-offer__card-body" },
+        el("h3", { class: "daily-offer__card-name", html: esc(name) }),
+        el("p", { class: "daily-offer__card-desc", html: esc(desc) }),
+        el("div", { class: "daily-offer__card-delivery" },
+          el("span", { html: "🛵" }),
+          el("span", { html: esc(t("dailyOfferFree")) })
+        ),
+        el("a", { class: "btn btn--wa btn--lg daily-offer__card-cta", href: waHref, target: "_blank", rel: "noopener", html: esc(t("dailyOfferOrder")) })
+      )
+    );
+  });
+
+  const grid = el("div", { class: "daily-offer__grid" }, cards);
+
+  return el("section", { class: "daily-offer reveal" }, header, grid);
 }
 
 function renderProducts(shop, isComida) {
