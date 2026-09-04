@@ -666,7 +666,10 @@ function marketingFor(shop) {
     : { title: override.es, placeholder: override.ph };
 }
 
-function openWA(text) { window.open(WA(text), "_blank", "noopener"); }
+function openWA(text, shop) {
+  try { if (window.trackWhatsApp) trackWhatsApp(shop || null); } catch (e) {}
+  window.open(WA(text), "_blank", "noopener");
+}
 
 /* Sugerencias de búsqueda (chips) por comercio. Solo se muestran si existen. */
 const SEARCH_SUGGESTIONS = {
@@ -871,6 +874,7 @@ function renderFooter() {
 function setLang(lang) {
   if (lang === STATE.lang) return;
   STATE.lang = lang;
+  try { if (window.trackSelectLanguage) trackSelectLanguage(lang); } catch (e) {}
   localStorage.setItem("traeya.lang", lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
@@ -918,6 +922,7 @@ function renderLangGate() {
   const choose = (lang) => {
     localStorage.setItem("traeya.lang", lang);
     STATE.lang = lang;
+    try { if (window.trackSelectLanguage) trackSelectLanguage(lang); } catch (e) {}
     applyLangAttrs();
     overlay.classList.add("is-leaving");
     setTimeout(() => {
@@ -1352,6 +1357,7 @@ function renderShop(shop) {
   view.innerHTML = "";
   document.title = shopTitle(shop) + " · TRAEYA · El Raal";
   STATE.shop = shop;
+  try { if (window.trackViewBusiness) trackViewBusiness(shop); } catch (e) {}
   const products = shop.products;
   const gallery = D.galleries[shop.slug] || [];
   const bg = shopFacade(shop);
@@ -1393,7 +1399,8 @@ function renderShop(shop) {
     if (addr) msg += t("waAddrLabel") + addr;
     if (phone) msg += t("waPhoneLabel") + phone;
     msg += deliveryCost === "0" ? t("waDeliveryFree") : t("waDeliveryLocal") + deliveryCost + " €";
-    openWA(msg);
+    try { if (window.trackSubmitOrder) trackSubmitOrder(shop); } catch (e) {}
+    openWA(msg, shop);
   };
   askBtn.addEventListener("click", askGo);
   askText.addEventListener("keydown", (e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) askGo(); });
@@ -1619,7 +1626,7 @@ function renderEmpty(shop) {
     el("h3", null, t("emptyTitle")),
     el("p", null, t("emptyBody")),
     el("div", { class: "empty-state__wa" },
-      el("a", { class: "btn btn--wa", href: WA(t("waShop") + " " + shopTitle(shop)), target: "_blank", rel: "noopener", html: t("askShopBtn") })
+      el("button", { class: "btn btn--wa", type: "button", onclick: () => openWA(t("waShop") + " " + shopTitle(shop), shop), html: t("askShopBtn") })
     )
   );
 }
@@ -1880,7 +1887,8 @@ const CartDrawer = {
       const send = el("button", { class: "btn btn--wa btn--lg", type: "button", html: t("cartSend") });
       send.addEventListener("click", () => {
         const msg = buildOrderMessage(shop, items, note.value);
-        openWA(msg);
+        try { if (window.trackSubmitOrder) trackSubmitOrder(shop); } catch (e) {}
+        openWA(msg, shop);
       });
       panel.append(total, el("div", { class: "cart-drawer__foot" }, send));
     }
